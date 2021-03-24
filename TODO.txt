@@ -1,0 +1,60 @@
+follow flappy bird tutorial to get cen64 working (hopefully well)
+	solve cmake openGL issue
+
+
+check out
+	controllertest homebrew joystick tester
+	n64chain
+	conker64's fork of libdragon
+	TransferBoy
+	retro Citrix
+
+
+determine how #define works in examples like #define N get_n()
+	does it replace usages of N with get_n()
+		probably this one :/
+	does it store the result of get_n() in N
+		is there a way to make it do this one?
+
+
+migrate from NP++ to real IDE
+	VS Code is possible
+		any clues in comments in the PRGE mine sweeper videos?
+	https://stackoverflow.com/questions/20821416/c-programming-in-visual-studio/32187564
+	https://docs.microsoft.com/en-us/cpp/build/reference/creating-a-makefile-project?view=msvc-160
+
+
+add support for input from any/all controller slots
+
+
+optimize
+	determine most optimal notation for strings
+		char * vs char <name>[]
+		const?
+			vs define?
+		https://eklitzke.org/declaring-c-string-constants-the-right-way
+		
+	add handling to fps_testing for RDP rendering
+
+
+
+C Resources
+	style & coding standards
+		https://elixir.bootlin.com/linux/latest/source/Documentation/process/coding-style.rst#L343
+		https://www.doc.ic.ac.uk/lab/cplus/cstyle.html#:~:text=File%20Naming%20Conventions,-File%20names%20are&text=The%20first%20character%20of%20the,if%20you%20include%20the%20period).
+		
+	exceptions
+		https://stackoverflow.com/questions/10586003/try-catch-statements-in-c
+		https://web.archive.org/web/20091104065428/http://www.di.unipi.it/~nids/docs/longjump_try_trow_catch.html
+		
+	printf format tokens
+		https://www.tutorialspoint.com/c_standard_library/c_function_printf.htm
+		
+	debug hooks
+		http://krikzz.com/forum/index.php?topic=1896.0
+		https://www.gnu.org/software/libc/manual/html_node/Hooks-for-Malloc.html
+		
+		
+		
+N64 Resources
+	https://n64.dev/
