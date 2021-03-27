@@ -1,3 +1,7 @@
+investigate rdp graphics
+
+investigate file system
+
 follow flappy bird tutorial to get cen64 working (hopefully well)
 	solve cmake openGL issue
 
@@ -8,12 +12,16 @@ check out
 	conker64's fork of libdragon
 	TransferBoy
 	retro Citrix
+	https://github.com/anacierdem/ed64 (ed64 usb restarts and remote logging)
+		This repository contains essential tools to be used with everdrive64.
+	https://github.com/murachue/gdbstub-ed64 (ed64 debug symbols)
+		A GDBstub for Nintendo 64 + EverDrive-64 v3.
+	https://github.com/networkfusion/ed64-gdb (more ed64 debugging. seems same as above but more learning oriented?)
+		A basic project for learning how to debug using GDB on an ED64 V3
 
 
 determine how #define works in examples like #define N get_n()
-	does it replace usages of N with get_n()
-		probably this one :/
-	does it store the result of get_n() in N
+	can #define store the result of get_n() in N
 		is there a way to make it do this one?
 
 
