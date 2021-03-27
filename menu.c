@@ -26,7 +26,7 @@
 
 
 // render pinwheel @ ~15Hz
-#define FIFTEEN_FPS 132//66
+#define FIFTEEN_FPS 66
 // render fps counter @ 0.5Hz
 #define HALF_FPS 2000
 
