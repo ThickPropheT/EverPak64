@@ -1,0 +1,50 @@
+{
+    "configurations": [
+        {
+            "inheritEnvironments": [
+                "cygwin_64"
+            ],
+            "name": "Cygwin64",
+            "includePath": [
+                "${env.INCLUDE}",
+                "${workspaceRoot}\\**"
+            ],
+            "intelliSenseMode": "linux-gcc-x64",
+            "environments": [
+                {
+                    "CYGWIN64_ROOT": "C://cygwin64",
+                    "BIN_ROOT": "${env.CYGWIN64_ROOT}//bin",
+                    "USR_ROOT": "${env.CYGWIN64_ROOT}//usr",
+                    "N64_INST": "${env.USR_ROOT}//mips64-elf",
+
+                    "ED_64": "${env.USR_ROOT}//ed64//usb64//bin",
+                    "DEPLOY_CMD": "${env.ED_64}//usb64 -rom=$(PROG_NAME)$(ROM_EXTENSION) -start",
+
+                    "PATH": "${env.BIN_ROOT};${env.PATH}",
+
+
+                    "USR_INCLUDE": "${env.USR_ROOT}//include",
+                    "MIPS_INCLUDE": "${env.N64_INST}//mips64-elf//include",
+
+
+                    "INCLUDE_CYGWIN": "${env.USR_INCLUDE}",
+                    "INCLUDE_CYGWIN_PC": "${env.CYGWIN64_ROOT}//lib//gcc//x86_64-pc-cygwin//10//include",
+                    "INCLUDE_CYGWIN_PC_CPP": "${env.CYGWIN64_ROOT}//lib//gcc//x86_64-pc-cygwin//10//include//c++",
+                    "INCLUDE_CYGWIN_W32": "${env.USR_INCLUDE}//w32api",
+                    "INCLUDE_CYGWIN_BASH": "${env.USR_INCLUDE}//base",
+
+                    "INCLUDE_MIPS": "${env.MIPS_INCLUDE}",
+                    "INCLUDE_MIPS_GCC": "${env.N64_INST}//lib//gcc//mips64-elf//9.1.0//include",
+                    "INCLUDE_MIPS_CPP": "${env.MIPS_INCLUDE}//c++//9.1.0//tr1",
+
+                    "INCLUDE_LIBDRAGON": "${env.USR_ROOT}//local//libdragon//include",
+
+                    "INCLUDE": "${env.INCLUDE_CYGWIN};${env.INCLUDE_CYGWIN_PC};${env.INCLUDE_CYGWIN_PC_CPP};${env.INCLUDE_CYGWIN_W32};${env.INCLUDE_CYGWIN_BASH};${env.INCLUDE_MIPS};${env.INCLUDE_LIBDRAGON};",
+
+
+                    "environment": "cygwin_64"
+                }
+            ]
+        }
+    ]
+}

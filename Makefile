@@ -21,9 +21,14 @@ ROM_EXTENSION = .z64
 N64_FLAGS = -l 2M -h $(HEADERPATH)/$(HEADERNAME) -o $(PROG_NAME)$(ROM_EXTENSION)
 endif
 
+
+OBJS = $(PROG_NAME).o
+
 PROG_NAME = menu
 
-all: $(PROG_NAME)$(ROM_EXTENSION) run
+
+
+all: $(PROG_NAME)$(ROM_EXTENSION)
 
 $(PROG_NAME)$(ROM_EXTENSION): $(PROG_NAME).elf
 	$(OBJCOPY) $(PROG_NAME).elf $(PROG_NAME).bin -O binary
@@ -31,14 +36,13 @@ $(PROG_NAME)$(ROM_EXTENSION): $(PROG_NAME).elf
 	$(N64TOOL) $(N64_FLAGS) -t "Menu" $(PROG_NAME).bin
 	$(CHKSUM64PATH) $(PROG_NAME)$(ROM_EXTENSION)
 
-$(PROG_NAME).elf : $(PROG_NAME).o
-	$(LD) -o $(PROG_NAME).elf $(PROG_NAME).o $(LINK_FLAGS)
+$(PROG_NAME).elf : $(OBJS)
+	$(LD) -o $(PROG_NAME).elf $(OBJS) $(LINK_FLAGS)
 
 .PHONY: clean
 clean:
 	rm -f *.v64 *.z64 *.elf *.o *.bin
 	
 .PHONY: run
-
 run: $(PROG_NAME)$(ROM_EXTENSION)
-	./usb64.exe -rom=$(PROG_NAME)$(ROM_EXTENSION) -start
+	$(DEPLOY_CMD)

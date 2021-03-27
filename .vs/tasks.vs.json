@@ -1,0 +1,55 @@
+{
+    "version": "0.2.1",
+    "tasks": [
+        {
+            "taskLabel": "gcc make",
+            "appliesTo": "/",
+            "type": "launch",
+            "contextType": "build",
+            "inheritEnvironments": [
+                "cygwin_64"
+            ],
+            "command": "make"
+        },
+        {
+            "taskLabel": "gcc make clean",
+            "appliesTo": "/",
+            "type": "launch",
+            "contextType": "clean",
+            "inheritEnvironments": [
+                "cygwin_64"
+            ],
+            "command": "make",
+            "args": [
+                "clean"
+            ]
+        },
+        {
+            "taskLabel": "gcc make rebuild",
+            "appliesTo": "/",
+            "type": "launch",
+            "contextType": "rebuild",
+            "inheritEnvironments": [
+                "cygwin_64"
+            ],
+            "command": "make",
+            "args": [
+                "clean",
+                "all"
+            ]
+        },
+        {
+            "taskLabel": "Deploy",
+            "appliesTo": "/",
+            "type": "launch",
+            "contextType": "custom",
+            "inheritEnvironments": [
+                "cygwin_64"
+            ],
+            "command": "make",
+            "args": [
+                "run"
+            ]
+        }
+    ]
+}
