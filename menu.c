@@ -7,6 +7,9 @@
 
 #include "pinwheel.h"
 #include "fps_counter.h"
+#include "color_palette.h"
+#include "types.h"
+#include "console.h"
 
 #define N_CONTROLLERS 4
 
@@ -31,6 +34,14 @@
 #define HALF_FPS 2000
 
 
+#define PRINT_BUF_LEN 128
+
+
+#define BG_COLOR 		BLACK(renderer_current_bitdepth())
+#define BG_TEXT_COLOR	TRANS
+#define FG_TEXT_COLOR	LIME(renderer_current_bitdepth(), renderer_current())
+
+
 
 // #### TODO MOVE THIS ####
 void sleep(unsigned long ms)
@@ -40,6 +51,13 @@ void sleep(unsigned long ms)
 	while (get_ticks_ms() - start_ms < ms);
 }
 // #### TODO MOVE THIS ####
+
+
+#define cprintf(...) { \
+	cs_printfln(cc, __VA_ARGS__); \
+}
+
+struct console_context cc;
 
 
 
@@ -122,8 +140,7 @@ struct root_menu* m_root_from_items(size_t n_items, struct slot_menu* items)
 
 	if (!rm)
 	{
-		printf("m_root_from_items : failed to allocate\n");
-		console_render();
+		cprintf("m_root_from_items : failed to allocate\n");
 		return NULL;
 	}
 
@@ -259,7 +276,7 @@ void m_root_update(struct root_menu* rm, struct device_state dev)
 
 void m_slot_draw(struct root_menu* rm, struct device_state dev)
 {
-	printf("Select Controller (A)\n\n");
+	cprintf("Select Controller (A)\n\n");
 
 	for (size_t i = 0; i < rm->n_all; i++)
 	{
@@ -278,7 +295,7 @@ void m_slot_draw(struct root_menu* rm, struct device_state dev)
 			? "+"
 			: " ";
 
-		printf("%s [%s] Slot %i\n", sel, pres, sn);
+		cprintf("%s [%s] Slot %i\n", sel, pres, sn);
 	}
 }
 
@@ -287,8 +304,8 @@ void m_status_draw_header(struct slot_menu sm)
 	int sn = sm_get_slot_number(sm);
 	char* acc_name = sm_get_acc_name(sm);
 
-	printf("Controller %i [%s]\n", sn, acc_name);
-	printf("Back (B)\n\n");
+	cprintf("Controller %i [%s]\n", sn, acc_name);
+	cprintf("Back (B)\n\n");
 }
 
 int m_status_has_error(struct slot_menu sm, struct device_state dev)
@@ -297,13 +314,13 @@ int m_status_has_error(struct slot_menu sm, struct device_state dev)
 
 	if (!(dev.controllers & f_slot))
 	{
-		printf("Controller missing.\n");
+		cprintf("Controller missing.\n");
 		return 1;
 	}
 
 	if (!(dev.accessories & f_slot))
 	{
-		printf("Memory Pak missing.\n");
+		cprintf("Memory Pak missing.\n");
 		return 1;
 	}
 
@@ -314,11 +331,11 @@ int m_status_has_error(struct slot_menu sm, struct device_state dev)
 	switch (err)
 	{
 	case MPAK_UNREADABLE:
-		printf("Memory Pak missing or unreadable.\n");
+		cprintf("Memory Pak missing or unreadable.\n");
 		break;
 
 	case MPAK_UNFORMATTED:
-		printf("Memory Pak unformatted.\n");
+		cprintf("Memory Pak unformatted.\n");
 		break;
 	}
 
@@ -327,10 +344,7 @@ int m_status_has_error(struct slot_menu sm, struct device_state dev)
 
 void m_status_draw_entries(struct device_state dev)
 {
-	printf("1 Banbo-Jazookie\n");
-	printf("2 700 Globe in Eye\n");
-	printf("3 Oh Hey, Mario 64\n");
-	printf("4 Oculus of Time\n");
+	cprintf("1 Banbo-Jazookie\n2 700 Globe in Eye\n3 Oh Hey, Mario 64\n4 Oculus of Time\n");
 }
 
 void m_status_draw(struct slot_menu sm, struct device_state dev)
@@ -357,23 +371,23 @@ void m_root_draw(struct root_menu* rm, struct device_state dev)
 
 
 
-void setup(void)
+struct console_context set_up(void)
 {
 	/* enable interrupts (on the CPU) */
 	init_interrupts();
 
 	/* Initialize peripherals */
-	console_init();
+	struct console_context cc = cs_init(Gx2D, DEPTH_16_BPP);
 	controller_init();
 
-	console_set_render_mode(RENDER_MANUAL);
+	return cc;
 }
 
 
 
 int main(void)
 {
-	setup();
+	cc = set_up();
 
 	char pinwheel = 0;
 	pw_init(FIFTEEN_FPS, 0, &pinwheel);
@@ -388,19 +402,21 @@ int main(void)
 
 	while (1)
 	{
-		console_clear();
+		cs_clear(&cc, BG_COLOR);
+
+		graphics_set_color(FG_TEXT_COLOR, BG_TEXT_COLOR);
 
 		pw_update();
 		fps_update();
 
-		printf("(%c) %.1f fps [menu.z64]\n\n", pinwheel, fps);
+		cprintf("(%c) %.1f fps [menu.z64]\n\n", pinwheel, fps);
 
 		struct device_state dev = poll_device();
 
 		m_root_update(rm, dev);
 		m_root_draw(rm, dev);
 
-		console_render();
+		cs_render(&cc);
 	}
 
 	return 0;
