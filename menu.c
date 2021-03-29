@@ -18,10 +18,10 @@
 
 // TODO consider converting to enum
 // TODO consider renaming to ROOT_MENU
-#define SLOT_MENU					0
+#define ROOT_MENU					0
 // TODO consider renaming to SLOT_MENU
-#define STATUS_MENU			 		1
-#define MAX_MENUS 	STATUS_MENU  + 	1
+#define SLOT_MENU			 		1
+#define MAX_MENUS 	SLOT_MENU  + 	1
 
 #define MPAK_READY 			 0
 #define MPAK_UNREADABLE		-2
@@ -37,9 +37,9 @@
 #define PRINT_BUF_LEN 128
 
 
-#define BG_COLOR 		BLACK(renderer_current_bitdepth())
+#define BG_COLOR 		0x10001
 #define BG_TEXT_COLOR	TRANS
-#define FG_TEXT_COLOR	LIME(renderer_current_bitdepth(), renderer_current())
+#define FG_TEXT_COLOR	0x364D364D
 
 
 
@@ -182,46 +182,31 @@ void m_root_push(struct root_menu* rm)
 struct device_state
 {
 	int controllers;
+	u8 accessories_changed;
 	int accessories;
 	// ? identify_accessory()
 	// ? validate_mempak(?)
 	struct controller_data keys;
 };
 
-struct device_state poll_device(void)
+void poll_device(struct device_state* ds)
 {
 	controller_scan();
 
-	// printf("controller_scan\n");
-	// console_render();
-
-	int controllers = get_controllers_present();
-
-	// printf("get_controllers_present [%X]\n", controllers);
-	// console_render();
+	ds->controllers = get_controllers_present();
 
 	struct controller_data out;
 	int accessories = get_accessories_present(&out);
 
-	// printf("get_accessories_present [%X]\n", accessories);
-	// console_render();
+	ds->accessories_changed = ds->accessories != accessories;
+	ds->accessories = accessories;
 
-	struct controller_data keys = get_keys_down();
-
-	// printf("get_keys_down\n");
-	// console_render();
-
-	return (struct device_state)
-	{
-		controllers,
-			accessories,
-			keys
-	};
+	ds->keys = get_keys_down();
 }
 
 
 
-void m_slot_update(struct root_menu* rm, struct controller_data keys)
+void m_root_update(struct root_menu* rm, struct controller_data keys)
 {
 	if (keys.c[0].up)
 	{
@@ -245,7 +230,7 @@ void m_slot_update(struct root_menu* rm, struct controller_data keys)
 	}
 }
 
-void m_status_update(struct root_menu* rm, struct controller_data keys)
+void m_slot_udpate(struct root_menu* rm, struct controller_data keys)
 {
 	if (keys.c[0].B)
 	{
@@ -253,7 +238,7 @@ void m_status_update(struct root_menu* rm, struct controller_data keys)
 	}
 }
 
-void m_root_update(struct root_menu* rm, struct device_state dev)
+void update(struct root_menu* rm, struct device_state dev)
 {
 	// TODO prevents weirdness if controller 1 is removed
 	// TODO update this when any/all controllers can input
@@ -262,19 +247,19 @@ void m_root_update(struct root_menu* rm, struct device_state dev)
 
 	switch (rm->i_depth)
 	{
-	case SLOT_MENU:
-		m_slot_update(rm, dev.keys);
+	case ROOT_MENU:
+		m_root_update(rm, dev.keys);
 		break;
 
-	case STATUS_MENU:
-		m_status_update(rm, dev.keys);
+	case SLOT_MENU:
+		m_slot_udpate(rm, dev.keys);
 		break;
 	}
 }
 
 
 
-void m_slot_draw(struct root_menu* rm, struct device_state dev)
+void m_root_draw(struct root_menu* rm, struct device_state dev)
 {
 	cprintf("Select Controller (A)\n\n");
 
@@ -299,7 +284,7 @@ void m_slot_draw(struct root_menu* rm, struct device_state dev)
 	}
 }
 
-void m_status_draw_header(struct slot_menu sm)
+void m_slot_draw_header(struct slot_menu sm)
 {
 	int sn = sm_get_slot_number(sm);
 	char* acc_name = sm_get_acc_name(sm);
@@ -308,7 +293,7 @@ void m_status_draw_header(struct slot_menu sm)
 	cprintf("Back (B)\n\n");
 }
 
-int m_status_has_error(struct slot_menu sm, struct device_state dev)
+int m_slot_has_error(struct slot_menu sm, struct device_state dev)
 {
 	int f_slot = sm_get_slot_flag(sm);
 
@@ -323,6 +308,9 @@ int m_status_has_error(struct slot_menu sm, struct device_state dev)
 		cprintf("Memory Pak missing.\n");
 		return 1;
 	}
+
+	if (!dev.accessories_changed)
+		return 0;
 
 	int err;
 	if (!(err = validate_mempak(sm.i_slot)))
@@ -342,29 +330,29 @@ int m_status_has_error(struct slot_menu sm, struct device_state dev)
 	return 1;
 }
 
-void m_status_draw_entries(struct device_state dev)
+void m_slot_draw_entries(struct device_state dev)
 {
 	cprintf("1 Banbo-Jazookie\n2 700 Globe in Eye\n3 Oh Hey, Mario 64\n4 Oculus of Time\n");
 }
 
-void m_status_draw(struct slot_menu sm, struct device_state dev)
+void m_slot_draw(struct slot_menu sm, struct device_state dev)
 {
-	m_status_draw_header(sm);
+	m_slot_draw_header(sm);
 
-	if (!m_status_has_error(sm, dev))
-		m_status_draw_entries(dev);
+	if (!m_slot_has_error(sm, dev))
+		m_slot_draw_entries(dev);
 }
 
-void m_root_draw(struct root_menu* rm, struct device_state dev)
+void draw(struct root_menu* rm, struct device_state dev)
 {
 	switch (rm->i_depth)
 	{
-	case SLOT_MENU:
-		m_slot_draw(rm, dev);
+	case ROOT_MENU:
+		m_root_draw(rm, dev);
 		break;
 
-	case STATUS_MENU:
-		m_status_draw(rm->all[rm->m.i_selected], dev);
+	case SLOT_MENU:
+		m_slot_draw(rm->all[rm->m.i_selected], dev);
 		break;
 	}
 }
@@ -400,21 +388,23 @@ int main(void)
 	// TODO this is unverified
 	while (!rm);
 
+	graphics_set_color(FG_TEXT_COLOR, BG_TEXT_COLOR);
+
+	struct device_state dev = { };
+
 	while (1)
 	{
 		cs_clear(&cc, BG_COLOR);
-
-		graphics_set_color(FG_TEXT_COLOR, BG_TEXT_COLOR);
 
 		pw_update();
 		fps_update();
 
 		cprintf("(%c) %.1f fps [menu.z64]\n\n", pinwheel, fps);
 
-		struct device_state dev = poll_device();
+		poll_device(&dev);
 
-		m_root_update(rm, dev);
-		m_root_draw(rm, dev);
+		update(rm, dev);
+		draw(rm, dev);
 
 		cs_render(&cc);
 	}
