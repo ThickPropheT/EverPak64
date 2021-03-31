@@ -1,8 +1,5 @@
-!!! COMMIT !!!
-
-migrate device_state.accessories_changed to local field in slot_menu
-
 re-evaluate use of size_t
+	and other int types
 
 add support for input from any/all controller slots
 

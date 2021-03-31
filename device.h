@@ -7,7 +7,6 @@
 struct device_state
 {
 	u16 controllers;
-	u8 accessories_changed;
 	int accessories;
 	// ? identify_accessory()
 	// ? validate_mempak(?)

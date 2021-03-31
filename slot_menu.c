@@ -20,6 +20,12 @@ char* accessory_names[] =
 
 struct console_context cc;
 
+
+int accessories;
+s8 mempak_err;
+
+
+
 void sm_init(struct console_context* c)
 {
 	cc = *c;
@@ -29,6 +35,7 @@ struct slot_menu sm_new(u8 i_slot)
 {
 	return (struct slot_menu) { i_slot, { 0, 0 } };
 }
+
 
 
 u8 sm_get_slot_number(struct slot_menu m)
@@ -53,6 +60,11 @@ char* get_acc_name(struct slot_menu sm)
 
 void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state dev)
 {
+	if (accessories != dev.accessories)
+		mempak_err = validate_mempak(sm->i_slot);
+
+	accessories = dev.accessories;
+
 	struct controller_data keys = dev.keys;
 
 	if (keys.c[0].B)
@@ -88,14 +100,10 @@ u8 has_error(struct slot_menu sm, struct device_state dev)
 		return 1;
 	}
 
-	if (!dev.accessories_changed)
+	if (!mempak_err)
 		return 0;
 
-	int err;
-	if (!(err = validate_mempak(sm.i_slot)))
-		return 0;
-
-	switch (err)
+	switch (mempak_err)
 	{
 	case MPAK_UNREADABLE:
 		cprintf("Memory Pak missing or unreadable.\n");
