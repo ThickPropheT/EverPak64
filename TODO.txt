@@ -1,7 +1,3 @@
-slot_menu.c :
-// TODO optimize out by caching identify_accessory result
-// TODO and using with array indexer
-
 sigh... turns out putting global variables in the *.c file does not actually isolate access to that variable.
 	really shoulda known better, but just got lucky and had no naming collisions for a long time...
 

@@ -7,7 +7,10 @@ void dev_poll(struct device_state* ds)
 	//ds->controllers = get_controllers_present();
 
 	struct controller_data out;
-	ds->accessories = get_accessories_present(&out);
+	u16 acc = get_accessories_present(&out);
+
+	ds->acc_changed = ds->accessories != acc;
+	ds->accessories = acc;
 
 	ds->keys = get_keys_down();
 }

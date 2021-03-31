@@ -20,6 +20,9 @@ struct slot_menu
 {
 	u8 i_slot;
 
+	u8 i_acc;
+	s8 acc_status;
+
 	struct menu m;
 };
 

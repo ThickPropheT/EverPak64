@@ -21,11 +21,6 @@ char* accessory_names[] =
 struct console_context cc;
 
 
-u16 sm_accessories;
-s8 sm_mempak_err;
-
-
-
 void sm_init(struct console_context* c)
 {
 	cc = *c;
@@ -33,7 +28,7 @@ void sm_init(struct console_context* c)
 
 struct slot_menu sm_new(u8 i_slot)
 {
-	return (struct slot_menu) { i_slot, { 0, 0 } };
+	return (struct slot_menu) { i_slot, 0, 0, { 0, 0 } };
 }
 
 
@@ -48,22 +43,17 @@ u16 sm_get_slot_flag(struct slot_menu m)
 	return FIRST_SLOT_FLAG >> (m.i_slot * FLAG_WIDTH);
 }
 
-// TODO optimize out by caching identify_accessory result
-// TODO and using with array indexer
-char* get_acc_name(struct slot_menu sm)
-{
-	int i_acc = identify_accessory(sm.i_slot);
-	return accessory_names[i_acc];
-}
-
 
 
 void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state dev)
 {
-	if (sm_accessories != dev.accessories)
-		sm_mempak_err = validate_mempak(sm->i_slot);
+	if (dev.acc_changed)
+	{
+		u8 slot = sm->i_slot;
 
-	sm_accessories = dev.accessories;
+		sm->acc_status = validate_mempak(slot);
+		sm->i_acc = identify_accessory(slot);
+	}
 
 	struct controller_data keys = dev.keys;
 
@@ -78,7 +68,7 @@ void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state 
 void draw_header(struct slot_menu sm)
 {
 	u8 sn = sm_get_slot_number(sm);
-	char* acc_name = get_acc_name(sm);
+	char* acc_name = accessory_names[sm.i_acc];
 
 	cprintf("Controller %i [%s]", sn, acc_name);
 	cprintf("Back (B)");
@@ -100,10 +90,10 @@ u8 has_error(struct slot_menu sm, struct device_state dev)
 		return 1;
 	}
 
-	if (!sm_mempak_err)
+	if (!sm.acc_status)
 		return 0;
 
-	switch (sm_mempak_err)
+	switch (sm.acc_status)
 	{
 	case MPAK_UNREADABLE:
 		cprintf("Memory Pak missing or unreadable.\n");

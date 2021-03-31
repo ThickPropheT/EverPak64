@@ -75,7 +75,7 @@ void rm_draw(struct root_menu* rm, struct device_state dev)
 			? ">"
 			: " ";
 
-		int f_slot = sm_get_slot_flag(mi);
+		u16 f_slot = sm_get_slot_flag(mi);
 
 		char* pres =
 			dev.controllers & f_slot
