@@ -1,3 +1,15 @@
+!!! COMMIT !!!
+
+migrate device_state.accessories_changed to local field in slot_menu
+
+re-evaluate use of size_t
+
+add support for input from any/all controller slots
+
+improve folder structure
+
+find a way to remove unused #includes
+
 investigate rdp graphics
 
 investigate file system
@@ -30,9 +42,6 @@ migrate from NP++ to real IDE
 		any clues in comments in the PRGE mine sweeper videos?
 	https://stackoverflow.com/questions/20821416/c-programming-in-visual-studio/32187564
 	https://docs.microsoft.com/en-us/cpp/build/reference/creating-a-makefile-project?view=msvc-160
-
-
-add support for input from any/all controller slots
 
 
 optimize

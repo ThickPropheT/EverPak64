@@ -2,6 +2,8 @@
 
 #include <libdragon.h>
 
+#include <stddef.h>
+
 #include "types.h"
 #include "renderer.h"
 
