@@ -6,6 +6,7 @@
 #include "root_menu.h"
 #include "device.h"
 
+
 // TODO consider converting to enum
 // TODO consider renaming to ROOT_MENU
 #define ROOT_MENU					0
@@ -14,14 +15,12 @@
 #define MAX_MENUS 	SLOT_MENU  + 	1
 
 
-#define I_DEFAULT_DEPTH 	0
-
-
 struct menu_tree
 {
 	struct menu_state ms;
 	struct root_menu rm;
 };
+
 
 void mt_init(struct console_context* cc);
 

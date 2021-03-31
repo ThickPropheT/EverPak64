@@ -6,7 +6,7 @@
 #include "slot_menu.h"
 
 
-#define N_SLOTS	4
+#define N_SLOTS		4
 
 
 struct root_menu

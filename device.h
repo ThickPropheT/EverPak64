@@ -7,7 +7,7 @@
 struct device_state
 {
 	u16 controllers;
-	int accessories;
+	u16 accessories;
 	// ? identify_accessory()
 	// ? validate_mempak(?)
 	struct controller_data keys;

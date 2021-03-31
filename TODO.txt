@@ -1,5 +1,16 @@
+slot_menu.c :
+// TODO optimize out by caching identify_accessory result
+// TODO and using with array indexer
+
+sigh... turns out putting global variables in the *.c file does not actually isolate access to that variable.
+	really shoulda known better, but just got lucky and had no naming collisions for a long time...
+
+determine what line endings are being used throughout and standardize
+	lookin at you slot_menu.c
+
+i don't think I_DEFAULT_SELECTED and I_DEFAULT_DEPTH are wired up in root_menu
+
 re-evaluate use of size_t
-	and other int types
 
 add support for input from any/all controller slots
 

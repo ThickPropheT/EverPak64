@@ -14,7 +14,6 @@ enum renderer
 
 char *renderer_nameof(enum renderer r);
 
-u8 renderer_current(void);
 char* renderer_current_name(void);
 bitdepth_t renderer_current_bitdepth(void);
 

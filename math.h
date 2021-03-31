@@ -1,3 +1,5 @@
 #pragma once
 
-int mod(int x, int m);
+#include "types.h"
+
+u64 cmod(u64 x, u64 m);

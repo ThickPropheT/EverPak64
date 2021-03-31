@@ -20,9 +20,9 @@
 
 
 // render pinwheel @ ~15Hz
-#define FIFTEEN_FPS 66
+#define FIFTEEN_FPS		66
 // render fps counter @ 0.5Hz
-#define HALF_FPS 2000
+#define HALF_FPS		2000
 
 
 #define BG_COLOR 		0x10001

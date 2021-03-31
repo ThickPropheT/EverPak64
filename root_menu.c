@@ -4,8 +4,9 @@
 #include <malloc.h>
 
 
-#define I_DEFAULT_SELECTED 0
-#define I_DEFAULT_DEPTH 0
+// TODO i don't think these are wired up
+#define I_DEFAULT_SELECTED	0
+#define I_DEFAULT_DEPTH		0
 
 
 #define cprintf(...) { \
@@ -64,10 +65,10 @@ void rm_draw(struct root_menu* rm, struct device_state dev)
 {
 	cprintf("Select Controller (A)\n\n");
 
-	for (size_t i = 0; i < N_SLOTS; i++)
+	for (u8 i = 0; i < N_SLOTS; i++)
 	{
 		struct slot_menu mi = rm->slots[i];
-		int sn = sm_get_slot_number(mi);
+		u8 sn = sm_get_slot_number(mi);
 
 		char* sel =
 			i == rm->m.i_item
@@ -81,6 +82,6 @@ void rm_draw(struct root_menu* rm, struct device_state dev)
 			? "+"
 			: " ";
 
-		cprintf("%s [%s] Slot %i\n", sel, pres, sn);
+		cprintf("%s [%s] Slot %u\n", sel, pres, sn);
 	}
 }

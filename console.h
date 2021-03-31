@@ -7,7 +7,7 @@
 #include "types.h"
 #include "renderer.h"
 
-#define BUFFER_LEN 128
+#define BUFFER_LEN 128 // TODO is this a good buffer length? just used one i saw in another project somewhere. maybe alt64
 
 #define cs_printfln(c, ...) { \
 	sprintf(c.buf, __VA_ARGS__); \

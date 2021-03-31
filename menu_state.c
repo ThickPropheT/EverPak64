@@ -9,10 +9,10 @@ struct menu_state ms_init(size_t max_depth)
 
 void ms_pop(struct menu_state* ms)
 {
-	ms->i_depth = mod(ms->i_depth - 1, ms->max_depth);
+	ms->i_depth = cmod(ms->i_depth - 1, ms->max_depth);
 }
 
 void ms_push(struct menu_state* ms)
 {
-	ms->i_depth = mod(ms->i_depth + 1, ms->max_depth);
+	ms->i_depth = cmod(ms->i_depth + 1, ms->max_depth);
 }

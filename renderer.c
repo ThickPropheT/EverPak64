@@ -2,7 +2,7 @@
 
 #include "gra_console.h"
 
-u8 renderer;
+enum renderer renderer;
 bitdepth_t bit_depth;
 
 
@@ -22,11 +22,6 @@ char* renderer_nameof(enum renderer r)
 }
 
 
-
-u8 renderer_current(void)
-{
-	return renderer;
-}
 
 char* renderer_current_name(void)
 {
@@ -67,6 +62,9 @@ void renderer_init(enum renderer r, bitdepth_t d)
 	case Gx2D:
 		set_up_graphics();
 		break;
+
+	default:
+		break;
 	}
 }
 
@@ -98,6 +96,9 @@ display_context_t renderer_clear(uint32_t color)
 
 	case Gx2D:
 		return clear_graphics(color);
+		
+	default:
+		break;
 	}
 
 	return (display_context_t)NULL;
@@ -116,6 +117,9 @@ void renderer_print(display_context_t dc, char* text, int x, int y)
 	case Gx2D:
 		gra_print(dc, text, x, y);
 		break;
+
+	default:
+		break;
 	}
 }
 
@@ -131,6 +135,10 @@ void renderer_render(display_context_t dc)
 
 	case Gx2D:
 		display_show(dc);
+		break;
+
+	default:
+		break;
 	}
 }
 
@@ -146,6 +154,9 @@ void renderer_tear_down(void)
 
 	case Gx2D:
 		display_close();
+		break;
+
+	default:
 		break;
 	}
 
