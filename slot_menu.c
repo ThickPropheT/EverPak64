@@ -38,11 +38,16 @@ u16 sm_get_slot_flag(struct slot_menu m)
 
 
 
-void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state dev)
+void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state* dev)
 {
-	struct controller_data keys = dev.keys;
+	struct controller_data keys = dev->keys;
 
-	if (keys.c[0].B)
+	if (keys.c[0].Z)
+	{
+		format_mempak(sm->i_slot);
+		acc_update(&dev->accessories[sm->i_slot]);
+	}
+	else if (keys.c[0].B)
 	{
 		ms_pop(ms);
 	}
@@ -56,6 +61,7 @@ void draw_header(struct slot_menu sm, struct accessory acc)
 	char* acc_name = accessory_names[acc.type];
 
 	cprintf("Controller %i [%s]", sn, acc_name);
+	cprintf("Format (Z)");
 	cprintf("Back (B)");
 }
 
@@ -71,7 +77,7 @@ u8 has_error(struct slot_menu sm, struct device_state dev, struct accessory acc)
 
 	if (!(dev.accessories_f & f_slot))
 	{
-		cprintf("Memory Pak missing.\n");
+		cprintf("Memory Pak missing.");
 		return 1;
 	}
 
@@ -81,11 +87,11 @@ u8 has_error(struct slot_menu sm, struct device_state dev, struct accessory acc)
 	switch (acc.status)
 	{
 	case MPAK_STATUS_UNREADABLE:
-		cprintf("Memory Pak missing or unreadable.\n");
+		cprintf("Memory Pak missing or unreadable.");
 		break;
 
 	case MPAK_STATUS_UNFORMATTED:
-		cprintf("Memory Pak unformatted.\n");
+		cprintf("Memory Pak unformatted.");
 		break;
 	}
 

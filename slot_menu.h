@@ -26,5 +26,5 @@ struct slot_menu sm_new(u8 i_slot);
 u8 sm_get_slot_number(struct slot_menu m);
 u16 sm_get_slot_flag(struct slot_menu m);
 
-void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state dev);
+void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state* dev);
 void sm_draw(struct slot_menu* sm, struct device_state dev);

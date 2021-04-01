@@ -26,5 +26,5 @@ void mt_init(struct console_context* cc);
 
 struct menu_tree mt_new(void);
 
-void mt_update(struct menu_tree* mt, struct device_state dev);
+void mt_update(struct menu_tree* mt, struct device_state* dev);
 void mt_draw(struct menu_tree* mt, struct device_state dev);

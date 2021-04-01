@@ -1,3 +1,5 @@
+find a better way to print to console than to have to "init" things with an instance of cc
+
 sigh... turns out putting global variables in the *.c file does not actually isolate access to that variable.
 	really shoulda known better, but just got lucky and had no naming collisions for a long time...
 

@@ -48,11 +48,11 @@ struct console_context cc;
 
 
 
-void update(struct menu_tree* mt, struct device_state dev)
+void update(struct menu_tree* mt, struct device_state* dev)
 {
 	// TODO prevents weirdness if controller 1 is removed
 	// TODO update this when any/all controllers can input
-	if (!(dev.controllers & CONTROLLER_1_INSERTED))
+	if (!(dev->controllers & CONTROLLER_1_INSERTED))
 		return;
 
 	mt_update(mt, dev);
@@ -109,7 +109,7 @@ int main(void)
 
 		dev_poll(&dev);
 
-		update(&mt, dev);
+		update(&mt, &dev);
 		draw(&mt, dev);
 
 		cs_render(&cc);

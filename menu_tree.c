@@ -16,7 +16,7 @@ struct menu_tree mt_new(void)
 	return (struct menu_tree) { ms, rm };
 }
 
-void mt_update(struct menu_tree* mt, struct device_state dev)
+void mt_update(struct menu_tree* mt, struct device_state* dev)
 {
 	struct root_menu* rm = &mt->rm;
 	struct menu_state* ms = &mt->ms;
