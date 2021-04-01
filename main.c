@@ -96,7 +96,7 @@ int main(void)
 
 	graphics_set_color(FG_TEXT_COLOR, BG_TEXT_COLOR);
 
-	struct device_state dev = { CONTROLLER_1_INSERTED };
+	struct device_state dev = dev_new();
 
 	while (1)
 	{

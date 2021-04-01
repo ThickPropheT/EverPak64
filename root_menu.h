@@ -4,9 +4,7 @@
 
 #include "menu.h"
 #include "slot_menu.h"
-
-
-#define N_SLOTS		4
+#include "device.h"
 
 
 struct root_menu

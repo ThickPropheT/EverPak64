@@ -11,17 +11,9 @@
 #include "menu_state.h"
 
 
-#define MPAK_READY 			 0
-#define MPAK_UNREADABLE		-2
-#define MPAK_UNFORMATTED	-3
-
-
 struct slot_menu
 {
 	u8 i_slot;
-
-	u8 i_acc;
-	s8 acc_status;
 
 	struct menu m;
 };

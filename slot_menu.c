@@ -1,5 +1,6 @@
 #include "slot_menu.h"
 
+#include "accessory.h"
 
 #define FIRST_SLOT_FLAG 0xF000
 #define FLAG_WIDTH		4
@@ -9,14 +10,6 @@
 	cs_printfln(cc, __VA_ARGS__); \
 }
 
-
-char* accessory_names[] =
-{
-	"None",
-	"Mem Pak",
-	"Rumble Pak",
-	"VRU"
-};
 
 struct console_context cc;
 
@@ -28,7 +21,7 @@ void sm_init(struct console_context* c)
 
 struct slot_menu sm_new(u8 i_slot)
 {
-	return (struct slot_menu) { i_slot, 0, 0, { 0, 0 } };
+	return (struct slot_menu) { i_slot, { 0, 0 } };
 }
 
 
@@ -47,14 +40,6 @@ u16 sm_get_slot_flag(struct slot_menu m)
 
 void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state dev)
 {
-	if (dev.acc_changed)
-	{
-		u8 slot = sm->i_slot;
-
-		sm->acc_status = validate_mempak(slot);
-		sm->i_acc = identify_accessory(slot);
-	}
-
 	struct controller_data keys = dev.keys;
 
 	if (keys.c[0].B)
@@ -65,16 +50,16 @@ void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state 
 
 
 
-void draw_header(struct slot_menu sm)
+void draw_header(struct slot_menu sm, struct accessory acc)
 {
 	u8 sn = sm_get_slot_number(sm);
-	char* acc_name = accessory_names[sm.i_acc];
+	char* acc_name = accessory_names[acc.type];
 
 	cprintf("Controller %i [%s]", sn, acc_name);
 	cprintf("Back (B)");
 }
 
-u8 has_error(struct slot_menu sm, struct device_state dev)
+u8 has_error(struct slot_menu sm, struct device_state dev, struct accessory acc)
 {
 	u16 f_slot = sm_get_slot_flag(sm);
 
@@ -84,22 +69,22 @@ u8 has_error(struct slot_menu sm, struct device_state dev)
 	//	return 1;
 	//}
 
-	if (!(dev.accessories & f_slot))
+	if (!(dev.accessories_f & f_slot))
 	{
 		cprintf("Memory Pak missing.\n");
 		return 1;
 	}
 
-	if (!sm.acc_status)
+	if (!acc.status)
 		return 0;
 
-	switch (sm.acc_status)
+	switch (acc.status)
 	{
-	case MPAK_UNREADABLE:
+	case MPAK_STATUS_UNREADABLE:
 		cprintf("Memory Pak missing or unreadable.\n");
 		break;
 
-	case MPAK_UNFORMATTED:
+	case MPAK_STATUS_UNFORMATTED:
 		cprintf("Memory Pak unformatted.\n");
 		break;
 	}
@@ -114,8 +99,10 @@ void draw_entries(struct slot_menu sm, struct device_state dev)
 
 void sm_draw(struct slot_menu* sm, struct device_state dev)
 {
-	draw_header(*sm);
+	struct accessory acc = dev.accessories[sm->i_slot];
 
-	if (!has_error(*sm, dev))
+	draw_header(*sm, acc);
+
+	if (!has_error(*sm, dev, acc))
 		draw_entries(*sm, dev);
 }
