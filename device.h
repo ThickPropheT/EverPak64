@@ -17,7 +17,7 @@ struct device_state
 
 	struct accessory accessories[N_SLOTS];
 
-	struct controller_data keys;
+	struct controller_data keys_d;
 };
 
 

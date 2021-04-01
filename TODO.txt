@@ -11,6 +11,8 @@ i don't think I_DEFAULT_SELECTED and I_DEFAULT_DEPTH are wired up in root_menu
 re-evaluate use of size_t
 
 add support for input from any/all controller slots
+	/*struct SI_condat c = keys.c[0];*/
+	^ this is the data type for keys.c
 
 improve folder structure
 

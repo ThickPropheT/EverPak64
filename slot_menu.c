@@ -40,9 +40,7 @@ u16 sm_get_slot_flag(struct slot_menu m)
 
 void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state* dev)
 {
-	struct controller_data keys = dev->keys;
-
-	struct SI_condat c = keys.c[0];
+	struct controller_data keys = dev->keys_d;
 
 	if (keys.c[0].Z)
 	{

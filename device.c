@@ -30,5 +30,5 @@ void dev_poll(struct device_state* ds)
 			acc_update(&ds->accessories[i]);
 	}
 
-	ds->keys = get_keys_down();
+	ds->keys_d = get_keys_down();
 }

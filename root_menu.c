@@ -37,7 +37,7 @@ struct slot_menu* rm_get_current(struct root_menu* rm)
 
 void rm_update(struct root_menu* rm, struct menu_state* ms, struct device_state* dev)
 {
-	struct controller_data keys = dev->keys;
+	struct controller_data keys = dev->keys_d;
 
 	if (keys.c[0].up)
 	{
