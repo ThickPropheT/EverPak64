@@ -42,10 +42,14 @@ void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state*
 {
 	struct controller_data keys = dev->keys;
 
+	struct SI_condat c = keys.c[0];
+
 	if (keys.c[0].Z)
 	{
-		format_mempak(sm->i_slot);
-		acc_update(&dev->accessories[sm->i_slot]);
+		u8 slot = sm->i_slot;
+
+		format_mempak(slot);
+		acc_update(&dev->accessories[slot]);
 	}
 	else if (keys.c[0].B)
 	{
