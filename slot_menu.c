@@ -1,5 +1,6 @@
 #include "slot_menu.h"
 
+#include "types.h"
 #include "accessory.h"
 
 #define FIRST_SLOT_FLAG 0xF000
@@ -62,7 +63,7 @@ void draw_header(struct slot_menu sm, struct accessory acc)
 	u8 sn = sm_get_slot_number(sm);
 	char* acc_name = accessory_names[acc.type];
 
-	cprintf("Controller %i [%s]", sn, acc_name);
+	cprintf("Controller %u [%s]", sn, acc_name);
 	cprintf("Format (Z)");
 	cprintf("Back (B)");
 }
@@ -102,7 +103,28 @@ u8 has_error(struct slot_menu sm, struct device_state dev, struct accessory acc)
 
 void draw_entries(struct slot_menu sm, struct device_state dev)
 {
-	cprintf("1 Banbo-Jazookie\n2 700 Globe in Eye\n3 Oh Hey, Mario 64\n4 Oculus of Time\n");
+	for (u16 i = 0; i < 16; i++)
+	{
+		entry_structure_t es = { };
+		s8 err = get_mempak_entry(sm.i_slot, i, &es);
+
+		switch (err)
+		{
+		case 0:
+			cprintf("%i %s", i, es.name);
+			break;
+
+		case -1:
+			// entry out of bounds or entry_data is null
+			cprintf("-1");
+			break;
+
+		case -2:
+			// mempak is bad or not present
+			cprintf("-2");
+			break;
+		}
+	}
 }
 
 void sm_draw(struct slot_menu* sm, struct device_state dev)
