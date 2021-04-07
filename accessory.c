@@ -23,6 +23,8 @@ struct accessory acc_new(u8 i_slot)
 	return a;
 }
 
+
+
 static void acc_update(struct game_object* go)
 {
 	struct accessory* acc = (struct accessory*)go;
@@ -34,3 +36,13 @@ static void acc_update(struct game_object* go)
 }
 
 const struct game_object_vtable_ ACC[] = { { acc_update } };
+
+
+
+void acc_format(struct accessory* acc)
+{
+	// TODO convert this to signal an acc_update
+	//		rather than doing it directly here.
+	format_mempak(acc->i_slot);
+	acc_update((struct game_object*)acc);
+}

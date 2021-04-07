@@ -31,3 +31,5 @@ extern char* accessory_names[N_ACC_TYPES];
 
 
 struct accessory acc_new(u8 i_slot);
+
+void acc_format(struct accessory* acc);
