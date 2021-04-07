@@ -48,7 +48,7 @@ void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state*
 		u8 slot = sm->i_slot;
 
 		format_mempak(slot);
-		acc_update(&dev->accessories[slot]);
+		go_update((struct game_object*)&dev->accessories[slot]);
 	}
 	else if (keys.c[0].B)
 	{

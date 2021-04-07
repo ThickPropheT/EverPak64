@@ -2,6 +2,7 @@
 
 #include "types.h"
 #include <libdragon.h>
+#include "game_object.h"
 
 
 #define N_ACC_TYPES		4
@@ -14,16 +15,19 @@
 
 struct accessory
 {
+	// TODO should this be const?
+	struct game_object base;
+
 	u8 i_slot;
 
 	u8 type;
 	s8 status;
 };
 
+extern const struct game_object_vtable_ ACC[];
+
 
 extern char* accessory_names[N_ACC_TYPES];
 
 
 struct accessory acc_new(u8 i_slot);
-
-void acc_update(struct accessory* acc);

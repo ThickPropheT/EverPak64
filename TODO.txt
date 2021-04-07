@@ -1,3 +1,6 @@
+add static to functions and things to limit their accessibility
+	see accessory.acc_update(struct accessory *)
+
 find a better way to print to console than to have to "init" things with an instance of cc
 
 sigh... turns out putting global variables in the *.c file does not actually isolate access to that variable.
