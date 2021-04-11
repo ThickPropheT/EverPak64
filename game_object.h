@@ -2,7 +2,7 @@
 
 struct game_object
 {
-	const struct _go_vtable* vtable_;
+	const struct _go_vtable* _vtable;
 	const struct game_object* _base;
 };
 
@@ -14,5 +14,5 @@ struct _go_vtable
 
 static inline void go_update(struct game_object* go)
 {
-	go->vtable_->update(go);
+	go->_vtable->update(go);
 }
