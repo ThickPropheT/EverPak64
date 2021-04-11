@@ -4,7 +4,9 @@
 #include <string.h>
 
 
-const struct _go_vtable ACC[];
+static void acc_update(struct game_object* go);
+
+const struct _go_vtable ACC[] = { { acc_update } };
 
 
 char* accessory_names[N_ACC_TYPES] =
@@ -46,10 +48,6 @@ static void acc_update(struct game_object* go)
 	acc->status = validate_mempak(slot);
 	acc->type = identify_accessory(slot);
 }
-
-const struct _go_vtable ACC[] = { { acc_update } };
-
-
 
 void acc_format(struct accessory* acc)
 {
