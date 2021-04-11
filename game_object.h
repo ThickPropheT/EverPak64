@@ -2,10 +2,10 @@
 
 struct game_object
 {
-	const struct game_object_vtable_* vtable_;
+	const struct _go_vtable* vtable_;
 };
 
-struct game_object_vtable_
+struct _go_vtable
 {
 	void (*update)(struct game_object* go);
 	// TODO add draw?

@@ -35,7 +35,7 @@ static void acc_update(struct game_object* go)
 	acc->type = identify_accessory(slot);
 }
 
-const struct game_object_vtable_ ACC[] = { { acc_update } };
+const struct _go_vtable ACC[] = { { acc_update } };
 
 
 

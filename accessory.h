@@ -24,7 +24,7 @@ struct accessory
 	s8 status;
 };
 
-extern const struct game_object_vtable_ ACC[];
+extern const struct _go_vtable ACC[];
 
 
 extern char* accessory_names[N_ACC_TYPES];
