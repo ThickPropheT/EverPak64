@@ -24,12 +24,10 @@ struct accessory
 	s8 status;
 };
 
-extern const struct _go_vtable ACC[];
-
 
 extern char* accessory_names[N_ACC_TYPES];
 
 
-struct accessory acc_new(u8 i_slot);
+struct accessory* acc_new(u8 i_slot);
 
 void acc_format(struct accessory* acc);

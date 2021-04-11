@@ -15,7 +15,7 @@ struct device_state
 	u16 accessories_f;
 	u8 acc_f_changed;
 
-	struct accessory accessories[N_SLOTS];
+	struct accessory* accessories[N_SLOTS];
 
 	struct controller_data keys_d;
 };

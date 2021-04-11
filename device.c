@@ -27,7 +27,7 @@ void dev_poll(struct device_state* ds)
 		ds->controllers = get_controllers_present();
 
 		for (u8 i = 0; i < N_SLOTS; i++)
-			go_update((struct game_object*)&ds->accessories[i]);
+			go_update((struct game_object*)ds->accessories[i]);
 	}
 
 	ds->keys_d = get_keys_down();

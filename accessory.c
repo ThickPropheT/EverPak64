@@ -1,7 +1,11 @@
 #include "accessory.h"
 
-//#include <stdlib.h>
-//#include <string.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+const struct _go_vtable ACC[];
+
 
 char* accessory_names[N_ACC_TYPES] =
 {
@@ -11,16 +15,24 @@ char* accessory_names[N_ACC_TYPES] =
 	"VRU"
 };
 
-struct accessory acc_new(u8 i_slot)
+
+struct accessory* acc_alloc(void)
 {
-	struct accessory a = { { ACC }, i_slot };
+	struct accessory a = { { ACC } };
 
-	// TODO start from this if base is changed to const.
-	// 	   it blackscreens and not sure what's wrong with it.
-	//struct accessory* acc = malloc(sizeof(struct accessory));
-	//memcpy(acc, &a, sizeof(struct accessory));
+	struct accessory* acc = malloc(sizeof(struct accessory));
+	return memcpy(acc, &a, sizeof(struct accessory));
+}
 
-	return a;
+struct accessory* acc_init(struct accessory* acc, u8 i_slot)
+{
+	acc->i_slot = i_slot;
+	return acc;
+}
+
+struct accessory* acc_new(u8 i_slot)
+{
+	return acc_init(acc_alloc(), i_slot);
 }
 
 

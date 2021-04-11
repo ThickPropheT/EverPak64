@@ -3,6 +3,7 @@
 struct game_object
 {
 	const struct _go_vtable* vtable_;
+	const struct game_object* _base;
 };
 
 struct _go_vtable

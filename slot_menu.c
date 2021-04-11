@@ -45,7 +45,7 @@ void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state*
 
 	if (keys.c[0].Z)
 	{
-		acc_format(&dev->accessories[sm->i_slot]);
+		acc_format(dev->accessories[sm->i_slot]);
 	}
 	else if (keys.c[0].B)
 	{
@@ -126,10 +126,10 @@ void draw_entries(struct slot_menu sm, struct device_state dev)
 
 void sm_draw(struct slot_menu* sm, struct device_state dev)
 {
-	struct accessory acc = dev.accessories[sm->i_slot];
+	struct accessory* acc = dev.accessories[sm->i_slot];
 
-	draw_header(*sm, acc);
+	draw_header(*sm, *acc);
 
-	if (!has_error(*sm, dev, acc))
+	if (!has_error(*sm, dev, *acc))
 		draw_entries(*sm, dev);
 }
