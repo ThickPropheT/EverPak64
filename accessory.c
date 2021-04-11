@@ -15,6 +15,7 @@ char* accessory_names[N_ACC_TYPES] =
 	"Mem Pak",
 	"Rumble Pak",
 	"VRU"
+	// TODO add transfer pak handling
 };
 
 
@@ -46,6 +47,7 @@ static void acc_update(struct game_object* go)
 	u8 slot = acc->i_slot;
 
 	acc->status = validate_mempak(slot);
+	// TODO bake this directly into sub-types instead
 	acc->type = identify_accessory(slot);
 }
 
