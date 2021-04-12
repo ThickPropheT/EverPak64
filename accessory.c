@@ -4,6 +4,10 @@
 #include <string.h>
 
 
+#define FIRST_SLOT_FLAG 0xF000
+#define FLAG_WIDTH		4
+
+
 static void acc_update(struct game_object* go);
 
 const struct _go_vtable ACC[] = { { acc_update } };
@@ -37,6 +41,16 @@ struct accessory* acc_init(struct accessory* acc, u8 i_slot)
 struct accessory* acc_new(u8 i_slot)
 {
 	return acc_init(acc_alloc(), i_slot);
+}
+
+u8 acc_get_number(struct accessory acc)
+{
+	return acc.i_slot + 1;
+}
+
+u16 acc_get_flag(struct accessory acc)
+{
+	return FIRST_SLOT_FLAG >> (acc.i_slot * FLAG_WIDTH);
 }
 
 

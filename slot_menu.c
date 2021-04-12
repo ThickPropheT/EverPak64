@@ -3,9 +3,6 @@
 #include "types.h"
 #include "accessory.h"
 
-#define FIRST_SLOT_FLAG 0xF000
-#define FLAG_WIDTH		4
-
 
 #define cprintf(...) { \
 	cs_printfln(cc, __VA_ARGS__); \
@@ -23,18 +20,6 @@ void sm_init(struct console_context* c)
 struct slot_menu sm_new(u8 i_slot)
 {
 	return (struct slot_menu) { i_slot, { 0, 0 } };
-}
-
-
-
-u8 sm_get_slot_number(struct slot_menu m)
-{
-	return m.i_slot + 1;
-}
-
-u16 sm_get_slot_flag(struct slot_menu m)
-{
-	return FIRST_SLOT_FLAG >> (m.i_slot * FLAG_WIDTH);
 }
 
 
@@ -57,7 +42,7 @@ void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state*
 
 void draw_header(struct slot_menu sm, struct accessory acc)
 {
-	u8 sn = sm_get_slot_number(sm);
+	u8 sn = acc_get_number(acc);
 	char* acc_name = accessory_names[acc.type];
 
 	cprintf("Controller %u [%s]", sn, acc_name);
@@ -67,7 +52,7 @@ void draw_header(struct slot_menu sm, struct accessory acc)
 
 u8 has_error(struct slot_menu sm, struct device_state dev, struct accessory acc)
 {
-	u16 f_slot = sm_get_slot_flag(sm);
+	u16 f_slot = acc_get_flag(acc);
 
 	//if (!(dev.controllers & f_slot))
 	//{

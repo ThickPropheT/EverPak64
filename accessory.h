@@ -32,4 +32,7 @@ struct accessory* acc_init(struct accessory* acc, u8 i_slot);
 
 struct accessory* acc_new(u8 i_slot);
 
+u8 acc_get_number(struct accessory acc);
+u16 acc_get_flag(struct accessory acc);
+
 void acc_format(struct accessory* acc);

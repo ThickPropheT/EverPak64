@@ -67,15 +67,16 @@ void rm_draw(struct root_menu* rm, struct device_state dev)
 
 	for (u8 i = 0; i < N_SLOTS; i++)
 	{
-		struct slot_menu mi = rm->slots[i];
-		u8 sn = sm_get_slot_number(mi);
+		struct accessory acc = *dev.accessories[i];
+
+		u8 sn = acc_get_number(acc);
 
 		char* sel =
 			i == rm->m.i_item
 			? ">"
 			: " ";
 
-		u16 f_slot = sm_get_slot_flag(mi);
+		u16 f_slot = acc_get_flag(acc);
 
 		char* pres =
 			dev.controllers & f_slot
