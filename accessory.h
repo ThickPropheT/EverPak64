@@ -5,7 +5,7 @@
 #include "game_object.h"
 
 
-#define N_ACC_TYPES		4
+#define N_ACC_TYPES		5
 
 
 #define MPAK_STATUS_READY 			 0

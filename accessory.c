@@ -14,8 +14,8 @@ char* accessory_names[N_ACC_TYPES] =
 	"None",
 	"Mem Pak",
 	"Rumble Pak",
-	"VRU"
-	// TODO add transfer pak handling
+	"VRU",
+	"Transfer Pak"
 };
 
 
