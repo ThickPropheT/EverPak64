@@ -52,7 +52,7 @@ void draw_header(struct slot_menu sm, struct accessory acc)
 
 u8 has_error(struct slot_menu sm, struct device_state dev, struct accessory acc)
 {
-	u16 f_slot = acc_get_flag(acc);
+	u16 f_slot = get_flag(acc.i_slot);
 
 	//if (!(dev.controllers & f_slot))
 	//{

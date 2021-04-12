@@ -21,6 +21,9 @@ struct device_state
 };
 
 
+u16 get_flag(u8 i_slot);
+
+
 struct device_state dev_new(void);
 
 void dev_poll(struct device_state* ds);

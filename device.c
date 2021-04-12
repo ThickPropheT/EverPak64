@@ -4,6 +4,17 @@
 #include "accessory.h"
 #include "memory_pak.h"
 
+
+#define FIRST_SLOT_FLAG 0xF000
+#define FLAG_WIDTH		4
+
+
+u16 get_flag(u8 i_slot)
+{
+	return FIRST_SLOT_FLAG >> (i_slot * FLAG_WIDTH);
+}
+
+
 static struct accessory* resolve_rpak(u8 i_slot)
 {
 	return acc_new(i_slot);
@@ -32,6 +43,8 @@ static struct accessory* resolve_acc(struct device_state dev, u8 i_slot)
 
 static void replace_acc(struct device_state* dev, u8 i_slot)
 {
+
+
 	free(dev->accessories[i_slot]);
 	dev->accessories[i_slot] = resolve_acc(*dev, i_slot);
 }
