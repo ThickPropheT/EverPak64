@@ -27,6 +27,8 @@ struct accessory
 
 extern char* accessory_names[N_ACC_TYPES];
 
+struct accessory* acc_alloc(void);
+struct accessory* acc_init(struct accessory* acc, u8 i_slot);
 
 struct accessory* acc_new(u8 i_slot);
 

@@ -33,6 +33,7 @@ struct accessory* acc_init(struct accessory* acc, u8 i_slot)
 	return acc;
 }
 
+
 struct accessory* acc_new(u8 i_slot)
 {
 	return acc_init(acc_alloc(), i_slot);

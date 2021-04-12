@@ -1,7 +1,8 @@
 #include "device.h"
 
-#include "accessory.h"
 #include <stdlib.h>
+#include "accessory.h"
+#include "memory_pak.h"
 
 static struct accessory* resolve_rpak(u8 i_slot)
 {
@@ -19,7 +20,7 @@ static struct accessory* resolve_acc(struct device_state dev, u8 i_slot)
 	switch (type)
 	{
 	case ACCESSORY_MEMPAK:
-		return acc_new(i_slot);
+		return (struct accessory*)mpk_new(i_slot);
 
 	case ACCESSORY_RUMBLEPAK:
 		return resolve_rpak(i_slot);
