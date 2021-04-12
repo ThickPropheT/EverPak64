@@ -24,8 +24,7 @@ static struct accessory* resolve_acc(struct device_state dev, u8 i_slot)
 {
 	u8 type = ACCESSORY_NONE;
 
-	// TODO migrate sm_get_slot_flag somewhere for common access
-	if (dev.accessories_f & (0xF000 >> (i_slot * 4)))
+	if (dev.accessories_f & get_flag(i_slot))
 		type = identify_accessory(i_slot);
 
 	switch (type)
