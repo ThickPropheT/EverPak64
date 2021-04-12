@@ -42,8 +42,6 @@ static struct accessory* resolve_acc(struct device_state dev, u8 i_slot)
 
 static void replace_acc(struct device_state* dev, u8 i_slot)
 {
-
-
 	free(dev->accessories[i_slot]);
 	dev->accessories[i_slot] = resolve_acc(*dev, i_slot);
 }
@@ -53,6 +51,9 @@ struct device_state dev_new(void)
 	struct device_state dev = { };
 
 	for (u8 i = 0; i < N_SLOTS; i++)
+		// TODO this will result in all accessories being accessory
+		// TODO since accessories_f will still be 0 becuase
+		// TODO get_accessories_present hasn't yet been called.
 		dev.accessories[i] = resolve_acc(dev, i);
 
 	return dev;
@@ -66,22 +67,29 @@ void dev_poll(struct device_state* ds)
 	u16 acc = get_accessories_present(&out);
 
 	ds->acc_f_changed = ds->accessories_f != acc;
-	ds->accessories_f = acc;
 
 	if (ds->acc_f_changed)
 	{
 		ds->controllers = get_controllers_present();
 
-		// TODO find a way to optimize this so that if the acc
-		// TODO didn't change then it doesn't need to be replaced
 		for (u8 i = 0; i < N_SLOTS; i++)
+		{
+			u16 f = get_flag(i);
+			u8 acc_changed = (ds->accessories_f & f) != (acc & f);
+
+			if (!acc_changed)
+				continue;
+
 			replace_acc(ds, i);
+		}
 
 		// TODO ensure this interacts correctly with resolve_acc
 		// TODO AND add 'dirty' flag for go_update
 		for (u8 i = 0; i < N_SLOTS; i++)
 			go_update((struct game_object*)ds->accessories[i]);
 	}
+
+	ds->accessories_f = acc;
 
 	ds->keys_d = get_keys_down();
 }
