@@ -54,11 +54,3 @@ static void acc_update(struct game_object* go)
 
 	acc->status = validate_mempak(slot);
 }
-
-void acc_format(struct accessory* acc)
-{
-	// TODO convert this to signal an acc_update
-	//		rather than doing it directly here.
-	format_mempak(acc->i_slot);
-	acc_update((struct game_object*)acc);
-}

@@ -32,5 +32,3 @@ void _acc_init(struct accessory* acc, const struct _go_vtable* vtable, u8 i_slot
 struct accessory* acc_new(u8 i_slot);
 
 u8 acc_get_number(struct accessory acc);
-
-void acc_format(struct accessory* acc);

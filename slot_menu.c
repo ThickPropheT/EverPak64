@@ -1,7 +1,7 @@
 #include "slot_menu.h"
 
 #include "types.h"
-#include "accessory.h"
+#include "memory_pak.h"
 
 
 #define cprintf(...) { \
@@ -33,7 +33,7 @@ void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state*
 		&& keys.c[0].Z
 		&& keys.c[0].R)
 	{
-		acc_format(dev->accessories[sm->i_slot]);
+		mpk_format((struct memory_pak*)dev->accessories[sm->i_slot]);
 	}
 	else if (keys.c[0].B)
 	{
