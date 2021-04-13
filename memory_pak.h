@@ -2,9 +2,13 @@
 
 #include "accessory.h"
 
+#define ENTRIES_LEN		16
+
 struct memory_pak
 {
 	struct accessory base;
+
+	entry_structure_t entries[ENTRIES_LEN];
 };
 
 

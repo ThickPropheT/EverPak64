@@ -6,6 +6,8 @@ struct game_object
 {
 	const struct _go_vtable* _vtable;
 	const struct game_object* _base;
+
+	u8 can_update;
 };
 
 struct _go_vtable

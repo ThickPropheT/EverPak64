@@ -90,11 +90,14 @@ void dev_poll(struct device_state* ds)
 
 			replace_acc(ds, i);
 		}
+	}
 
-		// TODO ensure this interacts correctly with resolve_acc
-		// TODO AND add 'dirty' flag for go_update
-		for (u8 i = 0; i < N_SLOTS; i++)
-			go_update((struct game_object*)ds->accessories[i]);
+	for (u8 i = 0; i < N_SLOTS; i++)
+	{
+		struct accessory* acc = ds->accessories[i];
+
+		if (acc->base.can_update)
+			go_update((struct game_object*)acc);
 	}
 
 	ds->keys_d = get_keys_down();

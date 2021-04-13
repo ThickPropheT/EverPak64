@@ -88,10 +88,15 @@ u8 has_error(struct slot_menu sm, struct device_state dev, struct accessory acc)
 
 void draw_entries(struct slot_menu sm, struct device_state dev)
 {
-	for (u16 i = 0; i < 16; i++)
+	struct memory_pak* mpk = (struct memory_pak*)dev.accessories[sm.i_slot];
+
+	for (u8 i = 0; i < ENTRIES_LEN; i++)
 	{
-		entry_structure_t es = { };
-		s8 err = get_mempak_entry(sm.i_slot, i, &es);
+		entry_structure_t es = mpk->entries[i];
+
+		// TODO wrap entry_structure_t to cache this err state
+		//s8 err = get_mempak_entry(sm.i_slot, i, &es);
+		s8 err = 0;
 
 		switch (err)
 		{
