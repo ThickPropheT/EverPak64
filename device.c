@@ -69,6 +69,9 @@ void dev_poll(struct device_state* ds)
 
 	ds->acc_f_changed = ds->accessories_f != acc;
 
+	u16 old_acc = ds->accessories_f;
+	ds->accessories_f = acc;
+
 	if (ds->acc_f_changed)
 	{
 		ds->controllers = get_controllers_present();
@@ -76,7 +79,7 @@ void dev_poll(struct device_state* ds)
 		for (u8 i = 0; i < N_SLOTS; i++)
 		{
 			u16 f = get_flag(i);
-			u8 acc_changed = (ds->accessories_f & f) != (acc & f);
+			u8 acc_changed = (old_acc & f) != (acc & f);
 
 			if (!acc_changed)
 				continue;
@@ -89,8 +92,6 @@ void dev_poll(struct device_state* ds)
 		for (u8 i = 0; i < N_SLOTS; i++)
 			go_update((struct game_object*)ds->accessories[i]);
 	}
-
-	ds->accessories_f = acc;
 
 	ds->keys_d = get_keys_down();
 }
