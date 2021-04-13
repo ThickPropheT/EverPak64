@@ -12,8 +12,7 @@ struct device_state
 {
 	u16 controllers;
 
-	u16 accessories_f;
-	u8 acc_f_changed;
+	u16 acc_flags;
 
 	struct accessory* accessories[N_SLOTS];
 
@@ -26,4 +25,4 @@ u16 get_flag(u8 i_slot);
 
 struct device_state dev_new(void);
 
-void dev_poll(struct device_state* ds);
+void dev_poll(struct device_state* dev);

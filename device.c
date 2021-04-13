@@ -29,7 +29,7 @@ static struct accessory* resolve_acc(struct device_state dev, u8 i_slot)
 {
 	u8 type = ACCESSORY_NONE;
 
-	if (dev.accessories_f & get_flag(i_slot))
+	if (dev.acc_flags & get_flag(i_slot))
 		type = identify_accessory(i_slot);
 
 	switch (type)
@@ -64,43 +64,58 @@ struct device_state dev_new(void)
 	return dev;
 }
 
-void dev_poll(struct device_state* ds)
+
+
+static void acc_flags_changed(struct device_state* dev, u16 from, u16 to)
 {
-	controller_scan();
-
-	struct controller_data out;
-	u16 acc = get_accessories_present(&out);
-
-	ds->acc_f_changed = ds->accessories_f != acc;
-
-	u16 old_acc = ds->accessories_f;
-	ds->accessories_f = acc;
-
-	if (ds->acc_f_changed)
-	{
-		ds->controllers = get_controllers_present();
-
-		for (u8 i = 0; i < N_SLOTS; i++)
-		{
-			u16 f = get_flag(i);
-			u8 acc_changed = (old_acc & f) != (acc & f);
-
-			if (!acc_changed)
-				continue;
-
-			replace_acc(ds, i);
-		}
-	}
+	dev->controllers = get_controllers_present();
 
 	for (u8 i = 0; i < N_SLOTS; i++)
 	{
-		struct accessory* acc = ds->accessories[i];
+		u16 f = get_flag(i);
+		u8 has_f_changed = (from & f) != (to & f);
+
+		if (!has_f_changed)
+			continue;
+
+		replace_acc(dev, i);
+	}
+}
+
+static void set_acc_flags(struct device_state* dev, u16 value)
+{
+	if (dev->acc_flags == value)
+		return;
+
+	u16 old_value = dev->acc_flags;
+
+	dev->acc_flags = value;
+
+	acc_flags_changed(dev, old_value, value);
+}
+
+static void update_accessories(struct device_state* dev)
+{
+	for (u8 i = 0; i < N_SLOTS; i++)
+	{
+		struct accessory* acc = dev->accessories[i];
 
 		if (!acc->base.can_update)
 			continue;
 
 		go_update((struct game_object*)acc);
 	}
+}
 
-	ds->keys_d = get_keys_down();
+void dev_poll(struct device_state* dev)
+{
+	controller_scan();
+
+	struct controller_data out;
+	u16 acc_flags = get_accessories_present(&out);
+
+	set_acc_flags(dev, acc_flags);
+	update_accessories(dev);
+
+	dev->keys_d = get_keys_down();
 }
