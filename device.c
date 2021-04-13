@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "accessory.h"
 #include "memory_pak.h"
+#include "rumble_pak.h"
 
 
 #define FIRST_SLOT_FLAG 0xF000
@@ -17,7 +18,7 @@ u16 get_flag(u8 i_slot)
 
 static struct accessory* resolve_rpak(u8 i_slot)
 {
-	return acc_new(i_slot);
+	return (struct accessory*)rpk_new(i_slot);
 }
 
 static struct accessory* resolve_acc(struct device_state dev, u8 i_slot)

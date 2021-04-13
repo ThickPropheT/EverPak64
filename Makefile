@@ -22,7 +22,7 @@ N64_FLAGS = -l 2M -h $(HEADERPATH)/$(HEADERNAME) -o $(PROG_NAME)$(ROM_EXTENSION)
 endif
 
 
-OBJS = $(PROG_NAME).o pinwheel.o fps_counter.o renderer.o gra_console.o console.o math.o device.o accessory.o memory_pak.o menu.o menu_state.o menu_tree.o root_menu.o slot_menu.o
+OBJS = $(PROG_NAME).o pinwheel.o fps_counter.o renderer.o gra_console.o console.o math.o device.o accessory.o memory_pak.o rumble_pak.o menu.o menu_state.o menu_tree.o root_menu.o slot_menu.o
 
 PROG_NAME = main
 
