@@ -28,7 +28,10 @@ void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state*
 {
 	struct controller_data keys = dev->keys_d;
 
-	if (keys.c[0].Z)
+	// for safety
+	if (keys.c[0].L
+		&& keys.c[0].Z
+		&& keys.c[0].R)
 	{
 		acc_format(dev->accessories[sm->i_slot]);
 	}
