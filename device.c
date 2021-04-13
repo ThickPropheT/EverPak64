@@ -18,6 +18,10 @@ u16 get_flag(u8 i_slot)
 
 static struct accessory* resolve_rpak(u8 i_slot)
 {
+	// Brawler64 controllers report mempaks as a rumble pak.
+	if (!validate_mempak(i_slot))
+		return (struct accessory*)mpk_new(i_slot);
+
 	return (struct accessory*)rpk_new(i_slot);
 }
 
