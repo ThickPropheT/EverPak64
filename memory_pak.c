@@ -21,7 +21,7 @@ struct memory_pak* mpk_new(u8 i_slot)
 	return mpk;
 }
 
-static void set_entry(struct memory_pak* mpk, u8 i)
+static void load_entry(struct memory_pak* mpk, u8 i)
 {
 	get_mempak_entry(mpk->base.i_slot, i, &mpk->entries[i]);
 }
@@ -33,7 +33,8 @@ static void mpk_update(struct game_object* go)
 
 	struct memory_pak* mpk = (struct memory_pak*)go;
 
-	set_entry(mpk, go->can_update - 1);
+
+	load_entry(mpk, go->can_update - 1);
 
 	go->can_update++;
 

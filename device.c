@@ -96,8 +96,10 @@ void dev_poll(struct device_state* ds)
 	{
 		struct accessory* acc = ds->accessories[i];
 
-		if (acc->base.can_update)
-			go_update((struct game_object*)acc);
+		if (!acc->base.can_update)
+			continue;
+
+		go_update((struct game_object*)acc);
 	}
 
 	ds->keys_d = get_keys_down();
