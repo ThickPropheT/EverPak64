@@ -11,7 +11,7 @@ const struct _go_vtable RPK[] = { { rpk_update } };
 
 struct rumble_pak* rpk_new(u8 i_slot)
 {
-	struct rumble_pak* rpk = malloc(sizeof * rpk);
+	struct rumble_pak* rpk = calloc(1, sizeof * rpk);
 
 	_acc_init(&rpk->base, RPK, i_slot);
 
