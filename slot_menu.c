@@ -101,7 +101,7 @@ void draw_entries(struct slot_menu sm, struct device_state dev)
 		switch (err)
 		{
 		case 0:
-			cprintf("%i %s", i, es.name);
+			cprintf("%2i %s", i + 1, es.name);
 			break;
 
 		case -1:
