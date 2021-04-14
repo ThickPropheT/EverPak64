@@ -4,6 +4,7 @@
 
 struct rumble_pak
 {
+	// TODO should this be const?
 	struct accessory acc;
 };
 
