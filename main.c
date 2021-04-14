@@ -100,16 +100,17 @@ int main(void)
 
 	while (1)
 	{
-		cs_clear(&cc, BG_COLOR);
-
 		pw_update();
 		fps_update();
-
-		cprintf("(%c) %.1f fps [menu.z64]\n\n", pinwheel, fps);
 
 		dev_poll(&dev);
 
 		update(&mt, &dev);
+
+		cs_clear(&cc, BG_COLOR);
+
+		cprintf("(%c) %.1f fps [menu.z64]\n\n", pinwheel, fps);
+
 		draw(&mt, dev);
 
 		cs_render(&cc);
