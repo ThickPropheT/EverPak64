@@ -63,7 +63,7 @@ u8 has_error(struct slot_menu sm, struct device_state dev, struct accessory acc)
 	//	return 1;
 	//}
 
-	if (!(dev.accessories_f & f_slot))
+	if (!(dev.acc_flags & f_slot))
 	{
 		cprintf("Memory Pak missing.");
 		return 1;

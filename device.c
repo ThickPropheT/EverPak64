@@ -112,9 +112,9 @@ void dev_poll(struct device_state* dev)
 	controller_scan();
 
 	struct controller_data out;
-	u16 acc_flags = get_accessories_present(&out);
+	u16 acc = get_accessories_present(&out);
 
-	set_acc_flags(dev, acc_flags);
+	set_acc_flags(dev, acc);
 	update_accessories(dev);
 
 	dev->keys_d = get_keys_down();
