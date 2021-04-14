@@ -21,8 +21,7 @@ char* accessory_names[N_ACC_TYPES] =
 
 void _acc_init(struct accessory* acc, const struct _go_vtable* vtable, u8 i_slot)
 {
-	acc->go._vtable = vtable;
-	acc->go._base = go_new(ACC);
+	_go_init(&acc->go, vtable, ACC);
 
 	acc->i_slot = i_slot;
 }
