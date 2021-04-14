@@ -6,7 +6,7 @@
 
 struct memory_pak
 {
-	struct accessory base;
+	struct accessory acc;
 
 	entry_structure_t entries[ENTRIES_LEN];
 };

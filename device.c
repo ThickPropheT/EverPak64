@@ -100,7 +100,7 @@ static void update_accessories(struct device_state* dev)
 	{
 		struct accessory* acc = dev->accessories[i];
 
-		if (!acc->base.can_update)
+		if (!acc->go.can_update)
 			continue;
 
 		go_update((struct game_object*)acc);

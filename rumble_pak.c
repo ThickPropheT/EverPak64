@@ -13,9 +13,9 @@ struct rumble_pak* rpk_new(u8 i_slot)
 {
 	struct rumble_pak* rpk = calloc(1, sizeof * rpk);
 
-	_acc_init(&rpk->base, RPK, i_slot);
+	_acc_init(&rpk->acc, RPK, i_slot);
 
-	rpk->base.type = ACCESSORY_RUMBLEPAK;
+	rpk->acc.type = ACCESSORY_RUMBLEPAK;
 
 	return rpk;
 }

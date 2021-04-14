@@ -21,8 +21,8 @@ char* accessory_names[N_ACC_TYPES] =
 
 void _acc_init(struct accessory* acc, const struct _go_vtable* vtable, u8 i_slot)
 {
-	acc->base._vtable = vtable;
-	acc->base._base = go_new(ACC);
+	acc->go._vtable = vtable;
+	acc->go._base = go_new(ACC);
 
 	acc->i_slot = i_slot;
 }
@@ -31,7 +31,7 @@ struct accessory* acc_new(u8 i_slot)
 {
 	struct accessory* acc = malloc(sizeof * acc);
 
-	acc->base._vtable = ACC;
+	acc->go._vtable = ACC;
 
 	acc->i_slot = i_slot;
 	acc->type = ACCESSORY_NONE;

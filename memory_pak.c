@@ -13,17 +13,17 @@ struct memory_pak* mpk_new(u8 i_slot)
 {
 	struct memory_pak* mpk = calloc(1, sizeof * mpk);
 
-	_acc_init(&mpk->base, MPK, i_slot);
+	_acc_init(&mpk->acc, MPK, i_slot);
 
-	mpk->base.type = ACCESSORY_MEMPAK;
-	mpk->base.base.can_update = 1;
+	mpk->acc.type = ACCESSORY_MEMPAK;
+	mpk->acc.go.can_update = 1;
 
 	return mpk;
 }
 
 static void load_entry(struct memory_pak* mpk, u8 i)
 {
-	get_mempak_entry(mpk->base.i_slot, i, &mpk->entries[i]);
+	get_mempak_entry(mpk->acc.i_slot, i, &mpk->entries[i]);
 }
 
 
@@ -47,6 +47,6 @@ static void mpk_update(struct game_object* go)
 
 void mpk_format(struct memory_pak* mpk)
 {
-	format_mempak(mpk->base.i_slot);
-	mpk->base.base.can_update = 1;
+	format_mempak(mpk->acc.i_slot);
+	mpk->acc.go.can_update = 1;
 }

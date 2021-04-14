@@ -16,7 +16,7 @@
 struct accessory
 {
 	// TODO should this be const?
-	struct game_object base;
+	struct game_object go;
 
 	u8 i_slot;
 

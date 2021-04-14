@@ -4,7 +4,7 @@
 
 struct rumble_pak
 {
-	struct accessory base;
+	struct accessory acc;
 };
 
 
