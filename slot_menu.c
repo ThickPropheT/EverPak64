@@ -39,6 +39,16 @@ void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state*
 	{
 		ms_pop(ms);
 	}
+	else if (keys.c[0].start)
+	{
+		if (sm->rumble)
+			rumble_stop(0);
+
+		else
+			rumble_start(0);
+
+		sm->rumble = 1 - sm->rumble;
+	}
 }
 
 

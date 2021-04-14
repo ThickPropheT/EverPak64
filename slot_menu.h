@@ -16,6 +16,8 @@ struct slot_menu
 	u8 i_slot;
 
 	struct menu m;
+
+	u8 rumble;
 };
 
 
