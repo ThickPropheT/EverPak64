@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdlib.h>
+#include "types.h"
 
 struct game_object
 {
