@@ -1,6 +1,6 @@
 #include "console.h"
 
-struct console_context cs_init(enum renderer r, bitdepth_t d)
+struct console_context cs_new(enum renderer r, bitdepth_t d)
 {
 	renderer_init(r, d);
 	return (struct console_context) { (display_context_t)NULL, 0, 0 };

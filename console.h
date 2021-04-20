@@ -23,7 +23,7 @@ struct console_context
 	char buf[BUFFER_LEN];
 };
 
-struct console_context cs_init(enum renderer r, bitdepth_t d);
+struct console_context cs_new(enum renderer r, bitdepth_t d);
 
 void cs_clear(struct console_context* cc, uint32_t bg_color);
 

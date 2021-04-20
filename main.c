@@ -73,7 +73,7 @@ struct console_context set_up(void)
 	init_interrupts();
 
 	/* Initialize peripherals */
-	struct console_context cc = cs_init(Gx2D, DEPTH_16_BPP);
+	struct console_context cc = cs_new(Gx2D, DEPTH_16_BPP);
 	controller_init();
 
 	return cc;
