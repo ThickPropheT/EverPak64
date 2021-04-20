@@ -9,12 +9,13 @@ struct game_object
 	const struct game_object* _base;
 
 	u8 can_update;
+	u8 can_draw;
 };
 
 struct _go_vtable
 {
 	void (*update)(struct game_object* go);
-	// TODO add draw?
+	void (*draw)(struct game_object* go);
 };
 
 static inline struct game_object* go_new(const struct _go_vtable* vtable)
