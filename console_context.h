@@ -10,9 +10,12 @@
 #define BUFFER_LEN 128 // TODO is this a good buffer length? just used one i saw in another project somewhere. maybe alt64
 
 #define cc_printfln(c, ...) { \
-	sprintf(c.buf, __VA_ARGS__); \
-	cc_println(&c); \
+	sprintf(c->buf, __VA_ARGS__); \
+	cc_println(c); \
 }
+
+// TODO add console.* & wrap below functions with single instance of console_context
+// TODO for better ease of use (i.e. in order to replace things like rm_init(...)
 
 struct console_context
 {

@@ -15,8 +15,6 @@ struct root_menu
 };
 
 
-void rm_init(struct console_context* cc);
-
 struct root_menu rm_new(void);
 
 struct slot_menu* rm_get_current(struct root_menu* rm);

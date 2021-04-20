@@ -2,26 +2,13 @@
 
 #include "types.h"
 #include "memory_pak.h"
+#include "console.h"
 
-
-#define cprintf(...) { \
-	cc_printfln(cc, __VA_ARGS__); \
-}
-
-
-struct console_context cc;
-
-
-void sm_init(struct console_context* c)
-{
-	cc = *c;
-}
 
 struct slot_menu sm_new(u8 i_slot)
 {
 	return (struct slot_menu) { i_slot, { 0, 0 } };
 }
-
 
 
 void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state* dev)

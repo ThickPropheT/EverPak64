@@ -16,6 +16,7 @@
 #include "menu_tree.h"
 #include "root_menu.h"
 #include "slot_menu.h"
+#include "console.h"
 
 
 // render pinwheel @ ~15Hz
@@ -39,13 +40,6 @@ void sleep(unsigned long ms)
 // #### TODO MOVE THIS ####
 
 
-#define cprintf(...) { \
-	cc_printfln(cc, __VA_ARGS__); \
-}
-
-struct console_context cc;
-
-
 
 void update(struct menu_tree* mt, struct device_state* dev)
 {
@@ -66,23 +60,22 @@ void draw(struct menu_tree* mt, struct device_state dev)
 
 
 
-struct console_context set_up(void)
+void set_up(void)
 {
 	/* enable interrupts (on the CPU) */
 	init_interrupts();
 
 	/* Initialize peripherals */
-	struct console_context cc = cc_new(Gx2D, DEPTH_16_BPP);
-	controller_init();
+	cs_init(Gx2D, DEPTH_16_BPP);
 
-	return cc;
+	controller_init();
 }
 
 
 
 int main(void)
 {
-	cc = set_up();
+	set_up();
 
 	char pinwheel = 0;
 	pw_init(FIFTEEN_FPS, 0, &pinwheel);
@@ -90,7 +83,6 @@ int main(void)
 	float fps = 0;
 	fps_init(HALF_FPS, &fps);
 
-	mt_init(&cc);
 	struct menu_tree mt = mt_new();
 
 	graphics_set_color(FG_TEXT_COLOR, BG_TEXT_COLOR);
@@ -106,13 +98,13 @@ int main(void)
 
 		update(&mt, &dev);
 
-		cc_clear(&cc, BG_COLOR);
+		cs_clear(BG_COLOR);
 
 		cprintf("(%c) %.1f fps [menu.z64]\n\n", pinwheel, fps);
 
 		draw(&mt, dev);
 
-		cc_render(&cc);
+		cs_render();
 	}
 
 	return 0;

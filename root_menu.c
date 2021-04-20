@@ -2,23 +2,13 @@
 
 #include <stddef.h>
 #include <malloc.h>
+#include "console.h"
 
 
 // TODO i don't think these are wired up
 #define I_DEFAULT_SELECTED	0
 #define I_DEFAULT_DEPTH		0
 
-
-#define cprintf(...) { \
-	cc_printfln(cc, __VA_ARGS__); \
-}
-
-struct console_context cc;
-
-void rm_init(struct console_context* c)
-{
-	cc = *c;
-}
 
 struct root_menu rm_new(void)
 {

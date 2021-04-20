@@ -21,8 +21,6 @@ struct slot_menu
 };
 
 
-void sm_init(struct console_context* cc);
-
 struct slot_menu sm_new(u8 i_slot);
 
 void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state* dev);

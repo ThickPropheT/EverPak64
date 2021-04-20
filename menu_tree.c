@@ -2,12 +2,6 @@
 
 #include "math.h"
 
-void mt_init(struct console_context* c)
-{
-	rm_init(c);
-	sm_init(c);
-}
-
 struct menu_tree mt_new(void)
 {
 	struct menu_state ms = ms_init(MAX_MENUS);
