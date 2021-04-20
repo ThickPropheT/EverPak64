@@ -10,7 +10,6 @@
 #include "fps_counter.h"
 #include "color_palette.h"
 #include "types.h"
-#include "console.h"
 #include "math.h"
 #include "menu.h"
 #include "menu_state.h"

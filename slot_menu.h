@@ -6,7 +6,7 @@
 
 #include "types.h"
 #include "menu.h"
-#include "console.h"
+#include "console_context.h"
 #include "device.h"
 #include "menu_state.h"
 

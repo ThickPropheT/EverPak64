@@ -1,4 +1,4 @@
-#include "console.h"
+#include "console_context.h"
 
 struct console_context cs_new(enum renderer r, bitdepth_t d)
 {
