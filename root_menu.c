@@ -10,7 +10,7 @@
 
 
 #define cprintf(...) { \
-	cs_printfln(cc, __VA_ARGS__); \
+	cc_printfln(cc, __VA_ARGS__); \
 }
 
 struct console_context cc;

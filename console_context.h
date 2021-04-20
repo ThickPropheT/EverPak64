@@ -9,9 +9,9 @@
 
 #define BUFFER_LEN 128 // TODO is this a good buffer length? just used one i saw in another project somewhere. maybe alt64
 
-#define cs_printfln(c, ...) { \
+#define cc_printfln(c, ...) { \
 	sprintf(c.buf, __VA_ARGS__); \
-	cs_println(&c); \
+	cc_println(&c); \
 }
 
 struct console_context
@@ -23,10 +23,10 @@ struct console_context
 	char buf[BUFFER_LEN];
 };
 
-struct console_context cs_new(enum renderer r, bitdepth_t d);
+struct console_context cc_new(enum renderer r, bitdepth_t d);
 
-void cs_clear(struct console_context* cc, uint32_t bg_color);
+void cc_clear(struct console_context* cc, uint32_t bg_color);
 
-void cs_println(struct console_context* cc);
+void cc_println(struct console_context* cc);
 
-void cs_render(struct console_context* cc);
+void cc_render(struct console_context* cc);

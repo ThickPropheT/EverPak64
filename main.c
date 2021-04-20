@@ -40,7 +40,7 @@ void sleep(unsigned long ms)
 
 
 #define cprintf(...) { \
-	cs_printfln(cc, __VA_ARGS__); \
+	cc_printfln(cc, __VA_ARGS__); \
 }
 
 struct console_context cc;
@@ -72,7 +72,7 @@ struct console_context set_up(void)
 	init_interrupts();
 
 	/* Initialize peripherals */
-	struct console_context cc = cs_new(Gx2D, DEPTH_16_BPP);
+	struct console_context cc = cc_new(Gx2D, DEPTH_16_BPP);
 	controller_init();
 
 	return cc;
@@ -106,13 +106,13 @@ int main(void)
 
 		update(&mt, &dev);
 
-		cs_clear(&cc, BG_COLOR);
+		cc_clear(&cc, BG_COLOR);
 
 		cprintf("(%c) %.1f fps [menu.z64]\n\n", pinwheel, fps);
 
 		draw(&mt, dev);
 
-		cs_render(&cc);
+		cc_render(&cc);
 	}
 
 	return 0;
