@@ -16,7 +16,7 @@ struct game_object
 struct _go_vtable
 {
 	void (*update)(struct game_state gs, struct game_object* go);
-	void (*draw)(struct game_object* go);
+	void (*draw)(struct game_state gs, struct game_object* go);
 };
 
 static inline struct game_object* go_new(const struct _go_vtable* vtable)
@@ -35,4 +35,9 @@ static inline void _go_init(struct game_object* go, const struct _go_vtable* vta
 static inline void go_update(struct game_state gs, struct game_object* go)
 {
 	go->_vtable->update(gs, go);
+}
+
+static inline void go_draw(struct game_state gs, struct game_object* go)
+{
+	go->_vtable->draw(gs, go);
 }
