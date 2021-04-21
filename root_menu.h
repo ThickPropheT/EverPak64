@@ -4,7 +4,7 @@
 
 #include "menu.h"
 #include "slot_menu.h"
-#include "device.h"
+#include "device_state.h"
 
 
 struct root_menu

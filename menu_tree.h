@@ -4,7 +4,7 @@
 
 #include "menu_state.h"
 #include "root_menu.h"
-#include "device.h"
+#include "device_state.h"
 
 
 // TODO consider converting to enum

@@ -1,4 +1,4 @@
-#include "device.h"
+#include "device_state.h"
 
 #include <stdlib.h>
 #include "accessory.h"
