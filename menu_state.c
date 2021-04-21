@@ -2,7 +2,7 @@
 
 #include "math.h"
 
-struct menu_state ms_init(size_t max_depth)
+struct menu_state ms_new(size_t max_depth)
 {
 	return (struct menu_state) { 0, max_depth };
 }

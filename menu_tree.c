@@ -4,7 +4,7 @@
 
 struct menu_tree mt_new(void)
 {
-	struct menu_state ms = ms_init(MAX_MENUS);
+	struct menu_state ms = ms_new(MAX_MENUS);
 	struct root_menu rm = rm_new();
 
 	return (struct menu_tree) { ms, rm };
