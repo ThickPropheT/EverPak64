@@ -53,9 +53,9 @@ void update(struct game_state gs, struct menu_tree* mt)
 
 
 
-void draw(struct menu_tree* mt, struct device_state dev)
+void draw(struct game_state gs, struct menu_tree* mt)
 {
-	mt_draw(mt, dev);
+	mt_draw(gs, mt);
 }
 
 
@@ -104,7 +104,7 @@ int main(void)
 
 		cprintf("(%c) %.1f fps [menu.z64]\n\n", pinwheel, fps);
 
-		draw(&mt, dev);
+		draw(gs, &mt);
 
 		cs_render();
 	}

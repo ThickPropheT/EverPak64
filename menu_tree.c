@@ -27,18 +27,18 @@ void mt_update(struct game_state gs, struct menu_tree * mt)
 	}
 }
 
-void mt_draw(struct menu_tree* mt, struct device_state dev)
+void mt_draw(struct game_state gs, struct menu_tree* mt)
 {
 	struct root_menu* rm = &mt->rm;
 
 	switch (mt->ms.i_depth)
 	{
 	case ROOT_MENU:
-		rm_draw(rm, dev);
+		rm_draw(gs, rm);
 		break;
 
 	case SLOT_MENU:
-		sm_draw(rm_get_current(rm), dev);
+		sm_draw(gs, rm_get_current(rm));
 		break;
 	}
 }

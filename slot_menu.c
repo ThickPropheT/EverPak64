@@ -114,12 +114,12 @@ void draw_entries(struct slot_menu sm, struct device_state dev)
 	}
 }
 
-void sm_draw(struct slot_menu* sm, struct device_state dev)
+void sm_draw(struct game_state gs, struct slot_menu* sm)
 {
-	struct accessory* acc = dev.accessories[sm->i_slot];
+	struct accessory* acc = gs.dev->accessories[sm->i_slot];
 
 	draw_header(*sm, *acc);
 
-	if (!has_error(*sm, dev, *acc))
-		draw_entries(*sm, dev);
+	if (!has_error(*sm, *gs.dev, *acc))
+		draw_entries(*sm, *gs.dev);
 }

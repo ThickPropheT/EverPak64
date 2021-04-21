@@ -53,13 +53,13 @@ void rm_update(struct game_state gs, struct root_menu* rm)
 	}
 }
 
-void rm_draw(struct root_menu* rm, struct device_state dev)
+void rm_draw(struct game_state gs, struct root_menu* rm)
 {
 	cprintf("Select Controller (A)\n\n");
 
 	for (u8 i = 0; i < N_SLOTS; i++)
 	{
-		struct accessory acc = *dev.accessories[i];
+		struct accessory acc = *gs.dev->accessories[i];
 
 		u8 sn = acc_get_number(acc);
 
@@ -71,7 +71,7 @@ void rm_draw(struct root_menu* rm, struct device_state dev)
 		u16 f_slot = get_flag(acc.i_slot);
 
 		char* pres =
-			dev.controllers & f_slot
+			gs.dev->controllers & f_slot
 			? "+"
 			: " ";
 
