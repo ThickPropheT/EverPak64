@@ -51,5 +51,6 @@ static void acc_update(struct game_object* go)
 
 	u8 slot = acc->i_slot;
 
+	// TODO migrate this to memory_pak
 	acc->status = validate_mempak(slot);
 }
