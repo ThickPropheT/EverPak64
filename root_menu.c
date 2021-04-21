@@ -25,9 +25,11 @@ struct slot_menu* rm_get_current(struct root_menu* rm)
 	return &(rm->slots[rm->m.i_item]);
 }
 
-void rm_update(struct root_menu* rm, struct menu_state* ms, struct device_state* dev)
+void rm_update(struct game_state gs, struct root_menu* rm)
 {
-	struct controller_data keys = dev->keys_d;
+	struct menu_state* ms = (struct menu_state*)gs.ms;
+
+	struct controller_data keys = gs.dev->keys_d;
 
 	if (keys.c[0].up)
 	{

@@ -10,7 +10,7 @@ struct menu_tree mt_new(void)
 	return (struct menu_tree) { ms, rm };
 }
 
-void mt_update(struct menu_tree* mt, struct device_state* dev)
+void mt_update(struct game_state gs, struct menu_tree * mt)
 {
 	struct root_menu* rm = &mt->rm;
 	struct menu_state* ms = &mt->ms;
@@ -18,11 +18,11 @@ void mt_update(struct menu_tree* mt, struct device_state* dev)
 	switch (ms->i_depth)
 	{
 	case ROOT_MENU:
-		rm_update(rm, ms, dev);
+		rm_update(gs, rm);
 		break;
 
 	case SLOT_MENU:
-		sm_update(rm_get_current(rm), ms, dev);
+		sm_update(gs, rm_get_current(rm));
 		break;
 	}
 }

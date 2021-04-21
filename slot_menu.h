@@ -23,5 +23,5 @@ struct slot_menu
 
 struct slot_menu sm_new(u8 i_slot);
 
-void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state* dev);
+void sm_update(struct game_state gs, struct slot_menu* sm);
 void sm_draw(struct slot_menu* sm, struct device_state dev);

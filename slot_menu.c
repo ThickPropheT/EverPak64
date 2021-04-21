@@ -11,20 +11,20 @@ struct slot_menu sm_new(u8 i_slot)
 }
 
 
-void sm_update(struct slot_menu* sm, struct menu_state* ms, struct device_state* dev)
+void sm_update(struct game_state gs, struct slot_menu* sm)
 {
-	struct controller_data keys = dev->keys_d;
+	struct controller_data keys = gs.dev->keys_d;
 
 	// for safety
 	if (keys.c[0].L
 		&& keys.c[0].Z
 		&& keys.c[0].R)
 	{
-		mpk_format((struct memory_pak*)dev->accessories[sm->i_slot]);
+		mpk_format((struct memory_pak*)gs.dev->accessories[sm->i_slot]);
 	}
 	else if (keys.c[0].B)
 	{
-		ms_pop(ms);
+		ms_pop((struct menu_state*)gs.ms);
 	}
 	else if (keys.c[0].start)
 	{

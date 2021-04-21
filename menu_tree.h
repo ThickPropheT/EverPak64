@@ -24,5 +24,5 @@ struct menu_tree
 
 struct menu_tree mt_new(void);
 
-void mt_update(struct menu_tree* mt, struct device_state* dev);
+void mt_update(struct game_state gs, struct menu_tree * mt);
 void mt_draw(struct menu_tree* mt, struct device_state dev);

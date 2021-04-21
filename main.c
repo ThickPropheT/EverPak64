@@ -41,14 +41,14 @@ void sleep(unsigned long ms)
 
 
 
-void update(struct menu_tree* mt, struct device_state* dev)
+void update(struct game_state gs, struct menu_tree* mt)
 {
 	// TODO prevents weirdness if controller 1 is removed
 	// TODO update this when any/all controllers can input
-	if (!(dev->controllers & CONTROLLER_1_INSERTED))
+	if (!(gs.dev->controllers & CONTROLLER_1_INSERTED))
 		return;
 
-	mt_update(mt, dev);
+	mt_update(gs, mt);
 }
 
 
@@ -98,7 +98,7 @@ int main(void)
 
 		dev_poll(gs, &dev);
 
-		update(&mt, &dev);
+		update(gs, &mt);
 
 		cs_clear(BG_COLOR);
 
