@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <libdragon.h>
 
-#include "device_state.h"
+#include "device_manager.h"
 #include "pinwheel.h"
 #include "fps_counter.h"
 #include "color_palette.h"
