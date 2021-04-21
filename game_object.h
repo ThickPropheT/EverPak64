@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include "types.h"
+#include "game_state.h"
 
 struct game_object
 {
@@ -14,7 +15,7 @@ struct game_object
 
 struct _go_vtable
 {
-	void (*update)(struct game_object* go);
+	void (*update)(struct game_state gs, struct game_object* go);
 	void (*draw)(struct game_object* go);
 };
 
@@ -31,7 +32,7 @@ static inline void _go_init(struct game_object* go, const struct _go_vtable* vta
 	go->_base = go_new(base_vtable);
 }
 
-static inline void go_update(struct game_object* go)
+static inline void go_update(struct game_state gs, struct game_object* go)
 {
-	go->_vtable->update(go);
+	go->_vtable->update(gs, go);
 }

@@ -4,7 +4,7 @@
 #include <string.h>
 
 
-static void mpk_update(struct game_object* go);
+static void mpk_update(struct game_state gs, struct game_object * go);
 
 const struct _go_vtable MPK[] = { { mpk_update } };
 
@@ -27,9 +27,9 @@ static void load_entry(struct memory_pak* mpk, u8 i)
 }
 
 
-static void mpk_update(struct game_object* go)
+static void mpk_update(struct game_state gs, struct game_object * go)
 {
-	go->_base->_vtable->update(go);
+	go->_base->_vtable->update(gs, go);
 
 	struct memory_pak* mpk = (struct memory_pak*)go;
 

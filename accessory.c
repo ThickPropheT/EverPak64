@@ -4,7 +4,7 @@
 #include <string.h>
 
 
-static void acc_update(struct game_object* go);
+static void acc_update(struct game_state gs, struct game_object* go);
 
 const struct _go_vtable ACC[] = { { acc_update } };
 
@@ -45,7 +45,7 @@ u8 acc_get_number(struct accessory acc)
 
 
 
-static void acc_update(struct game_object* go)
+static void acc_update(struct game_state gs, struct game_object* go)
 {
 	struct accessory* acc = (struct accessory*)go;
 

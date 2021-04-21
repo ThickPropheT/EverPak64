@@ -89,12 +89,14 @@ int main(void)
 
 	struct device_state dev = dev_new();
 
+	struct game_state gs = { &dev, &mt.ms };
+
 	while (1)
 	{
 		pw_update();
 		fps_update();
 
-		dev_poll(&dev);
+		dev_poll(gs, &dev);
 
 		update(&mt, &dev);
 

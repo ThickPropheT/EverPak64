@@ -1,10 +1,7 @@
-add static to functions and things to limit their accessibility
-	see accessory.acc_update(struct accessory *)
-
-find a better way to print to console than to have to "init" things with an instance of cc
-
-sigh... turns out putting global variables in the *.c file does not actually isolate access to that variable.
-	really shoulda known better, but just got lucky and had no naming collisions for a long time...
+aggregate various pieces of global game state into a game_state struct
+	i.e. device_state & menu_state
+	pass that struct around to update and draw methods
+	remove references to those pieces of state that currently live in disparate structs
 
 determine what line endings are being used throughout and standardize
 	lookin at you slot_menu.c
