@@ -16,6 +16,8 @@ struct slot_menu* sm_new(u8 i_slot)
 	struct slot_menu* sm = malloc(sizeof * sm);
 
 	sm->go._vtable = SM;
+	sm->go.can_update = 1;
+	sm->go.can_draw = 1;
 
 	sm->i_slot = i_slot;
 

@@ -21,6 +21,8 @@ struct root_menu* rm_new(void)
 	struct root_menu* rm = malloc(sizeof * rm);
 
 	rm->go._vtable = RM;
+	rm->go.can_update = 1;
+	rm->go.can_draw = 1;
 
 	struct menu m = { 0, N_SLOTS };
 	rm->m = m;

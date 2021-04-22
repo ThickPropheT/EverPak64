@@ -34,10 +34,16 @@ static inline void _go_init(struct game_object* go, const struct _go_vtable* vta
 
 static inline void go_update(struct game_state gs, struct game_object* go)
 {
+	if (!go->can_update)
+		return;
+
 	go->_vtable->update(gs, go);
 }
 
 static inline void go_draw(struct game_state gs, struct game_object* go)
 {
+	if (!go->can_draw)
+		return;
+
 	go->_vtable->draw(gs, go);
 }

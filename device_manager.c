@@ -55,12 +55,7 @@ static void update_accessories(struct game_state gs, struct device_state* dev)
 {
 	for (u8 i = 0; i < N_SLOTS; i++)
 	{
-		struct accessory* acc = dev->accessories[i];
-
-		if (!acc->go.can_update)
-			continue;
-
-		go_update(gs, (struct game_object*)acc);
+		go_update(gs, (struct game_object*)dev->accessories[i]);
 	}
 }
 
