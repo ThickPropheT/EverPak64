@@ -43,7 +43,7 @@ static void sm_update(struct game_state gs, struct game_object* go)
 	}
 	else if (keys.c[0].B)
 	{
-		ms_pop((struct menu_state*)gs.ms);
+		ms_popd((struct menu_state*)gs.ms);
 	}
 	else if (keys.c[0].start)
 	{

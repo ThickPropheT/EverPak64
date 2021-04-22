@@ -63,7 +63,7 @@ static void rm_update(struct game_state gs, struct game_object* go)
 	}
 	else if (keys.c[0].A)
 	{
-		ms_push(ms);
+		ms_pushd(ms);
 	}
 }
 
