@@ -22,7 +22,7 @@ void mt_update(struct game_state gs, struct menu_tree * mt)
 		break;
 
 	case SLOT_MENU:
-		sm_update(gs, rm_get_current(rm));
+		go_update(gs, (struct game_object*)rm_get_current(rm));
 		break;
 	}
 }
@@ -38,7 +38,7 @@ void mt_draw(struct game_state gs, struct menu_tree* mt)
 		break;
 
 	case SLOT_MENU:
-		sm_draw(gs, rm_get_current(rm));
+		go_draw(gs, (struct game_object*)rm_get_current(rm));
 		break;
 	}
 }

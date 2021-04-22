@@ -13,7 +13,7 @@ struct root_menu
 
 	struct menu m;
 
-	struct slot_menu slots[N_SLOTS];
+	struct slot_menu* slots[N_SLOTS];
 };
 
 

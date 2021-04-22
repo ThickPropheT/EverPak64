@@ -33,7 +33,7 @@ struct root_menu* rm_new(void)
 
 struct slot_menu* rm_get_current(struct root_menu* rm)
 {
-	return &(rm->slots[rm->m.i_item]);
+	return rm->slots[rm->m.i_item];
 }
 
 static void rm_update(struct game_state gs, struct game_object* go)

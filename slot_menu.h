@@ -13,6 +13,8 @@
 
 struct slot_menu
 {
+	struct game_object go;
+
 	u8 i_slot;
 
 	struct menu m;
@@ -21,7 +23,4 @@ struct slot_menu
 };
 
 
-struct slot_menu sm_new(u8 i_slot);
-
-void sm_update(struct game_state gs, struct slot_menu* sm);
-void sm_draw(struct game_state gs, struct slot_menu* sm);
+struct slot_menu* sm_new(u8 i_slot);

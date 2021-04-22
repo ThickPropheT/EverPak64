@@ -5,14 +5,31 @@
 #include "console.h"
 
 
-struct slot_menu sm_new(u8 i_slot)
+static void sm_update(struct game_state gs, struct game_object* go);
+static void sm_draw(struct game_state gs, struct game_object* go);
+
+const struct _go_vtable SM[] = { { sm_update, sm_draw } };
+
+
+struct slot_menu* sm_new(u8 i_slot)
 {
-	return (struct slot_menu) { i_slot, { 0, 0 } };
+	struct slot_menu* sm = malloc(sizeof * sm);
+
+	sm->go._vtable = SM;
+
+	sm->i_slot = i_slot;
+
+	struct menu m = { 0, 0 };
+	sm->m = m;
+	
+	return sm;
 }
 
 
-void sm_update(struct game_state gs, struct slot_menu* sm)
+static void sm_update(struct game_state gs, struct game_object* go)
 {
+	struct slot_menu* sm = (struct slot_menu*)go;
+
 	struct controller_data keys = gs.dev->keys_d;
 
 	// for safety
@@ -114,8 +131,10 @@ void draw_entries(struct slot_menu sm, struct device_state dev)
 	}
 }
 
-void sm_draw(struct game_state gs, struct slot_menu* sm)
+static void sm_draw(struct game_state gs, struct game_object* go)
 {
+	struct slot_menu* sm = (struct slot_menu*)go;
+
 	struct accessory* acc = gs.dev->accessories[sm->i_slot];
 
 	draw_header(*sm, *acc);
