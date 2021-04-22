@@ -18,11 +18,11 @@
 struct menu_tree
 {
 	struct menu_state ms;
-	struct root_menu rm;
+	struct root_menu* rm;
 };
 
 
 struct menu_tree mt_new(void);
 
-void mt_update(struct game_state gs, struct menu_tree * mt);
+void mt_update(struct game_state gs, struct menu_tree* mt);
 void mt_draw(struct game_state gs, struct menu_tree* mt);

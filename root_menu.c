@@ -10,12 +10,23 @@
 #define I_DEFAULT_DEPTH		0
 
 
-struct root_menu rm_new(void)
+static void rm_update(struct game_state gs, struct game_object* go);
+static void rm_draw(struct game_state gs, struct game_object* go);
+
+const struct _go_vtable RM[] = { { rm_update, rm_draw } };
+
+
+struct root_menu* rm_new(void)
 {
-	struct root_menu rm = { { 0, N_SLOTS } };
+	struct root_menu* rm = malloc(sizeof * rm);
+
+	rm->go._vtable = RM;
+
+	struct menu m = { 0, N_SLOTS };
+	rm->m = m;
 
 	for (int i = 0; i < N_SLOTS; i++)
-		rm.slots[i] = sm_new(i);
+		rm->slots[i] = sm_new(i);
 
 	return rm;
 }
@@ -25,8 +36,9 @@ struct slot_menu* rm_get_current(struct root_menu* rm)
 	return &(rm->slots[rm->m.i_item]);
 }
 
-void rm_update(struct game_state gs, struct root_menu* rm)
+static void rm_update(struct game_state gs, struct game_object* go)
 {
+	struct root_menu* rm = (struct root_menu*)go;
 	struct menu_state* ms = (struct menu_state*)gs.ms;
 
 	struct controller_data keys = gs.dev->keys_d;
@@ -53,8 +65,10 @@ void rm_update(struct game_state gs, struct root_menu* rm)
 	}
 }
 
-void rm_draw(struct game_state gs, struct root_menu* rm)
+static void rm_draw(struct game_state gs, struct game_object* go)
 {
+	struct root_menu* rm = (struct root_menu*)go;
+
 	cprintf("Select Controller (A)\n\n");
 
 	for (u8 i = 0; i < N_SLOTS; i++)

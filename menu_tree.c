@@ -5,20 +5,20 @@
 struct menu_tree mt_new(void)
 {
 	struct menu_state ms = ms_new(MAX_MENUS);
-	struct root_menu rm = rm_new();
+	struct root_menu* rm = rm_new();
 
 	return (struct menu_tree) { ms, rm };
 }
 
 void mt_update(struct game_state gs, struct menu_tree * mt)
 {
-	struct root_menu* rm = &mt->rm;
+	struct root_menu* rm = mt->rm;
 	struct menu_state* ms = &mt->ms;
 
 	switch (ms->i_depth)
 	{
 	case ROOT_MENU:
-		rm_update(gs, rm);
+		go_update(gs, (struct game_object*)rm);
 		break;
 
 	case SLOT_MENU:
@@ -29,12 +29,12 @@ void mt_update(struct game_state gs, struct menu_tree * mt)
 
 void mt_draw(struct game_state gs, struct menu_tree* mt)
 {
-	struct root_menu* rm = &mt->rm;
+	struct root_menu* rm = mt->rm;
 
 	switch (mt->ms.i_depth)
 	{
 	case ROOT_MENU:
-		rm_draw(gs, rm);
+		go_draw(gs, (struct game_object*)rm);
 		break;
 
 	case SLOT_MENU:
