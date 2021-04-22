@@ -1,3 +1,12 @@
+investigate defects:
+	start game with no accessory for slot 0
+
+determine if document formatting can be configured
+	prefer this: 'my_type *' to this: 'my_type* '
+	prefer this: 'sizeof *my_var' to this: 'sizeof * my_var'
+
+consider adding unit tests
+
 aggregate various pieces of global game state into a game_state struct
 	i.e. device_state & menu_state
 	pass that struct around to update and draw methods
