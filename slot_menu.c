@@ -3,6 +3,8 @@
 #include "types.h"
 #include "memory_pak.h"
 #include "console.h"
+#include "device_state.h"
+#include "menu_state.h"
 
 
 static void sm_update(struct game_object* go);
@@ -15,12 +17,8 @@ struct slot_menu* sm_new(struct device_state* dev, struct menu_state* ms, u8 i_s
 {
 	struct slot_menu* sm = malloc(sizeof * sm);
 
-	sm->go._vtable = SM;
-	sm->go.can_update = 1;
-	sm->go.can_draw = 1;
-
-	sm->dev = dev;
-	sm->ms = ms;
+	_gm_init(&sm->gm, SM, dev, ms);
+	
 	sm->i_slot = i_slot;
 
 	struct menu m = { 0, 0 };
@@ -34,18 +32,19 @@ static void sm_update(struct game_object* go)
 {
 	struct slot_menu* sm = (struct slot_menu*)go;
 
-	struct controller_data keys = sm->dev->keys_d;
+	struct device_state* dev = sm->gm.dev;
+	struct controller_data keys = dev->keys_d;
 
 	// for safety
 	if (keys.c[0].L
 		&& keys.c[0].Z
 		&& keys.c[0].R)
 	{
-		mpk_format((struct memory_pak*)sm->dev->accessories[sm->i_slot]);
+		mpk_format((struct memory_pak*)dev->accessories[sm->i_slot]);
 	}
 	else if (keys.c[0].B)
 	{
-		ms_popd((struct menu_state*)sm->ms);
+		ms_popd((struct menu_state*)sm->gm.ms);
 	}
 	else if (keys.c[0].start)
 	{
@@ -138,7 +137,7 @@ void draw_entries(struct slot_menu sm, struct device_state dev)
 static void sm_draw(struct game_object* go)
 {
 	struct slot_menu* sm = (struct slot_menu*)go;
-	struct device_state* dev = sm->dev;
+	struct device_state* dev = sm->gm.dev;
 	struct accessory* acc = dev->accessories[sm->i_slot];
 
 	draw_header(*sm, *acc);
