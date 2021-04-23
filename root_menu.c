@@ -10,13 +10,13 @@
 #define I_DEFAULT_DEPTH		0
 
 
-static void rm_update(struct game_state gs, struct game_object* go);
-static void rm_draw(struct game_state gs, struct game_object* go);
+static void rm_update(struct game_object* go);
+static void rm_draw(struct game_object* go);
 
 const struct _go_vtable RM[] = { { rm_update, rm_draw } };
 
 
-struct root_menu* rm_new(void)
+struct root_menu* rm_new(struct device_state* dev, struct menu_state* ms)
 {
 	struct root_menu* rm = malloc(sizeof * rm);
 
@@ -24,11 +24,14 @@ struct root_menu* rm_new(void)
 	rm->go.can_update = 1;
 	rm->go.can_draw = 1;
 
+	rm->dev = dev;
+	rm->ms = ms;
+
 	struct menu m = { 0, N_SLOTS };
 	rm->m = m;
 
 	for (int i = 0; i < N_SLOTS; i++)
-		rm->slots[i] = sm_new(i);
+		rm->slots[i] = sm_new(dev, ms, i);
 
 	return rm;
 }
@@ -38,12 +41,12 @@ struct slot_menu* rm_get_current(struct root_menu* rm)
 	return rm->slots[rm->m.i_item];
 }
 
-static void rm_update(struct game_state gs, struct game_object* go)
+static void rm_update(struct game_object* go)
 {
 	struct root_menu* rm = (struct root_menu*)go;
-	struct menu_state* ms = (struct menu_state*)gs.ms;
+	struct menu_state* ms = (struct menu_state*)rm->ms;
 
-	struct controller_data keys = gs.dev->keys_d;
+	struct controller_data keys = rm->dev->keys_d;
 
 	if (keys.c[0].up)
 	{
@@ -67,15 +70,16 @@ static void rm_update(struct game_state gs, struct game_object* go)
 	}
 }
 
-static void rm_draw(struct game_state gs, struct game_object* go)
+static void rm_draw(struct game_object* go)
 {
 	struct root_menu* rm = (struct root_menu*)go;
+	struct device_state* dev = rm->dev;
 
 	cprintf("Select Controller (A)\n\n");
 
 	for (u8 i = 0; i < N_SLOTS; i++)
 	{
-		struct accessory acc = *gs.dev->accessories[i];
+		struct accessory acc = *dev->accessories[i];
 
 		u8 sn = acc_get_number(acc);
 
@@ -87,7 +91,7 @@ static void rm_draw(struct game_state gs, struct game_object* go)
 		u16 f_slot = get_flag(acc.i_slot);
 
 		char* pres =
-			gs.dev->controllers & f_slot
+			dev->controllers & f_slot
 			? "+"
 			: " ";
 

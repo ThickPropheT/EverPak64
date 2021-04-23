@@ -15,6 +15,9 @@ struct slot_menu
 {
 	struct game_object go;
 
+	struct device_state* dev;
+	struct menu_state* ms;
+
 	u8 i_slot;
 
 	struct menu m;
@@ -23,4 +26,4 @@ struct slot_menu
 };
 
 
-struct slot_menu* sm_new(u8 i_slot);
+struct slot_menu* sm_new(struct device_state* dev, struct menu_state* ms, u8 i_slot);

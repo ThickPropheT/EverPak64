@@ -51,15 +51,15 @@ static void set_acc_flags(struct device_state* dev, u16 value)
 	acc_flags_changed(dev, old_value, value);
 }
 
-static void update_accessories(struct game_state gs, struct device_state* dev)
+static void update_accessories(struct device_state* dev)
 {
 	for (u8 i = 0; i < N_SLOTS; i++)
 	{
-		go_update(gs, (struct game_object*)dev->accessories[i]);
+		go_update((struct game_object*)dev->accessories[i]);
 	}
 }
 
-void dev_poll(struct game_state gs, struct device_state* dev)
+void dev_poll(struct device_state* dev)
 {
 	controller_scan();
 
@@ -67,7 +67,7 @@ void dev_poll(struct game_state gs, struct device_state* dev)
 	u16 acc = get_accessories_present(&out);
 
 	set_acc_flags(dev, acc);
-	update_accessories(gs, dev);
+	update_accessories(dev);
 
 	dev->keys_d = get_keys_down();
 }

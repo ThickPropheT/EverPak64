@@ -41,21 +41,16 @@ void sleep(unsigned long ms)
 
 
 
-void update(struct game_state gs, struct menu_tree* mt)
+void update(struct menu_tree* mt)
 {
-	// TODO prevents weirdness if controller 1 is removed
-	// TODO update this when any/all controllers can input
-	if (!(gs.dev->controllers & CONTROLLER_1_INSERTED))
-		return;
-
-	mt_update(gs, mt);
+	mt_update(mt);
 }
 
 
 
-void draw(struct game_state gs, struct menu_tree* mt)
+void draw(struct menu_tree* mt)
 {
-	mt_draw(gs, mt);
+	mt_draw(mt);
 }
 
 
@@ -83,28 +78,26 @@ int main(void)
 	float fps = 0;
 	fps_init(HALF_FPS, &fps);
 
-	struct menu_tree mt = mt_new();
-
 	graphics_set_color(FG_TEXT_COLOR, BG_TEXT_COLOR);
 
 	struct device_state dev = dev_new();
 
-	struct game_state gs = { &dev, &mt.ms };
+	struct menu_tree mt = mt_new(&dev);
 
 	while (1)
 	{
 		pw_update();
 		fps_update();
 
-		dev_poll(gs, &dev);
+		dev_poll(&dev);
 
-		update(gs, &mt);
+		update(&mt);
 
 		cs_clear(BG_COLOR);
 
 		cprintf("(%c) %.1f fps [menu.z64]\n\n", pinwheel, fps);
 
-		draw(gs, &mt);
+		draw(&mt);
 
 		cs_render();
 	}

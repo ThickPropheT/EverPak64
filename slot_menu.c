@@ -5,13 +5,13 @@
 #include "console.h"
 
 
-static void sm_update(struct game_state gs, struct game_object* go);
-static void sm_draw(struct game_state gs, struct game_object* go);
+static void sm_update(struct game_object* go);
+static void sm_draw(struct game_object* go);
 
 const struct _go_vtable SM[] = { { sm_update, sm_draw } };
 
 
-struct slot_menu* sm_new(u8 i_slot)
+struct slot_menu* sm_new(struct device_state* dev, struct menu_state* ms, u8 i_slot)
 {
 	struct slot_menu* sm = malloc(sizeof * sm);
 
@@ -19,31 +19,33 @@ struct slot_menu* sm_new(u8 i_slot)
 	sm->go.can_update = 1;
 	sm->go.can_draw = 1;
 
+	sm->dev = dev;
+	sm->ms = ms;
 	sm->i_slot = i_slot;
 
 	struct menu m = { 0, 0 };
 	sm->m = m;
-	
+
 	return sm;
 }
 
 
-static void sm_update(struct game_state gs, struct game_object* go)
+static void sm_update(struct game_object* go)
 {
 	struct slot_menu* sm = (struct slot_menu*)go;
 
-	struct controller_data keys = gs.dev->keys_d;
+	struct controller_data keys = sm->dev->keys_d;
 
 	// for safety
 	if (keys.c[0].L
 		&& keys.c[0].Z
 		&& keys.c[0].R)
 	{
-		mpk_format((struct memory_pak*)gs.dev->accessories[sm->i_slot]);
+		mpk_format((struct memory_pak*)sm->dev->accessories[sm->i_slot]);
 	}
 	else if (keys.c[0].B)
 	{
-		ms_popd((struct menu_state*)gs.ms);
+		ms_popd((struct menu_state*)sm->ms);
 	}
 	else if (keys.c[0].start)
 	{
@@ -133,14 +135,14 @@ void draw_entries(struct slot_menu sm, struct device_state dev)
 	}
 }
 
-static void sm_draw(struct game_state gs, struct game_object* go)
+static void sm_draw(struct game_object* go)
 {
 	struct slot_menu* sm = (struct slot_menu*)go;
-
-	struct accessory* acc = gs.dev->accessories[sm->i_slot];
+	struct device_state* dev = sm->dev;
+	struct accessory* acc = dev->accessories[sm->i_slot];
 
 	draw_header(*sm, *acc);
 
-	if (!has_error(*sm, *gs.dev, *acc))
-		draw_entries(*sm, *gs.dev);
+	if (!has_error(*sm, *dev, *acc))
+		draw_entries(*sm, *dev);
 }
