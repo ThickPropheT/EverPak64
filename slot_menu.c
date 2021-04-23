@@ -21,9 +21,6 @@ struct slot_menu* sm_new(struct device_state* dev, struct menu_state* ms, u8 i_s
 	
 	sm->i_slot = i_slot;
 
-	struct menu m = { 0, 0 };
-	sm->m = m;
-
 	return sm;
 }
 

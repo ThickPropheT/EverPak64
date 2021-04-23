@@ -5,7 +5,6 @@
 #include <libdragon.h>
 
 #include "types.h"
-#include "menu.h"
 #include "game_menu.h"
 
 
@@ -14,8 +13,6 @@ struct slot_menu
 	struct game_menu gm;
 
 	u8 i_slot;
-
-	struct menu m;
 
 	u8 rumble;
 };

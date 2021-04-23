@@ -11,7 +11,6 @@
 #include "color_palette.h"
 #include "types.h"
 #include "math.h"
-#include "menu.h"
 #include "menu_state.h"
 #include "menu_tree.h"
 #include "root_menu.h"
