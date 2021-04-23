@@ -17,7 +17,7 @@ struct slot_menu* sm_new(struct device_state* dev, struct menu_state* ms, u8 i_s
 {
 	struct slot_menu* sm = malloc(sizeof * sm);
 
-	_gm_init(&sm->gm, SM, dev, ms);
+	_gm_init(&sm->gm, SM, dev, ms, 0);
 	
 	sm->i_slot = i_slot;
 

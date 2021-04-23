@@ -20,10 +20,7 @@ struct root_menu* rm_new(struct device_state* dev, struct menu_state* ms)
 {
 	struct root_menu* rm = malloc(sizeof * rm);
 
-	_gm_init(&rm->gm, RM, dev, ms);
-
-	struct menu m = { 0, N_SLOTS };
-	rm->m = m;
+	_gm_init(&rm->gm, RM, dev, ms, N_SLOTS);
 
 	for (int i = 0; i < N_SLOTS; i++)
 		rm->slots[i] = sm_new(dev, ms, i);
@@ -33,7 +30,7 @@ struct root_menu* rm_new(struct device_state* dev, struct menu_state* ms)
 
 struct slot_menu* rm_get_current(struct root_menu* rm)
 {
-	return rm->slots[rm->m.i_item];
+	return rm->slots[rm->gm.i_hovered_item];
 }
 
 static void rm_update(struct game_object* go)
@@ -45,19 +42,19 @@ static void rm_update(struct game_object* go)
 
 	if (keys.c[0].up)
 	{
-		m_prev_item(&rm->m);
+		_gm_hover_prev(&rm->gm);
 	}
 	else if (keys.c[0].down)
 	{
-		m_next_item(&rm->m);
+		_gm_hover_next(&rm->gm);
 	}
 	else if (keys.c[0].left)
 	{
-		m_prev_item(&rm->m);
+		_gm_hover_prev(&rm->gm);
 	}
 	else if (keys.c[0].right)
 	{
-		m_next_item(&rm->m);
+		_gm_hover_next(&rm->gm);
 	}
 	else if (keys.c[0].A)
 	{
@@ -79,7 +76,7 @@ static void rm_draw(struct game_object* go)
 		u8 sn = acc_get_number(acc);
 
 		char* sel =
-			i == rm->m.i_item
+			i == rm->gm.i_hovered_item
 			? ">"
 			: " ";
 

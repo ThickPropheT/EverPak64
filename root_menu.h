@@ -2,7 +2,6 @@
 
 #include <stddef.h>
 
-#include "menu.h"
 #include "slot_menu.h"
 #include "game_menu.h"
 
@@ -10,8 +9,6 @@
 struct root_menu
 {
 	struct game_menu gm;
-
-	struct menu m;
 
 	struct slot_menu* slots[N_SLOTS];
 };

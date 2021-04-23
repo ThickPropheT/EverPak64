@@ -9,7 +9,7 @@ static void gm_update(struct game_object* go);
 const struct _go_vtable GM[] = { { gm_update } };
 
 
-void _gm_init(struct game_menu* gm, const struct _go_vtable* vtable, struct device_state* dev, struct menu_state* ms)
+void _gm_init(struct game_menu* gm, const struct _go_vtable* vtable, struct device_state* dev, struct menu_state* ms, size_t n_items)
 {
 	_go_init(&gm->go, vtable, GM);
 
@@ -18,6 +18,9 @@ void _gm_init(struct game_menu* gm, const struct _go_vtable* vtable, struct devi
 
 	gm->dev = dev;
 	gm->ms = ms;
+
+	gm->i_hovered_item = 0;
+	gm->n_items = n_items;
 }
 
 struct game_menu* gm_new(struct menu_state* ms, struct device_state* dev)
