@@ -17,7 +17,7 @@ struct slot_menu* sm_new(struct device_state* dev, struct menu_nav_controller* m
 	struct slot_menu* sm = malloc(sizeof * sm);
 
 	_gm_init(&sm->gm, SM, dev, mnav, 0);
-	
+
 	sm->i_slot = i_slot;
 
 	return sm;
@@ -40,7 +40,7 @@ static void sm_update(struct game_object* go)
 	}
 	else if (keys.c[0].B)
 	{
-		ms_popd((struct menu_state*)sm->gm.mnav->ms);
+		mnav_pop(sm->gm.mnav);
 	}
 	else if (keys.c[0].start)
 	{
