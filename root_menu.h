@@ -4,15 +4,12 @@
 
 #include "menu.h"
 #include "slot_menu.h"
-#include "device_state.h"
+#include "game_menu.h"
 
 
 struct root_menu
 {
-	struct game_object go;
-
-	struct device_state* dev;
-	struct menu_state* ms;
+	struct game_menu gm;
 
 	struct menu m;
 

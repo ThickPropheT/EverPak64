@@ -20,12 +20,7 @@ struct root_menu* rm_new(struct device_state* dev, struct menu_state* ms)
 {
 	struct root_menu* rm = malloc(sizeof * rm);
 
-	rm->go._vtable = RM;
-	rm->go.can_update = 1;
-	rm->go.can_draw = 1;
-
-	rm->dev = dev;
-	rm->ms = ms;
+	_gm_init(&rm->gm, RM, dev, ms);
 
 	struct menu m = { 0, N_SLOTS };
 	rm->m = m;
@@ -44,9 +39,9 @@ struct slot_menu* rm_get_current(struct root_menu* rm)
 static void rm_update(struct game_object* go)
 {
 	struct root_menu* rm = (struct root_menu*)go;
-	struct menu_state* ms = (struct menu_state*)rm->ms;
+	struct menu_state* ms = (struct menu_state*)rm->gm.ms;
 
-	struct controller_data keys = rm->dev->keys_d;
+	struct controller_data keys = rm->gm.dev->keys_d;
 
 	if (keys.c[0].up)
 	{
@@ -73,7 +68,7 @@ static void rm_update(struct game_object* go)
 static void rm_draw(struct game_object* go)
 {
 	struct root_menu* rm = (struct root_menu*)go;
-	struct device_state* dev = rm->dev;
+	struct device_state* dev = rm->gm.dev;
 
 	cprintf("Select Controller (A)\n\n");
 
