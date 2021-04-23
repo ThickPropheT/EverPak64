@@ -2,6 +2,8 @@
 
 #include "game_object.h"
 #include "accessory.h"
+#include "device_state.h"
+#include "menu_state.h"
 
 struct game_menu
 {
