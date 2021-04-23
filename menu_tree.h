@@ -18,8 +18,8 @@
 struct menu_tree
 {
 	struct device_state* dev;
-
 	struct menu_state* ms;
+
 	struct root_menu* rm;
 };
 
