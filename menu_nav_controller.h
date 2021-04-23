@@ -10,4 +10,4 @@ struct menu_nav_controller
 
 struct menu_nav_controller* mnav_new(struct menu_state* ms);
 
-void mnav_push_sm(struct menu_nav_controller* mnav, u8 i_slot);
+void mnav_to_sm(struct menu_nav_controller* mnav, u8 i_slot);

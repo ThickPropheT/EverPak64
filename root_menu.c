@@ -36,29 +36,29 @@ struct slot_menu* rm_get_current(struct root_menu* rm)
 static void rm_update(struct game_object* go)
 {
 	struct root_menu* rm = (struct root_menu*)go;
-	struct menu_state* ms = (struct menu_state*)rm->gm.mnav->ms;
+	struct game_menu* gm = &rm->gm;
 
-	struct controller_data keys = rm->gm.dev->keys_d;
+	struct controller_data keys = gm->dev->keys_d;
 
 	if (keys.c[0].up)
 	{
-		_gm_hover_prev(&rm->gm);
+		_gm_hover_prev(gm);
 	}
 	else if (keys.c[0].down)
 	{
-		_gm_hover_next(&rm->gm);
+		_gm_hover_next(gm);
 	}
 	else if (keys.c[0].left)
 	{
-		_gm_hover_prev(&rm->gm);
+		_gm_hover_prev(gm);
 	}
 	else if (keys.c[0].right)
 	{
-		_gm_hover_next(&rm->gm);
+		_gm_hover_next(gm);
 	}
 	else if (keys.c[0].A)
 	{
-		ms_pushd(ms);
+		mnav_to_sm(gm->mnav, gm->i_hovered_item);
 	}
 }
 
