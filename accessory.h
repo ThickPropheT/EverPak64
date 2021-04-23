@@ -22,7 +22,7 @@ struct accessory
 
 extern char* accessory_names[N_ACC_TYPES];
 
-void _acc_init(struct accessory* acc, const struct _go_vtable* vtable, u8 i_slot);
+void _acc_init(struct accessory* acc, const struct go_type* vtable, u8 i_slot);
 
 struct accessory* acc_new(u8 i_slot);
 

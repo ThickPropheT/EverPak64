@@ -6,7 +6,7 @@
 
 static void mpk_update(struct game_object * go);
 
-const struct _go_vtable MPK[] = { { mpk_update } };
+const struct go_type MPK[] = { { mpk_update } };
 
 
 struct memory_pak* mpk_new(u8 i_slot)
@@ -29,7 +29,7 @@ static void load_entry(struct memory_pak* mpk, u8 i)
 
 static void mpk_update(struct game_object * go)
 {
-	go->_base->_vtable->update(go);
+	go->_base->type->update(go);
 
 	struct memory_pak* mpk = (struct memory_pak*)go;
 

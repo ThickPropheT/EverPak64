@@ -17,7 +17,7 @@ struct game_menu
 	size_t n_items;
 };
 
-void _gm_init(struct game_menu* gm, const struct _go_vtable* vtable, struct device_state* dev, struct menu_nav_controller* mnav, size_t n_items);
+void _gm_init(struct game_menu* gm, const struct go_type* vtable, struct device_state* dev, struct menu_nav_controller* mnav, size_t n_items);
 
 struct game_menu* gm_new(struct menu_state* ms, struct device_state* dev, struct menu_nav_controller* mnav);
 

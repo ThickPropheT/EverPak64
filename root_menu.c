@@ -13,7 +13,7 @@
 static void rm_update(struct game_object* go);
 static void rm_draw(struct game_object* go);
 
-const struct _go_vtable RM[] = { { rm_update, rm_draw } };
+const struct go_type RM[] = { { rm_update, rm_draw } };
 
 
 struct root_menu* rm_new(struct device_state* dev, struct menu_nav_controller* mnav)

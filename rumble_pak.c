@@ -6,7 +6,7 @@
 
 static void rpk_update(struct game_object* go);
 
-const struct _go_vtable RPK[] = { { rpk_update } };
+const struct go_type RPK[] = { { rpk_update } };
 
 
 struct rumble_pak* rpk_new(u8 i_slot)
@@ -23,5 +23,5 @@ struct rumble_pak* rpk_new(u8 i_slot)
 
 static void rpk_update(struct game_object* go) 
 {
-	go->_base->_vtable->update(go);
+	go->_base->type->update(go);
 }

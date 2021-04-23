@@ -6,10 +6,10 @@
 
 static void gm_update(struct game_object* go);
 
-const struct _go_vtable GM[] = { { gm_update } };
+const struct go_type GM[] = { { gm_update } };
 
 
-void _gm_init(struct game_menu* gm, const struct _go_vtable* vtable, struct device_state* dev, struct menu_nav_controller* mnav, size_t n_items)
+void _gm_init(struct game_menu* gm, const struct go_type* vtable, struct device_state* dev, struct menu_nav_controller* mnav, size_t n_items)
 {
 	_go_init(&gm->go, vtable, GM);
 
@@ -27,7 +27,7 @@ struct game_menu* gm_new(struct menu_state* ms, struct device_state* dev, struct
 {
 	struct game_menu* gm = malloc(sizeof * gm);
 
-	gm->go._vtable = GM;
+	gm->go.type = GM;
 
 	gm->dev = dev;
 	gm->mnav = mnav;
