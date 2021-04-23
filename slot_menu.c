@@ -4,7 +4,6 @@
 #include "memory_pak.h"
 #include "console.h"
 #include "device_state.h"
-#include "menu_state.h"
 
 
 static void sm_update(struct game_object* go);
@@ -13,11 +12,11 @@ static void sm_draw(struct game_object* go);
 const struct _go_vtable SM[] = { { sm_update, sm_draw } };
 
 
-struct slot_menu* sm_new(struct device_state* dev, struct menu_state* ms, u8 i_slot)
+struct slot_menu* sm_new(struct device_state* dev, struct menu_nav_controller* mnav, u8 i_slot)
 {
 	struct slot_menu* sm = malloc(sizeof * sm);
 
-	_gm_init(&sm->gm, SM, dev, ms, 0);
+	_gm_init(&sm->gm, SM, dev, mnav, 0);
 	
 	sm->i_slot = i_slot;
 
@@ -41,7 +40,7 @@ static void sm_update(struct game_object* go)
 	}
 	else if (keys.c[0].B)
 	{
-		ms_popd((struct menu_state*)sm->gm.ms);
+		ms_popd((struct menu_state*)sm->gm.mnav->ms);
 	}
 	else if (keys.c[0].start)
 	{

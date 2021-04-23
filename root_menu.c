@@ -16,14 +16,14 @@ static void rm_draw(struct game_object* go);
 const struct _go_vtable RM[] = { { rm_update, rm_draw } };
 
 
-struct root_menu* rm_new(struct device_state* dev, struct menu_state* ms)
+struct root_menu* rm_new(struct device_state* dev, struct menu_nav_controller* mnav)
 {
 	struct root_menu* rm = malloc(sizeof * rm);
 
-	_gm_init(&rm->gm, RM, dev, ms, N_SLOTS);
+	_gm_init(&rm->gm, RM, dev, mnav, N_SLOTS);
 
 	for (int i = 0; i < N_SLOTS; i++)
-		rm->slots[i] = sm_new(dev, ms, i);
+		rm->slots[i] = sm_new(dev, mnav, i);
 
 	return rm;
 }
@@ -36,7 +36,7 @@ struct slot_menu* rm_get_current(struct root_menu* rm)
 static void rm_update(struct game_object* go)
 {
 	struct root_menu* rm = (struct root_menu*)go;
-	struct menu_state* ms = (struct menu_state*)rm->gm.ms;
+	struct menu_state* ms = (struct menu_state*)rm->gm.mnav->ms;
 
 	struct controller_data keys = rm->gm.dev->keys_d;
 

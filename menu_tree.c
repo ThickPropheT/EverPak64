@@ -1,11 +1,13 @@
 #include "menu_tree.h"
 
 #include "math.h"
+#include "menu_nav_controller.h"
 
 struct menu_tree mt_new(struct device_state* dev)
 {
 	struct menu_state* ms = ms_new(MAX_MENUS);
-	struct root_menu* rm = rm_new(dev, ms);
+	struct menu_nav_controller* mnav = mnav_new(ms);
+	struct root_menu* rm = rm_new(dev, mnav);
 
 	return (struct menu_tree) { dev, ms, rm };
 }

@@ -6,6 +6,7 @@
 
 #include "types.h"
 #include "game_menu.h"
+#include "menu_nav_controller.h"
 
 
 struct slot_menu
@@ -18,4 +19,4 @@ struct slot_menu
 };
 
 
-struct slot_menu* sm_new(struct device_state* dev, struct menu_state* ms, u8 i_slot);
+struct slot_menu* sm_new(struct device_state* dev, struct menu_nav_controller* mnav, u8 i_slot);
