@@ -18,9 +18,8 @@ void mt_update(struct menu_tree * mt)
 		return;
 
 	struct root_menu* rm = mt->rm;
-	struct menu_state* ms = mt->ms;
 
-	switch (ms->i_depth)
+	switch (mt->ms->i_depth)
 	{
 	case ROOT_MENU:
 		go_update((struct game_object*)rm);
