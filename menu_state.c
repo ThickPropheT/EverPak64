@@ -18,12 +18,12 @@ static struct menu_node* mn_new(struct game_menu* gm)
 	return mn;
 }
 
-static inline void ms_init(struct menu_state* ms, struct game_menu* gm)
+static inline void ms_init_root(struct menu_state* ms, struct game_menu* gm)
 {
 	ms->mn = mn_new(gm);
 }
 
-static inline void ms_push_impl(struct menu_state* ms, struct game_menu* gm)
+static inline void push_node(struct menu_state* ms, struct game_menu* gm)
 {
 	struct menu_node* new_node = mn_new(gm);
 
@@ -37,11 +37,11 @@ void ms_push(struct menu_state* ms, struct game_menu* gm)
 {
 	if (ms->mn != NULL)
 	{
-		ms_push_impl(ms, gm);
+		push_node(ms, gm);
 		return;
 	}
 
-	ms_init(ms, gm);
+	ms_init_root(ms, gm);
 }
 
 void ms_pop(struct menu_state* ms)
