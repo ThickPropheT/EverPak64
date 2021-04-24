@@ -11,6 +11,8 @@ struct root_menu
 {
 	struct game_menu gm;
 
+	struct menu_nav_controller* mnav;
+
 	struct slot_menu* slots[N_SLOTS];
 };
 

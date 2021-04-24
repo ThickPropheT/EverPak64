@@ -20,7 +20,9 @@ struct root_menu* rm_new(struct device_state* dev, struct menu_nav_controller* m
 {
 	struct root_menu* rm = malloc(sizeof * rm);
 
-	_gm_init(&rm->gm, RM, dev, mnav, N_SLOTS);
+	_gm_init(&rm->gm, RM, dev, N_SLOTS);
+
+	rm->mnav = mnav;
 
 	for (int i = 0; i < N_SLOTS; i++)
 		rm->slots[i] = sm_new(dev, mnav, i);
@@ -58,7 +60,7 @@ static void rm_update(struct game_object* go)
 	}
 	else if (keys.c[0].A)
 	{
-		mnav_to_sm(gm->mnav, gm->i_hovered_item);
+		mnav_to_sm(rm->mnav, gm->i_hovered_item);
 	}
 }
 
