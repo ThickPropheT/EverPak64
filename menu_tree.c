@@ -29,36 +29,10 @@ void mt_update(struct menu_tree * mt)
 	if (!(mt->dev->controllers & CONTROLLER_1_INSERTED))
 		return;
 
-	//struct root_menu* rm = mt->rm;
-
 	go_update((struct game_object*)mt->ms->mn->gm);
-
-	//switch (mt->ms->i_depth)
-	//{
-	//case ROOT_MENU:
-	//	go_update((struct game_object*)rm);
-	//	break;
-
-	//case SLOT_MENU:
-	//	go_update((struct game_object*)rm_get_current(rm));
-	//	break;
-	//}
 }
 
 void mt_draw(struct menu_tree* mt)
 {
 	go_draw((struct game_object*)mt->ms->mn->gm);
-
-	/*struct root_menu* rm = mt->rm;
-
-	switch (mt->ms->i_depth)
-	{
-	case ROOT_MENU:
-		go_draw((struct game_object*)rm);
-		break;
-
-	case SLOT_MENU:
-		go_draw((struct game_object*)rm_get_current(rm));
-		break;
-	}*/
 }
