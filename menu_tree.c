@@ -11,7 +11,7 @@ struct menu_tree mt_new(struct device_state* dev)
 	struct menu_builder_table* mbt = mbt_new();
 	struct menu_nav_controller* mnav = mnav_new(ms, mbt);
 
-	mbr_register(mbt, dev, mnav);
+	mbreg_register(mbt, dev, mnav);
 
 	ms_init_root(ms, (struct game_menu*)rm_new(dev, mnav));
 
