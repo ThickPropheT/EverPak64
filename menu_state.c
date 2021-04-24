@@ -18,8 +18,11 @@ static struct menu_node* mn_new(struct game_menu* gm)
 	return mn;
 }
 
-static inline void ms_init_root(struct menu_state* ms, struct game_menu* gm)
+void ms_init_root(struct menu_state* ms, struct game_menu* gm)
 {
+	if (ms->mn != NULL)
+		return;
+
 	ms->mn = mn_new(gm);
 }
 

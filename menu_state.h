@@ -17,5 +17,7 @@ struct menu_state
 
 struct menu_state* ms_new(void);
 
+void ms_init_root(struct menu_state* ms, struct game_menu* gm);
+
 void ms_push(struct menu_state* ms, struct game_menu* gm);
 void ms_pop(struct menu_state* ms);

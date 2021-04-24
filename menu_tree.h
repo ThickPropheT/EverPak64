@@ -5,6 +5,7 @@
 #include "menu_state.h"
 #include "root_menu.h"
 #include "device_state.h"
+#include "menu_nav_controller.h"
 
 
 // TODO consider converting to enum
@@ -18,9 +19,7 @@
 struct menu_tree
 {
 	struct device_state* dev;
-	struct menu_state* ms;
-
-	struct root_menu* rm;
+	struct menu_nav_controller* mnav;
 };
 
 
