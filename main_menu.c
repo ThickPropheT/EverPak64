@@ -5,11 +5,6 @@
 #include "console.h"
 
 
-// TODO i don't think these are wired up
-#define I_DEFAULT_SELECTED	0
-#define I_DEFAULT_DEPTH		0
-
-
 static void mm_update(struct game_object* go);
 static void mm_draw(struct game_object* go);
 
