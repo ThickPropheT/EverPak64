@@ -8,7 +8,7 @@
 
 struct menu_tree mt_new(struct device_state* dev)
 {
-	struct menu_state* ms = ms_new(MAX_MENUS);
+	struct menu_state* ms = ms_new();
 
 	struct menu_builder_table* mbt = mbt_new();
 
