@@ -2,12 +2,22 @@
 
 #include "math.h"
 #include "menu_nav_controller.h"
+#include "menu_builder_table.h"
+#include "default_menu_builder.h"
+#include "game_object.h"
 
 struct menu_tree mt_new(struct device_state* dev)
 {
 	struct menu_state* ms = ms_new(MAX_MENUS);
-	struct menu_nav_controller* mnav = mnav_new(ms);
+
+	struct menu_builder_table* mbt = mbt_new();
+
+	struct menu_nav_controller* mnav = mnav_new(ms, mbt);
+
+	mbt->default_builder = (struct menu_builder*)dmb_new(dev, mnav);
+
 	struct root_menu* rm = rm_new(dev, mnav);
+	ms_push(ms, (struct game_menu*)rm);
 
 	return (struct menu_tree) { dev, ms, rm };
 }
@@ -19,23 +29,27 @@ void mt_update(struct menu_tree * mt)
 	if (!(mt->dev->controllers & CONTROLLER_1_INSERTED))
 		return;
 
-	struct root_menu* rm = mt->rm;
+	//struct root_menu* rm = mt->rm;
 
-	switch (mt->ms->i_depth)
-	{
-	case ROOT_MENU:
-		go_update((struct game_object*)rm);
-		break;
+	go_update((struct game_object*)mt->ms->mn->gm);
 
-	case SLOT_MENU:
-		go_update((struct game_object*)rm_get_current(rm));
-		break;
-	}
+	//switch (mt->ms->i_depth)
+	//{
+	//case ROOT_MENU:
+	//	go_update((struct game_object*)rm);
+	//	break;
+
+	//case SLOT_MENU:
+	//	go_update((struct game_object*)rm_get_current(rm));
+	//	break;
+	//}
 }
 
 void mt_draw(struct menu_tree* mt)
 {
-	struct root_menu* rm = mt->rm;
+	go_draw((struct game_object*)mt->ms->mn->gm);
+
+	/*struct root_menu* rm = mt->rm;
 
 	switch (mt->ms->i_depth)
 	{
@@ -46,5 +60,5 @@ void mt_draw(struct menu_tree* mt)
 	case SLOT_MENU:
 		go_draw((struct game_object*)rm_get_current(rm));
 		break;
-	}
+	}*/
 }
