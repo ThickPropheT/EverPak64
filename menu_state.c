@@ -54,6 +54,7 @@ void ms_pop(struct menu_state* ms)
 	if (prev == NULL)
 		return;
 
+	free(ms->mn->gm);
 	free(ms->mn);
 
 	prev->next = NULL;
