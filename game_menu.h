@@ -19,8 +19,6 @@ struct game_menu
 
 void _gm_init(struct game_menu* gm, const struct go_type* vtable, struct device_state* dev, struct menu_nav_controller* mnav, size_t n_items);
 
-struct game_menu* gm_new(struct menu_state* ms, struct device_state* dev, struct menu_nav_controller* mnav);
-
 void _gm_hover_prev(struct game_menu* gm);
 void _gm_hover_next(struct game_menu* gm);
 

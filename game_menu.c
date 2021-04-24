@@ -23,18 +23,6 @@ void _gm_init(struct game_menu* gm, const struct go_type* vtable, struct device_
 	gm->n_items = n_items;
 }
 
-struct game_menu* gm_new(struct menu_state* ms, struct device_state* dev, struct menu_nav_controller* mnav)
-{
-	struct game_menu* gm = malloc(sizeof * gm);
-
-	gm->go.type = GM;
-
-	gm->dev = dev;
-	gm->mnav = mnav;
-
-	return gm;
-}
-
 void _gm_hover_prev(struct game_menu* gm)
 {
 	gm->i_hovered_item = cmod(gm->i_hovered_item - 1, gm->n_items);
