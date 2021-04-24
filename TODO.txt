@@ -15,7 +15,7 @@ aggregate various pieces of global game state into a game_state struct
 determine what line endings are being used throughout and standardize
 	lookin at you slot_menu.c
 
-i don't think I_DEFAULT_SELECTED and I_DEFAULT_DEPTH are wired up in root_menu
+i don't think I_DEFAULT_SELECTED and I_DEFAULT_DEPTH are wired up in main_menu
 
 re-evaluate use of size_t
 

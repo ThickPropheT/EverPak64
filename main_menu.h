@@ -7,7 +7,7 @@
 #include "menu_nav_controller.h"
 
 
-struct root_menu
+struct main_menu
 {
 	struct game_menu gm;
 
@@ -17,6 +17,6 @@ struct root_menu
 };
 
 
-struct root_menu* rm_new(struct device_state* dev, struct menu_nav_controller* mnav);
+struct main_menu* mm_new(struct device_state* dev, struct menu_nav_controller* mnav);
 
-struct slot_menu* rm_get_current(struct root_menu* rm);
+struct slot_menu* mm_get_current(struct main_menu* mm);

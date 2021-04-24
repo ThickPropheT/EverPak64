@@ -13,7 +13,7 @@ struct menu_tree mt_new(struct device_state* dev)
 
 	mbreg_register(mbt, dev, mnav);
 
-	ms_init_root(ms, (struct game_menu*)rm_new(dev, mnav));
+	ms_init_root(ms, (struct game_menu*)mm_new(dev, mnav));
 
 	return (struct menu_tree) { dev, mnav };
 }

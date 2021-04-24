@@ -15,7 +15,7 @@
 }
 
 // TODO add console.* & wrap below functions with single instance of console_context
-// TODO for better ease of use (i.e. in order to replace things like rm_init(...)
+// TODO for better ease of use (i.e. in order to replace things like mm_init(...)
 
 struct console_context
 {

@@ -1,4 +1,4 @@
-#include "root_menu.h"
+#include "main_menu.h"
 
 #include <stddef.h>
 #include <malloc.h>
@@ -10,35 +10,35 @@
 #define I_DEFAULT_DEPTH		0
 
 
-static void rm_update(struct game_object* go);
-static void rm_draw(struct game_object* go);
+static void mm_update(struct game_object* go);
+static void mm_draw(struct game_object* go);
 
-const struct go_type RM[] = { { rm_update, rm_draw } };
+const struct go_type MM[] = { { mm_update, mm_draw } };
 
 
-struct root_menu* rm_new(struct device_state* dev, struct menu_nav_controller* mnav)
+struct main_menu* mm_new(struct device_state* dev, struct menu_nav_controller* mnav)
 {
-	struct root_menu* rm = malloc(sizeof * rm);
+	struct main_menu* mm = malloc(sizeof * mm);
 
-	_gm_init(&rm->gm, RM, dev, N_SLOTS);
+	_gm_init(&mm->gm, MM, dev, N_SLOTS);
 
-	rm->mnav = mnav;
+	mm->mnav = mnav;
 
 	for (int i = 0; i < N_SLOTS; i++)
-		rm->slots[i] = sm_new(dev, mnav, i);
+		mm->slots[i] = sm_new(dev, mnav, i);
 
-	return rm;
+	return mm;
 }
 
-struct slot_menu* rm_get_current(struct root_menu* rm)
+struct slot_menu* mm_get_current(struct main_menu* mm)
 {
-	return rm->slots[rm->gm.i_hovered_item];
+	return mm->slots[mm->gm.i_hovered_item];
 }
 
-static void rm_update(struct game_object* go)
+static void mm_update(struct game_object* go)
 {
-	struct root_menu* rm = (struct root_menu*)go;
-	struct game_menu* gm = &rm->gm;
+	struct main_menu* mm = (struct main_menu*)go;
+	struct game_menu* gm = &mm->gm;
 
 	struct controller_data keys = gm->dev->keys_d;
 
@@ -60,14 +60,14 @@ static void rm_update(struct game_object* go)
 	}
 	else if (keys.c[0].A)
 	{
-		mnav_to_sm(rm->mnav, gm->i_hovered_item);
+		mnav_to_sm(mm->mnav, gm->i_hovered_item);
 	}
 }
 
-static void rm_draw(struct game_object* go)
+static void mm_draw(struct game_object* go)
 {
-	struct root_menu* rm = (struct root_menu*)go;
-	struct device_state* dev = rm->gm.dev;
+	struct main_menu* mm = (struct main_menu*)go;
+	struct device_state* dev = mm->gm.dev;
 
 	cprintf("Select Controller (A)\n\n");
 
@@ -78,7 +78,7 @@ static void rm_draw(struct game_object* go)
 		u8 sn = acc_get_number(acc);
 
 		char* sel =
-			i == rm->gm.i_hovered_item
+			i == mm->gm.i_hovered_item
 			? ">"
 			: " ";
 
