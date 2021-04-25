@@ -30,7 +30,7 @@ static void acc_flags_changed(struct device_state* dev, u16 from, u16 to)
 	for (u8 i = 0; i < N_SLOTS; i++)
 	{
 		u16 f = get_flag(i);
-		u8 has_f_changed = (from & f) != (to & f);
+		u8 has_f_changed = did_flag_change(f, from, to);
 
 		if (!has_f_changed)
 			continue;

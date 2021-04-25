@@ -21,3 +21,5 @@ struct device_state
 
 
 u16 get_flag(u8 i_slot);
+
+u8 did_flag_change(u16 flag, u16 from, u16 to);
