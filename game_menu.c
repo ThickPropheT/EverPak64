@@ -6,15 +6,18 @@
 
 static void gm_update(struct game_object* go);
 
-const struct go_type GM[] = { { gm_update } };
+const struct go_type GM_O[] = { { gm_update } };
+const struct gm_type GM[] = { { NULL, NULL } };
 
 
 void _gm_init(struct game_menu* gm, const struct go_type* vtable, struct device_state* dev, size_t n_items)
 {
-	_go_init(&gm->go, vtable, GM);
+	_go_init(&gm->go, vtable, GM_O);
 
 	gm->go.can_update = 1;
 	gm->go.can_draw = 1;
+
+	gm->gm_type = GM;
 
 	gm->dev = dev;
 
