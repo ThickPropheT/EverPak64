@@ -30,7 +30,7 @@ struct accessory* acc_new(u8 i_slot)
 {
 	struct accessory* acc = malloc(sizeof * acc);
 
-	acc->go.type = ACC;
+	acc->go.go_type = ACC;
 
 	acc->i_slot = i_slot;
 	acc->type = ACCESSORY_NONE;

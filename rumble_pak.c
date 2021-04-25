@@ -23,5 +23,5 @@ struct rumble_pak* rpk_new(u8 i_slot)
 
 static void rpk_update(struct game_object* go) 
 {
-	go->_base->type->update(go);
+	go->_base->go_type->update(go);
 }
