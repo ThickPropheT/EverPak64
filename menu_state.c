@@ -18,9 +18,9 @@ static struct menu_node* mn_new(struct game_menu* gm)
 	return mn;
 }
 
-static inline struct game_menu* get_current(struct menu_state* ms)
+static inline struct menu_presenter* get_current(struct menu_state* ms)
 {
-	return ms->mn->mp->gm;
+	return ms->mn->mp;
 }
 
 void ms_init_root(struct menu_state* ms, struct game_menu* gm)
@@ -30,7 +30,7 @@ void ms_init_root(struct menu_state* ms, struct game_menu* gm)
 
 	ms->mn = mn_new(gm);
 
-	gm_entering(gm);
+	mp_entering(ms->mn->mp);
 }
 
 static inline void push_node(struct menu_state* ms, struct game_menu* gm)
@@ -42,7 +42,7 @@ static inline void push_node(struct menu_state* ms, struct game_menu* gm)
 
 	ms->mn = new_node;
 
-	gm_entering(gm);
+	mp_entering(ms->mn->mp);
 }
 
 void ms_push(struct menu_state* ms, struct game_menu* gm)
@@ -69,7 +69,7 @@ void ms_pop(struct menu_state* ms)
 	if (prev == NULL)
 		return;
 
-	gm_leaving(get_current(ms));
+	mp_leaving(get_current(ms));
 
 	free_leaf(ms->mn);
 
