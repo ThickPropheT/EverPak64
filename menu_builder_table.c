@@ -2,6 +2,6 @@
 
 struct menu_builder_table* mbt_new(void)
 {
-	struct menu_builder_table* mbt = malloc(sizeof * mbt);
+	struct menu_builder_table* mbt = calloc(1, sizeof * mbt);
 	return mbt;
 }
