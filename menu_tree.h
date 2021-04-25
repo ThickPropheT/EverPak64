@@ -1,9 +1,5 @@
 #pragma once
 
-#include <stddef.h>
-
-#include "menu_state.h"
-#include "main_menu.h"
 #include "device_state.h"
 #include "menu_nav_controller.h"
 
