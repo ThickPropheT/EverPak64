@@ -13,7 +13,7 @@ static struct menu_node* mn_new(struct game_menu* gm)
 {
 	struct menu_node* mn = malloc(sizeof * mn);
 
-	mn->gm = gm;
+	mn->mp = mp_new(gm);
 
 	return mn;
 }
@@ -47,6 +47,12 @@ void ms_push(struct menu_state* ms, struct game_menu* gm)
 	ms_init_root(ms, gm);
 }
 
+static void free_leaf(struct menu_node* mn)
+{
+	mp_free(mn->mp);
+	free(mn);
+}
+
 void ms_pop(struct menu_state* ms)
 {
 	struct menu_node* prev = ms->mn->prev;
@@ -54,8 +60,7 @@ void ms_pop(struct menu_state* ms)
 	if (prev == NULL)
 		return;
 
-	free(ms->mn->gm);
-	free(ms->mn);
+	free_leaf(ms->mn);
 
 	prev->next = NULL;
 	ms->mn = prev;

@@ -1,11 +1,12 @@
 #pragma once
 
 #include <stddef.h>
+#include "menu_presenter.h"
 #include "game_menu.h"
 
 struct menu_node
 {
-	struct game_menu* gm;
+	struct menu_presenter* mp;
 	struct menu_node* prev;
 	struct menu_node* next;
 };

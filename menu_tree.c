@@ -24,7 +24,7 @@ struct menu_tree mt_new(struct device_state* dev)
 static inline struct game_object* get_current(struct menu_tree* mt)
 {
 	// TODO consider moving this into menu_nav_controller
-	return (struct game_object*)mt->mnav->ms->mn->gm;
+	return (struct game_object*)mt->mnav->ms->mn->mp->gm;
 }
 
 void mt_update(struct menu_tree* mt)
