@@ -26,7 +26,7 @@ struct game_menu* mbres_try_build_acc(struct menu_builder_table* mbt, struct dev
 {
 	struct accessory* acc = dev->accessories[i_slot];
 
-	struct menu_builder* mb = mbt_get_builder(mbt, acc);
+	struct menu_builder* mb = mbt->acc_builders[acc->type];
 
 	if (mb != NULL)
 		return mbres_build_acc(mb, acc);
