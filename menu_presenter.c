@@ -21,12 +21,18 @@ struct menu_presenter* mp_new(struct game_menu* gm)
 
 static void _mp_entering(struct menu_presenter* mp)
 {
+	mp->gm->go.can_update = 1;
+	mp->gm->go.can_draw = 1;
+
 	gm_entering(mp->gm);
 }
 
 static void _mp_leaving(struct menu_presenter* mp)
 {
 	gm_leaving(mp->gm);
+
+	mp->gm->go.can_update = 0;
+	mp->gm->go.can_draw = 0;
 }
 
 

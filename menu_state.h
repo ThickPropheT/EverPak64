@@ -13,6 +13,7 @@ struct menu_node
 
 struct menu_state
 {
+	struct menu_node* root;
 	struct menu_node* mn;
 };
 

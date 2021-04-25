@@ -21,11 +21,6 @@ struct menu_tree mt_new(struct device_state* dev)
 	return (struct menu_tree) { dev, mnav };
 }
 
-static inline struct game_object* get_current(struct menu_tree* mt)
-{
-	// TODO consider moving this into menu_nav_controller
-	return (struct game_object*)mt->mnav->ms->mn->mp->gm;
-}
 
 void mt_update(struct menu_tree* mt)
 {
@@ -34,10 +29,25 @@ void mt_update(struct menu_tree* mt)
 	if (!(mt->dev->controllers & CONTROLLER_1_INSERTED))
 		return;
 
-	go_update(get_current(mt));
+	// TODO ooowee he's trying
+	struct menu_node* mn = mt->mnav->ms->root;
+
+	while (mn != NULL)
+	{
+		go_update((struct game_object*)mn->mp->gm);
+
+		mn = mn->next;
+	}
 }
 
 void mt_draw(struct menu_tree* mt)
 {
-	go_draw(get_current(mt));
+	struct menu_node* mn = mt->mnav->ms->root;
+
+	while (mn != NULL)
+	{
+		go_draw((struct game_object*)mn->mp->gm);
+
+		mn = mn->next;
+	}
 }
