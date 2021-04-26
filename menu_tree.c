@@ -35,8 +35,7 @@ void mt_update(struct menu_tree* mt)
 
 	while ((mp = mne_move_next(&mne)))
 	{
-		// TODO make menu_presenter a game_object and use it here to control hot-swap menus
-		go_update((struct game_object*)mp->gm);
+		go_update((struct game_object*)mp);
 	}
 }
 
@@ -48,6 +47,6 @@ void mt_draw(struct menu_tree* mt)
 	
 	while ((mp = mne_move_next(&mne)))
 	{
-		go_draw((struct game_object*)mp->gm);
+		go_draw((struct game_object*)mp);
 	}
 }
