@@ -5,6 +5,8 @@
 #include "memory_pak.h"
 #include "menu_state.h"
 
+extern const struct go_type MPKM_TYPE[];
+
 struct mpk_menu
 {
 	struct game_menu gm;

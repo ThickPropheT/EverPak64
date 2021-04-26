@@ -9,6 +9,8 @@
 #include "menu_nav_controller.h"
 
 
+extern const struct go_type SM_TYPE[];
+
 struct slot_menu
 {
 	struct game_menu gm;

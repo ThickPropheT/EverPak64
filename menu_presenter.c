@@ -6,7 +6,7 @@
 static void mp_update(struct game_object* go);
 static void mp_draw(struct game_object* go);
 
-const struct go_type MP_O[] = { { mp_update, mp_draw } };
+const struct go_type MPO_TYPE[] = { { mp_update, mp_draw } };
 
 
 static void _mp_entering(struct menu_presenter* mp);
@@ -18,7 +18,7 @@ struct menu_presenter* mp_new(struct game_menu* gm)
 {
 	struct menu_presenter* mp = malloc(sizeof * mp);
 
-	mp->go.go_type = MP_O;
+	mp->go.go_type = MPO_TYPE;
 	mp->go.can_update = 1;
 	mp->go.can_draw = 1;
 
@@ -31,7 +31,7 @@ struct menu_presenter* mp_new(struct game_menu* gm)
 
 void _mp_init(struct menu_presenter* mp, const struct go_type* vtable, struct game_menu* gm)
 {
-	_go_init(&mp->go, vtable, MP_O);
+	_go_init(&mp->go, vtable, MPO_TYPE);
 
 	mp->gm = gm;
 }

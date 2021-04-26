@@ -6,7 +6,7 @@
 
 static void acc_update(struct game_object* go);
 
-const struct go_type ACC[] = { { acc_update } };
+const struct go_type ACC_TYPE[] = { { acc_update } };
 
 
 char* accessory_names[N_ACC_TYPES] =
@@ -21,7 +21,7 @@ char* accessory_names[N_ACC_TYPES] =
 
 void _acc_init(struct accessory* acc, const struct go_type* vtable, u8 i_slot)
 {
-	_go_init(&acc->go, vtable, ACC);
+	_go_init(&acc->go, vtable, ACC_TYPE);
 
 	acc->i_slot = i_slot;
 }
@@ -30,7 +30,7 @@ struct accessory* acc_new(u8 i_slot)
 {
 	struct accessory* acc = malloc(sizeof * acc);
 
-	acc->go.go_type = ACC;
+	acc->go.go_type = ACC_TYPE;
 
 	acc->i_slot = i_slot;
 	acc->type = ACCESSORY_NONE;

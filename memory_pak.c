@@ -6,14 +6,14 @@
 
 static void mpk_update(struct game_object * go);
 
-const struct go_type MPK[] = { { mpk_update } };
+const struct go_type MPK_TYPE[] = { { mpk_update } };
 
 
 struct memory_pak* mpk_new(u8 i_slot)
 {
 	struct memory_pak* mpk = calloc(1, sizeof * mpk);
 
-	_acc_init(&mpk->acc, MPK, i_slot);
+	_acc_init(&mpk->acc, MPK_TYPE, i_slot);
 
 	mpk->acc.type = ACCESSORY_MEMPAK;
 	mpk->acc.go.can_update = 1;

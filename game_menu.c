@@ -4,18 +4,18 @@
 #include "console.h"
 
 
-const struct go_type GM_O[] = { { NULL, NULL } };
-const struct gm_type GM[] = { { NULL, NULL } };
+const struct go_type GMO_TYPE[] = { { NULL, NULL } };
+const struct gm_type GM_TYPE[] = { { NULL, NULL } };
 
 
 void _gm_init(struct game_menu* gm, const struct go_type* vtable, struct device_state* dev, size_t n_items)
 {
-	_go_init(&gm->go, vtable, GM_O);
+	_go_init(&gm->go, vtable, GMO_TYPE);
 
 	gm->go.can_update = 1;
 	gm->go.can_draw = 1;
 
-	gm->gm_type = GM;
+	gm->gm_type = GM_TYPE;
 
 	gm->dev = dev;
 

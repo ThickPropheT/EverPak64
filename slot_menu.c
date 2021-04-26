@@ -9,14 +9,14 @@
 static void sm_update(struct game_object* go);
 static void sm_draw(struct game_object* go);
 
-const struct go_type SM[] = { { sm_update, sm_draw } };
+const struct go_type SM_TYPE[] = { { sm_update, sm_draw } };
 
 
 struct slot_menu* sm_new(struct device_state* dev, struct menu_nav_controller* mnav, u8 i_slot)
 {
 	struct slot_menu* sm = malloc(sizeof * sm);
 
-	_gm_init(&sm->gm, SM, dev, 0);
+	_gm_init(&sm->gm, SM_TYPE, dev, 0);
 
 	sm->mnav = mnav;
 	sm->i_slot = i_slot;

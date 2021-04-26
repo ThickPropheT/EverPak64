@@ -2,6 +2,8 @@
 
 #include "game_menu.h"
 
+extern const struct go_type MPO_TYPE[];
+
 struct menu_presenter
 {
 	struct game_object go;

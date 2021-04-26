@@ -9,6 +9,8 @@
 #define MPAK_STATUS_UNREADABLE		-2
 #define MPAK_STATUS_UNFORMATTED		-3
 
+extern const struct go_type MPK_TYPE[];
+
 struct memory_pak
 {
 	// TODO should this be const?

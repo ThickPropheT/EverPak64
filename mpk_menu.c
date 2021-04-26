@@ -7,14 +7,14 @@
 static void mpkm_update(struct game_object* go);
 static void mpkm_draw(struct game_object* go);
 
-const struct go_type MPKM[] = { { mpkm_update, mpkm_draw } };
+const struct go_type MPKM_TYPE[] = { { mpkm_update, mpkm_draw } };
 
 
 struct mpk_menu* mpkm_new(struct device_state* dev, struct menu_nav_controller* mnav, struct memory_pak* mpk)
 {
 	struct mpk_menu* mpkm = malloc(sizeof * mpkm);
 
-	_gm_init(&mpkm->gm, MPKM, dev, 0);
+	_gm_init(&mpkm->gm, MPKM_TYPE, dev, 0);
 
 	mpkm->mnav = mnav;
 	mpkm->mpk = mpk;

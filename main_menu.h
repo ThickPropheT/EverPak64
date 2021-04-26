@@ -7,6 +7,8 @@
 #include "menu_nav_controller.h"
 
 
+extern const struct go_type MM_TYPE[];
+
 struct main_menu
 {
 	struct game_menu gm;

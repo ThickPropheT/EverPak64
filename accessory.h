@@ -8,6 +8,8 @@
 #define N_ACC_TYPES		5
 
 
+extern const struct go_type ACC_TYPE[];
+
 struct accessory
 {
 	// TODO should this be const?
