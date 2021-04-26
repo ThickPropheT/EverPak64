@@ -4,7 +4,7 @@
 #include "memory_pak.h"
 #include "mpk_menu.h"
 
-static struct game_menu* mpkmb_build(struct menu_builder* mb, struct mb_args* args);
+static struct menu_presenter* mpkmb_build(struct menu_builder* mb, struct mb_args* args);
 
 struct mpk_menu_builder* mpkmb_new(struct device_state* dev, struct menu_nav_controller* mnav)
 {
@@ -18,12 +18,15 @@ struct mpk_menu_builder* mpkmb_new(struct device_state* dev, struct menu_nav_con
 	return mb;
 }
 
-static struct game_menu* mpkmb_build(struct menu_builder* mb, struct mb_args* args)
+static struct menu_presenter* mpkmb_build(struct menu_builder* mb, struct mb_args* args)
 {
 	struct mpk_menu_builder* mmb = (struct mpk_menu_builder*)mb;
 	struct acc_mb_args* ama = (struct acc_mb_args*)args;
 
 	struct memory_pak* mpk = (struct memory_pak*)ama->acc;
 
-	return (struct game_menu*)mpkm_new(mmb->dev, mmb->mnav, mpk);
+	struct game_menu* gm = (struct game_menu*)mpkm_new(mmb->dev, mmb->mnav, mpk);
+	struct menu_presenter* mp = mp_new(gm);
+
+	return mp;
 }

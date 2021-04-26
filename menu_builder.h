@@ -1,6 +1,6 @@
 #pragma once
 
-#include "game_menu.h"
+#include "menu_presenter.h"
 
 struct mb_args
 {
@@ -9,10 +9,10 @@ struct mb_args
 
 struct menu_builder
 {
-	struct game_menu* (*build)(struct menu_builder* mb, struct mb_args* args);
+	struct menu_presenter* (*build)(struct menu_builder* mb, struct mb_args* args);
 };
 
-static inline struct game_menu* mb_build(struct menu_builder* mb, struct mb_args* args)
+static inline struct menu_presenter* mb_build(struct menu_builder* mb, struct mb_args* args)
 {
 	return mb->build(mb, args);
 }

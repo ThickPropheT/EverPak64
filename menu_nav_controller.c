@@ -19,7 +19,7 @@ void mnav_to_sm(struct menu_nav_controller* mnav, u8 i_slot)
 	struct menu_state* ms = mnav->ms;
 	struct menu_builder_table* mbt = mnav->mbt;
 
-	struct game_menu* acc_menu = mbres_try_build_acc(mbt, mnav->dev, i_slot);
+	struct menu_presenter* acc_menu = mbres_try_build_acc(mbt, mnav->dev, i_slot);
 
 	if (acc_menu != NULL)
 	{

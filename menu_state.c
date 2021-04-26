@@ -9,22 +9,22 @@ struct menu_state* ms_new(void)
 	return ms;
 }
 
-static struct menu_node* mn_new(struct game_menu* gm)
+static struct menu_node* mn_new(struct menu_presenter* mp)
 {
 	struct menu_node* mn = calloc(1, sizeof * mn);
 
-	mn->mp = mp_new(gm);
+	mn->mp = mp;
 
 	return mn;
 }
 
 
-void ms_init_root(struct menu_state* ms, struct game_menu* gm)
+void ms_init_root(struct menu_state* ms, struct menu_presenter* mp)
 {
 	if (ms->mn != NULL)
 		return;
 
-	struct menu_node* root = mn_new(gm);
+	struct menu_node* root = mn_new(mp);
 
 	ms->root = root;
 	ms->mn = ms->root;
@@ -32,13 +32,13 @@ void ms_init_root(struct menu_state* ms, struct game_menu* gm)
 	mp_entering(root->mp);
 }
 
-static inline void push_node(struct menu_state* ms, struct game_menu* gm)
+static inline void push_node(struct menu_state* ms, struct menu_presenter* mp)
 {
 	struct menu_node* current = ms->mn;
 
 	mp_leaving(current->mp);
 
-	struct menu_node* new_node = mn_new(gm);
+	struct menu_node* new_node = mn_new(mp);
 
 	new_node->prev = current;
 	current->next = new_node;
@@ -48,15 +48,15 @@ static inline void push_node(struct menu_state* ms, struct game_menu* gm)
 	mp_entering(new_node->mp);
 }
 
-void ms_push(struct menu_state* ms, struct game_menu* gm)
+void ms_push(struct menu_state* ms, struct menu_presenter* mp)
 {
 	if (ms->mn != NULL)
 	{
-		push_node(ms, gm);
+		push_node(ms, mp);
 		return;
 	}
 
-	ms_init_root(ms, gm);
+	ms_init_root(ms, mp);
 }
 
 static void free_leaf(struct menu_node* mn)
