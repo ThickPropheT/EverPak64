@@ -3,6 +3,7 @@
 #include "acc_mb_args.h"
 #include "memory_pak.h"
 #include "mpk_menu.h"
+#include "acc_menu_presenter.h"
 
 static struct menu_presenter* mpkmb_build(struct menu_builder* mb, struct mb_args* args);
 
@@ -26,7 +27,7 @@ static struct menu_presenter* mpkmb_build(struct menu_builder* mb, struct mb_arg
 	struct memory_pak* mpk = (void*)ama->acc;
 
 	struct game_menu* gm = (void*)mpkm_new(mmb->dev, mmb->mnav, mpk);
-	struct menu_presenter* mp = mp_new(gm);
+	struct menu_presenter* mp = (void*)accmp_new(gm);
 
 	return mp;
 }

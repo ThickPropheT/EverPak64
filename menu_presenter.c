@@ -21,7 +21,8 @@ struct menu_presenter* mp_new(struct game_menu* gm)
 {
 	struct menu_presenter* mp = malloc(sizeof * mp);
 
-	mp->go.go_type = MPO_TYPE;
+	_go_init(&mp->go, MPO_TYPE);
+
 	mp->go.can_update = 1;
 	mp->go.can_draw = 1;
 
@@ -35,6 +36,11 @@ struct menu_presenter* mp_new(struct game_menu* gm)
 void _mp_init(struct menu_presenter* mp, const struct go_type* vtable, struct game_menu* gm)
 {
 	_go_init(&mp->go, vtable);
+
+	mp->go.can_update = 1;
+	mp->go.can_draw = 1;
+
+	mp->mp_type = MP;
 
 	mp->gm = gm;
 }
