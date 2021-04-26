@@ -2,6 +2,8 @@
 
 #include "accessory.h"
 
+extern const struct go_type RPK_TYPE[];
+
 struct rumble_pak
 {
 	// TODO should this be const?

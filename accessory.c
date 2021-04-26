@@ -4,9 +4,10 @@
 #include <string.h>
 
 
-static void acc_update(struct game_object* go);
+static void acc_update(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate ACC_UPDATE[] = { { acc_update } };
 
-const struct go_type ACC_TYPE[] = { { acc_update } };
+const struct go_type ACC_TYPE[] = { { ACC_UPDATE } };
 
 
 char* accessory_names[N_ACC_TYPES] =
@@ -21,7 +22,7 @@ char* accessory_names[N_ACC_TYPES] =
 
 void _acc_init(struct accessory* acc, const struct go_type* vtable, u8 i_slot)
 {
-	_go_init(&acc->go, vtable, ACC_TYPE);
+	_go_init(&acc->go, vtable);
 
 	acc->i_slot = i_slot;
 }
@@ -45,7 +46,7 @@ u8 acc_get_number(struct accessory acc)
 
 
 
-static void acc_update(struct game_object* go)
+static void acc_update(const struct go_delegate* base, struct game_object* go)
 {
 	struct accessory* acc = (void*)go;
 

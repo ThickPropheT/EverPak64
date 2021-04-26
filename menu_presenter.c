@@ -3,10 +3,13 @@
 #include <malloc.h>
 
 
-static void mp_update(struct game_object* go);
-static void mp_draw(struct game_object* go);
+static void mp_update(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate MP_UPDATE[] = { { mp_update } };
 
-const struct go_type MPO_TYPE[] = { { mp_update, mp_draw } };
+static void mp_draw(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate MP_DRAW[] = { { mp_draw } };
+
+const struct go_type MPO_TYPE[] = { { MP_UPDATE, MP_DRAW } };
 
 
 static void _mp_entering(struct menu_presenter* mp);
@@ -31,7 +34,7 @@ struct menu_presenter* mp_new(struct game_menu* gm)
 
 void _mp_init(struct menu_presenter* mp, const struct go_type* vtable, struct game_menu* gm)
 {
-	_go_init(&mp->go, vtable, MPO_TYPE);
+	_go_init(&mp->go, vtable);
 
 	mp->gm = gm;
 }
@@ -45,14 +48,14 @@ static void _mp_entering(struct menu_presenter* mp)
 	gm_entering(mp->gm);
 }
 
-static void mp_update(struct game_object* go)
+static void mp_update(const struct go_delegate* base, struct game_object* go)
 {
 	struct menu_presenter* mp = (void*)go;
 
 	go_update((struct game_object*)mp->gm);
 }
 
-static void mp_draw(struct game_object* go)
+static void mp_draw(const struct go_delegate* base, struct game_object* go)
 {
 	struct menu_presenter* mp = (void*)go;
 

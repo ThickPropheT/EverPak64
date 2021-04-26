@@ -4,10 +4,13 @@
 #include "console.h"
 
 
-static void mpkm_update(struct game_object* go);
-static void mpkm_draw(struct game_object* go);
+static void mpkm_update(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate MPKM_UPDATE[] = { { mpkm_update } };
 
-const struct go_type MPKM_TYPE[] = { { mpkm_update, mpkm_draw } };
+static void mpkm_draw(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate MPKM_DRAW[] = { { mpkm_draw } };
+
+const struct go_type MPKM_TYPE[] = { { MPKM_UPDATE, MPKM_DRAW } };
 
 
 struct mpk_menu* mpkm_new(struct device_state* dev, struct menu_nav_controller* mnav, struct memory_pak* mpk)
@@ -23,7 +26,7 @@ struct mpk_menu* mpkm_new(struct device_state* dev, struct menu_nav_controller* 
 }
 
 
-static void mpkm_update(struct game_object* go)
+static void mpkm_update(const struct go_delegate* base, struct game_object* go)
 {
 	struct mpk_menu* mpkm = (void*)go;
 
@@ -108,7 +111,7 @@ static void draw_entries(struct memory_pak mpk)
 	}
 }
 
-static void mpkm_draw(struct game_object* go)
+static void mpkm_draw(const struct go_delegate* base, struct game_object* go)
 {
 	struct mpk_menu* mpkm = (void*)go;
 

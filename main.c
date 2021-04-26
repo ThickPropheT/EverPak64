@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <libdragon.h>
 
+#include "game_object.h"
 #include "device_manager.h"
 #include "pinwheel.h"
 #include "fps_counter.h"

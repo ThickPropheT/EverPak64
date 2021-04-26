@@ -6,7 +6,6 @@
 struct game_object
 {
 	const struct go_type* go_type;
-	const struct game_object* _base;
 
 	u8 can_update;
 	u8 can_draw;
@@ -14,37 +13,44 @@ struct game_object
 
 struct go_type
 {
-	void (*update)(struct game_object* go);
-	void (*draw)(struct game_object* go);
+	const struct go_delegate* update;
+	const struct go_delegate* draw;
 };
 
-static inline struct game_object* go_new(const struct go_type* vtable)
+
+struct go_delegate
 {
-	struct game_object* go = malloc(sizeof * go);
-	go->go_type = vtable;
-	return go;
+	void (*invoke)(const struct go_delegate* base, struct game_object* go);
+	const struct go_delegate* base;
+};
+
+static inline void _god_invoke(const struct go_delegate* god, struct game_object* go)
+{
+	if (god == NULL)
+		return;
+
+	god->invoke(god->base, go);
 }
 
-static inline void _go_init(struct game_object* go, const struct go_type* vtable, const struct go_type* base_vtable)
+
+
+static inline void _go_init(struct game_object* go, const struct go_type* vtable)
 {
 	go->go_type = vtable;
-	go->_base = go_new(base_vtable);
 }
 
 static inline void go_update(struct game_object* go)
 {
-	if (!go->can_update
-		|| go->go_type->update == NULL)
+	if (!go->can_update)
 		return;
 
-	go->go_type->update(go);
+	_god_invoke(go->go_type->update, go);
 }
 
 static inline void go_draw(struct game_object* go)
 {
-	if (!go->can_draw
-		|| go->go_type->draw == NULL)
+	if (!go->can_draw)
 		return;
 
-	go->go_type->draw(go);
+	_god_invoke(go->go_type->draw, go);
 }

@@ -5,10 +5,13 @@
 #include "console.h"
 
 
-static void mm_update(struct game_object* go);
-static void mm_draw(struct game_object* go);
+static void mm_update(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate MM_UPDATE[] = { { mm_update } };
 
-const struct go_type MM_TYPE[] = { { mm_update, mm_draw } };
+static void mm_draw(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate MM_DRAW[] = { { mm_draw } };
+
+const struct go_type MM_TYPE[] = { { MM_UPDATE, MM_DRAW } };
 
 
 struct main_menu* mm_new(struct device_state* dev, struct menu_nav_controller* mnav)
@@ -30,7 +33,7 @@ struct slot_menu* mm_get_current(struct main_menu* mm)
 	return mm->slots[mm->gm.i_hovered_item];
 }
 
-static void mm_update(struct game_object* go)
+static void mm_update(const struct go_delegate* base, struct game_object* go)
 {
 	struct main_menu* mm = (void*)go;
 	struct game_menu* gm = &mm->gm;
@@ -59,7 +62,7 @@ static void mm_update(struct game_object* go)
 	}
 }
 
-static void mm_draw(struct game_object* go)
+static void mm_draw(const struct go_delegate* base, struct game_object* go)
 {
 	struct main_menu* mm = (void*)go;
 	struct device_state* dev = mm->gm.dev;

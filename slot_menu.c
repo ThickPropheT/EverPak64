@@ -6,10 +6,13 @@
 #include "device_state.h"
 
 
-static void sm_update(struct game_object* go);
-static void sm_draw(struct game_object* go);
+static void sm_update(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate SM_UPDATE[] = { { sm_update } };
 
-const struct go_type SM_TYPE[] = { { sm_update, sm_draw } };
+static void sm_draw(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate SM_DRAW[] = { { sm_draw } };
+
+const struct go_type SM_TYPE[] = { { SM_UPDATE, SM_DRAW } };
 
 
 struct slot_menu* sm_new(struct device_state* dev, struct menu_nav_controller* mnav, u8 i_slot)
@@ -25,7 +28,7 @@ struct slot_menu* sm_new(struct device_state* dev, struct menu_nav_controller* m
 }
 
 
-static void sm_update(struct game_object* go)
+static void sm_update(const struct go_delegate* base, struct game_object* go)
 {
 	struct slot_menu* sm = (void*)go;
 
@@ -131,7 +134,7 @@ void draw_entries(struct slot_menu sm, struct device_state dev)
 	}
 }
 
-static void sm_draw(struct game_object* go)
+static void sm_draw(const struct go_delegate* base, struct game_object* go)
 {
 	struct slot_menu* sm = (void*)go;
 	struct device_state* dev = sm->gm.dev;

@@ -4,9 +4,10 @@
 #include <string.h>
 
 
-static void mpk_update(struct game_object * go);
+static void mpk_update(const struct go_delegate* base, struct game_object * go);
+const struct go_delegate MPK_UPDATE[] = { { mpk_update, ACC_UPDATE } };
 
-const struct go_type MPK_TYPE[] = { { mpk_update } };
+const struct go_type MPK_TYPE[] = { { MPK_UPDATE } };
 
 
 struct memory_pak* mpk_new(u8 i_slot)
@@ -27,9 +28,9 @@ static void load_entry(struct memory_pak* mpk, u8 i)
 }
 
 
-static void mpk_update(struct game_object * go)
+static void mpk_update(const struct go_delegate* base, struct game_object* go)
 {
-	go->_base->go_type->update(go);
+	_god_invoke(base, go);
 
 	struct memory_pak* mpk = (void*)go;
 

@@ -4,8 +4,6 @@
 #include "accessory.h"
 #include "device_state.h"
 
-extern const struct go_type GMO_TYPE[];
-
 struct game_menu
 {
 	// TODO should this be const?
