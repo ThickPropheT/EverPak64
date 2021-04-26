@@ -79,6 +79,25 @@ void ms_pop(struct menu_state* ms)
 
 	prev->next = NULL;
 	ms->mn = prev;
-	
+
 	mp_entering(prev->mp);
+}
+
+
+struct mn_enumerator ms_get_enumerator(struct menu_state* ms)
+{
+	struct mn_enumerator mne = { ms->root };
+	return mne;
+}
+
+struct menu_presenter* mne_move_next(struct mn_enumerator* mne)
+{
+	struct menu_node* current = mne->current;
+
+	if (current == NULL)
+		return NULL;
+
+	mne->current = current->next;
+
+	return current->mp;
 }

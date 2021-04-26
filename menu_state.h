@@ -23,3 +23,12 @@ void ms_init_root(struct menu_state* ms, struct game_menu* gm);
 
 void ms_push(struct menu_state* ms, struct game_menu* gm);
 void ms_pop(struct menu_state* ms);
+
+
+struct mn_enumerator
+{
+	struct menu_node* current;
+};
+
+struct mn_enumerator ms_get_enumerator(struct menu_state* ms);
+struct menu_presenter* mne_move_next(struct mn_enumerator* mne);

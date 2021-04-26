@@ -29,25 +29,25 @@ void mt_update(struct menu_tree* mt)
 	if (!(mt->dev->controllers & CONTROLLER_1_INSERTED))
 		return;
 
-	// TODO ooowee he's trying
-	struct menu_node* mn = mt->mnav->ms->root;
+	struct mn_enumerator mne = ms_get_enumerator(mt->mnav->ms);
 
-	while (mn != NULL)
+	struct menu_presenter* mp;
+
+	while ((mp = mne_move_next(&mne)))
 	{
-		go_update((struct game_object*)mn->mp->gm);
-
-		mn = mn->next;
+		// TODO make menu_presenter a game_object and use it here to control hot-swap menus
+		go_update((struct game_object*)mp->gm);
 	}
 }
 
 void mt_draw(struct menu_tree* mt)
 {
-	struct menu_node* mn = mt->mnav->ms->root;
+	struct mn_enumerator mne = ms_get_enumerator(mt->mnav->ms);
 
-	while (mn != NULL)
+	struct menu_presenter* mp;
+	
+	while ((mp = mne_move_next(&mne)))
 	{
-		go_draw((struct game_object*)mn->mp->gm);
-
-		mn = mn->next;
+		go_draw((struct game_object*)mp->gm);
 	}
 }
