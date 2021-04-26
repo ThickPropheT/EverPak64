@@ -33,7 +33,8 @@ static inline void _go_init(struct game_object* go, const struct go_type* vtable
 
 static inline void go_update(struct game_object* go)
 {
-	if (!go->can_update)
+	if (!go->can_update
+		|| go->go_type->update == NULL)
 		return;
 
 	go->go_type->update(go);
@@ -41,7 +42,8 @@ static inline void go_update(struct game_object* go)
 
 static inline void go_draw(struct game_object* go)
 {
-	if (!go->can_draw)
+	if (!go->can_draw
+		|| go->go_type->draw == NULL)
 		return;
 
 	go->go_type->draw(go);
