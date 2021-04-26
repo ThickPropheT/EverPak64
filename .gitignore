@@ -34,3 +34,4 @@ node_modules
 .vs/slnx.sqlite
 .vs/menu
 .vs/VSWorkspaceState.json
+.vs/slnx.sqlite-journal
