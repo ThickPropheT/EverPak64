@@ -4,9 +4,7 @@
 #include "console.h"
 
 
-static void gm_update(struct game_object* go);
-
-const struct go_type GM_O[] = { { gm_update } };
+const struct go_type GM_O[] = { { NULL, NULL } };
 const struct gm_type GM[] = { { NULL, NULL } };
 
 
@@ -42,10 +40,4 @@ void _gm_draw_header(struct accessory acc)
 
 	cprintf("Controller %u [%s]", sn, acc_name);
 	cprintf("Back (B)");
-}
-
-
-static void gm_update(struct game_object* go)
-{
-
 }
