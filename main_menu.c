@@ -32,7 +32,7 @@ struct slot_menu* mm_get_current(struct main_menu* mm)
 
 static void mm_update(struct game_object* go)
 {
-	struct main_menu* mm = (struct main_menu*)go;
+	struct main_menu* mm = (void*)go;
 	struct game_menu* gm = &mm->gm;
 
 	struct controller_data keys = gm->dev->keys_d;
@@ -61,7 +61,7 @@ static void mm_update(struct game_object* go)
 
 static void mm_draw(struct game_object* go)
 {
-	struct main_menu* mm = (struct main_menu*)go;
+	struct main_menu* mm = (void*)go;
 	struct device_state* dev = mm->gm.dev;
 
 	cprintf("Select Controller (A)\n\n");

@@ -47,7 +47,7 @@ u8 acc_get_number(struct accessory acc)
 
 static void acc_update(struct game_object* go)
 {
-	struct accessory* acc = (struct accessory*)go;
+	struct accessory* acc = (void*)go;
 
 	u8 slot = acc->i_slot;
 

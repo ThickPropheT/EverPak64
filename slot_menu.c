@@ -27,7 +27,7 @@ struct slot_menu* sm_new(struct device_state* dev, struct menu_nav_controller* m
 
 static void sm_update(struct game_object* go)
 {
-	struct slot_menu* sm = (struct slot_menu*)go;
+	struct slot_menu* sm = (void*)go;
 
 	struct device_state* dev = sm->gm.dev;
 	struct controller_data keys = dev->keys_d;
@@ -37,7 +37,7 @@ static void sm_update(struct game_object* go)
 		&& keys.c[0].Z
 		&& keys.c[0].R)
 	{
-		mpk_format((struct memory_pak*)dev->accessories[sm->i_slot]);
+		mpk_format((void*)dev->accessories[sm->i_slot]);
 	}
 	else if (keys.c[0].B)
 	{
@@ -102,7 +102,7 @@ u8 has_error(struct slot_menu sm, struct device_state dev, struct accessory acc)
 
 void draw_entries(struct slot_menu sm, struct device_state dev)
 {
-	struct memory_pak* mpk = (struct memory_pak*)dev.accessories[sm.i_slot];
+	struct memory_pak* mpk = (void*)dev.accessories[sm.i_slot];
 
 	for (u8 i = 0; i < ENTRIES_LEN; i++)
 	{
@@ -133,7 +133,7 @@ void draw_entries(struct slot_menu sm, struct device_state dev)
 
 static void sm_draw(struct game_object* go)
 {
-	struct slot_menu* sm = (struct slot_menu*)go;
+	struct slot_menu* sm = (void*)go;
 	struct device_state* dev = sm->gm.dev;
 	struct accessory* acc = dev->accessories[sm->i_slot];
 

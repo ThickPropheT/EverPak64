@@ -25,7 +25,7 @@ struct mpk_menu* mpkm_new(struct device_state* dev, struct menu_nav_controller* 
 
 static void mpkm_update(struct game_object* go)
 {
-	struct mpk_menu* mpkm = (struct mpk_menu*)go;
+	struct mpk_menu* mpkm = (void*)go;
 
 	struct controller_data keys = mpkm->gm.dev->keys_d;
 
@@ -110,7 +110,7 @@ static void draw_entries(struct memory_pak mpk)
 
 static void mpkm_draw(struct game_object* go)
 {
-	struct mpk_menu* mpkm = (struct mpk_menu*)go;
+	struct mpk_menu* mpkm = (void*)go;
 
 	struct memory_pak* mpk = mpkm->mpk;
 	struct accessory acc = mpk->acc;

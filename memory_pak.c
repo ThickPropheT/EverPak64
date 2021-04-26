@@ -31,7 +31,7 @@ static void mpk_update(struct game_object * go)
 {
 	go->_base->go_type->update(go);
 
-	struct memory_pak* mpk = (struct memory_pak*)go;
+	struct memory_pak* mpk = (void*)go;
 
 
 	load_entry(mpk, go->can_update - 1);

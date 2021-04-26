@@ -20,12 +20,12 @@ struct mpk_menu_builder* mpkmb_new(struct device_state* dev, struct menu_nav_con
 
 static struct menu_presenter* mpkmb_build(struct menu_builder* mb, struct mb_args* args)
 {
-	struct mpk_menu_builder* mmb = (struct mpk_menu_builder*)mb;
-	struct acc_mb_args* ama = (struct acc_mb_args*)args;
+	struct mpk_menu_builder* mmb = (void*)mb;
+	struct acc_mb_args* ama = (void*)args;
 
-	struct memory_pak* mpk = (struct memory_pak*)ama->acc;
+	struct memory_pak* mpk = (void*)ama->acc;
 
-	struct game_menu* gm = (struct game_menu*)mpkm_new(mmb->dev, mmb->mnav, mpk);
+	struct game_menu* gm = (void*)mpkm_new(mmb->dev, mmb->mnav, mpk);
 	struct menu_presenter* mp = mp_new(gm);
 
 	return mp;

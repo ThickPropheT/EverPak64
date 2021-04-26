@@ -47,14 +47,14 @@ static void _mp_entering(struct menu_presenter* mp)
 
 static void mp_update(struct game_object* go)
 {
-	struct menu_presenter* mp = (struct menu_presenter*)go;
+	struct menu_presenter* mp = (void*)go;
 
 	go_update((struct game_object*)mp->gm);
 }
 
 static void mp_draw(struct game_object* go)
 {
-	struct menu_presenter* mp = (struct menu_presenter*)go;
+	struct menu_presenter* mp = (void*)go;
 
 	go_draw((struct game_object*)mp->gm);
 }
