@@ -4,6 +4,11 @@
 #include "acc_mb_args.h"
 #include "menu_builder.h"
 
+struct game_menu* mbres_build_root(struct menu_builder_table* mbt)
+{
+	return mb_build(mbt->main_builder, NULL);
+}
+
 struct game_menu* mbres_build_default(struct menu_builder_table* mbt, u8 i_slot)
 {
 	struct default_mb_args* args = dmba_new(i_slot);

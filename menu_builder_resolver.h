@@ -5,6 +5,8 @@
 #include "accessory.h"
 #include "device_state.h"
 
+struct game_menu* mbres_build_root(struct menu_builder_table* mbt);
+
 struct game_menu* mbres_build_default(struct menu_builder_table* mbt, u8 i_slot);
 
 struct game_menu* mbres_build_acc(struct menu_builder* mb, struct accessory* acc);

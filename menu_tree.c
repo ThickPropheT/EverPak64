@@ -4,6 +4,7 @@
 #include "menu_builder_table.h"
 #include "menu_nav_controller.h"
 #include "menu_builder_registrar.h"
+#include "menu_builder_resolver.h"
 #include "main_menu.h"
 #include "game_object.h"
 
@@ -16,7 +17,7 @@ struct menu_tree mt_new(struct device_state* dev)
 
 	mbreg_register(mbt, dev, mnav);
 
-	ms_init_root(ms, (struct game_menu*)mm_new(dev, mnav));
+	ms_init_root(ms, mbres_build_root(mbt));
 
 	return (struct menu_tree) { dev, mnav };
 }
