@@ -7,7 +7,7 @@
 static struct game_menu* build_menu(struct menu_builder* mb, struct mb_args* args);
 static struct menu_presenter* build_presenter(struct menu_builder* mb, struct mb_args* args);
 
-struct rpk_menu_builder* rpkmb_new(struct device_state* dev, struct menu_builder_table* mbt)
+struct rpk_menu_builder* rpkmb_new(struct device_state* dev, struct menu_nav_controller* mnav, struct menu_builder_table* mbt)
 {
 	struct rpk_menu_builder* mb = malloc(sizeof * mb);
 
@@ -15,6 +15,7 @@ struct rpk_menu_builder* rpkmb_new(struct device_state* dev, struct menu_builder
 	mb->mb.build_presenter = &build_presenter;
 
 	mb->dev = dev;
+	mb->mnav = mnav;
 	mb->mbt = mbt;
 
 	return mb;
@@ -32,7 +33,7 @@ static struct game_menu* build_menu(struct menu_builder* mb, struct mb_args* arg
 	struct rumble_pak* rpk = NULL;
 	struct rpk_menu_builder* builder = unpack(mb, args, &builder, &rpk);
 
-	return (void*)rpkm_new(builder->dev, rpk);
+	return (void*)rpkm_new(builder->dev, builder->mnav, rpk);
 }
 
 static struct menu_presenter* build_presenter(struct menu_builder* mb, struct mb_args* args)
@@ -42,6 +43,6 @@ static struct menu_presenter* build_presenter(struct menu_builder* mb, struct mb
 
 	struct device_state* dev = builder->dev;
 
-	struct game_menu* menu = (void*)rpkm_new(dev, rpk);
+	struct game_menu* menu = (void*)rpkm_new(dev, builder->mnav, rpk);
 	return (void*)accmp_new(menu, builder->mbt, dev, rpk->acc.i_slot);
 }

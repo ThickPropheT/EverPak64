@@ -1,6 +1,7 @@
 #pragma once
 
 #include "game_menu.h"
+#include "menu_nav_controller.h"
 #include "rumble_pak.h"
 #include "types.h"
 
@@ -10,9 +11,11 @@ struct rpk_menu
 {
 	struct game_menu gm;
 
+	struct menu_nav_controller* mnav;
+
 	struct rumble_pak* rpk;
 
 	u8 rumble;
 };
 
-struct rpk_menu* rpkm_new(struct device_state* dev, struct rumble_pak* rpk);
+struct rpk_menu* rpkm_new(struct device_state* dev, struct menu_nav_controller* mnav, struct rumble_pak* rpk);

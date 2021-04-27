@@ -12,15 +12,17 @@ const struct go_delegate RPKM_DRAW[] = { { rpkmn_draw } };
 const struct go_type RPKM_TYPE[] = { { RPKM_UPDATE, RPKM_DRAW } };
 
 
-struct rpk_menu* rpkm_new(struct device_state* dev, struct rumble_pak* rpk)
+struct rpk_menu* rpkm_new(struct device_state* dev, struct menu_nav_controller* mnav, struct rumble_pak* rpk) 
 {
-	struct rpk_menu* rpkm = malloc(sizeof * rpkm);
+	struct rpk_menu* menu = malloc(sizeof * menu);
 
-	_gm_init(&rpkm->gm, RPKM_TYPE, dev, 0);
+	_gm_init(&menu->gm, RPKM_TYPE, dev, 0);
 
-	rpkm->rpk = rpk;
+	menu->mnav = mnav;
 
-	return rpkm;
+	menu->rpk = rpk;
+
+	return menu;
 }
 
 static void rpkmn_update(const struct go_delegate* base, struct game_object* go)
@@ -39,6 +41,10 @@ static void rpkmn_update(const struct go_delegate* base, struct game_object* go)
 			rumble_start(0);
 
 		menu->rumble = 1 - menu->rumble;
+	}
+	else if (keys.c[0].B)
+	{
+		mnav_pop(menu->mnav);
 	}
 }
 
