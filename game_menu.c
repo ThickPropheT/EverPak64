@@ -3,11 +3,13 @@
 #include "math.h"
 #include "console.h"
 
+static void gm_update(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate GM_UPDATE[] = { { gm_update } };
 
 const struct gm_type GM_TYPE[] = { { NULL, NULL } };
 
 
-void _gm_init(struct game_menu* gm, const struct go_type* vtable, struct device_state* dev, size_t n_items)
+void _gm_init(struct game_menu* gm, const struct go_type* vtable, struct device_state* dev, struct menu_nav_controller* mnav, size_t n_items)
 {
 	_go_init(&gm->go, vtable);
 
@@ -17,6 +19,7 @@ void _gm_init(struct game_menu* gm, const struct go_type* vtable, struct device_
 	gm->gm_type = GM_TYPE;
 
 	gm->dev = dev;
+	gm->mnav = mnav;
 
 	gm->i_hovered_item = 0;
 	gm->n_items = n_items;
@@ -39,4 +42,16 @@ void _gm_draw_header(struct accessory acc)
 
 	cprintf("Controller %u [%s]", sn, acc_name);
 	cprintf("Back (B)");
+}
+
+
+static void gm_update(const struct go_delegate* base, struct game_object* go)
+{
+	struct game_menu* menu = (void*)go;
+	struct controller_data keys = menu->dev->keys_d;
+
+	if (keys.c[0].B)
+	{
+		mnav_pop(menu->mnav);
+	}
 }

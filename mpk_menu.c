@@ -5,7 +5,7 @@
 
 
 static void mpkm_update(const struct go_delegate* base, struct game_object* go);
-const struct go_delegate MPKM_UPDATE[] = { { mpkm_update } };
+const struct go_delegate MPKM_UPDATE[] = { { mpkm_update, GM_UPDATE } };
 
 static void mpkm_draw(const struct go_delegate* base, struct game_object* go);
 const struct go_delegate MPKM_DRAW[] = { { mpkm_draw } };
@@ -17,9 +17,8 @@ struct mpk_menu* mpkm_new(struct device_state* dev, struct menu_nav_controller* 
 {
 	struct mpk_menu* mpkm = malloc(sizeof * mpkm);
 
-	_gm_init(&mpkm->gm, MPKM_TYPE, dev, 0);
+	_gm_init(&mpkm->gm, MPKM_TYPE, dev, mnav, 0);
 
-	mpkm->mnav = mnav;
 	mpkm->mpk = mpk;
 
 	return mpkm;
@@ -39,10 +38,8 @@ static void mpkm_update(const struct go_delegate* base, struct game_object* go)
 	{
 		mpk_format(mpkm->mpk);
 	}
-	else if (keys.c[0].B)
-	{
-		mnav_pop(mpkm->mnav);
-	}
+
+	_god_invoke(base, go);
 }
 
 static void draw_header(struct accessory acc)

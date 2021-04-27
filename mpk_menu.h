@@ -11,8 +11,6 @@ struct mpk_menu
 {
 	struct game_menu gm;
 
-	struct menu_nav_controller* mnav;
-
 	struct memory_pak* mpk;
 };
 

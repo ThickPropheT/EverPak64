@@ -19,9 +19,8 @@ struct slot_menu* sm_new(struct device_state* dev, struct menu_nav_controller* m
 {
 	struct slot_menu* sm = malloc(sizeof * sm);
 
-	_gm_init(&sm->gm, SM_TYPE, dev, 0);
+	_gm_init(&sm->gm, SM_TYPE, dev, mnav, 0);
 
-	sm->mnav = mnav;
 	sm->i_slot = i_slot;
 
 	return sm;
@@ -42,10 +41,6 @@ static void sm_update(const struct go_delegate* base, struct game_object* go)
 	{
 		mpk_format((void*)dev->accessories[sm->i_slot]);
 	}
-	else if (keys.c[0].B)
-	{
-		mnav_pop(sm->mnav);
-	}
 	else if (keys.c[0].start)
 	{
 		if (sm->rumble)
@@ -56,6 +51,8 @@ static void sm_update(const struct go_delegate* base, struct game_object* go)
 
 		sm->rumble = 1 - sm->rumble;
 	}
+
+	_god_invoke(base, go);
 }
 
 

@@ -3,6 +3,10 @@
 #include "game_object.h"
 #include "accessory.h"
 #include "device_state.h"
+#include "menu_nav_controller.h"
+
+
+extern const struct go_delegate GM_UPDATE[];
 
 struct game_menu
 {
@@ -11,6 +15,7 @@ struct game_menu
 	const struct gm_type* gm_type;
 
 	struct device_state* dev;
+	struct menu_nav_controller* mnav;
 
 	size_t i_hovered_item;
 	size_t n_items;
@@ -22,7 +27,7 @@ struct gm_type
 	void (*leaving)(struct game_menu* gm);
 };
 
-void _gm_init(struct game_menu* gm, const struct go_type* vtable, struct device_state* dev, size_t n_items);
+void _gm_init(struct game_menu* gm, const struct go_type* vtable, struct device_state* dev, struct menu_nav_controller* mnav, size_t n_items);
 
 static inline void gm_entering(struct game_menu* gm)
 {

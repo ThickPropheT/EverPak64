@@ -18,9 +18,7 @@ struct main_menu* mm_new(struct device_state* dev, struct menu_nav_controller* m
 {
 	struct main_menu* mm = malloc(sizeof * mm);
 
-	_gm_init(&mm->gm, MM_TYPE, dev, N_SLOTS);
-
-	mm->mnav = mnav;
+	_gm_init(&mm->gm, MM_TYPE, dev, mnav, N_SLOTS);
 
 	for (int i = 0; i < N_SLOTS; i++)
 		mm->slots[i] = sm_new(dev, mnav, i);
@@ -58,7 +56,7 @@ static void mm_update(const struct go_delegate* base, struct game_object* go)
 	}
 	else if (keys.c[0].A)
 	{
-		mnav_to_sm(mm->mnav, gm->i_hovered_item);
+		mnav_to_sm(gm->mnav, gm->i_hovered_item);
 	}
 }
 

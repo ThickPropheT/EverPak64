@@ -11,8 +11,6 @@ struct rpk_menu
 {
 	struct game_menu gm;
 
-	struct menu_nav_controller* mnav;
-
 	struct rumble_pak* rpk;
 
 	u8 rumble;

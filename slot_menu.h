@@ -15,8 +15,6 @@ struct slot_menu
 {
 	struct game_menu gm;
 
-	struct menu_nav_controller* mnav;
-
 	u8 i_slot;
 
 	u8 rumble;
