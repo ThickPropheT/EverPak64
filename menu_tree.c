@@ -17,7 +17,7 @@ struct menu_tree mt_new(struct device_state* dev)
 
 	mbreg_register(mbt, dev, mnav);
 
-	ms_init_root(ms, mbres_build_main(mbt));
+	ms_init_root(ms, mpres_build_main(mbt));
 
 	return (struct menu_tree) { dev, mnav };
 }
