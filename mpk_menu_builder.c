@@ -40,12 +40,10 @@ static struct game_menu* build_menu(struct menu_builder* mb, struct mb_args* arg
 static struct menu_presenter* build_presenter(struct menu_builder* mb, struct mb_args* args)
 {
 	struct memory_pak* mpk = NULL;
-	struct mpk_menu_builder* mmb = unpack(mb, args, &mpk);
+	struct mpk_menu_builder* builder = unpack(mb, args, &mpk);
 
-	struct device_state* dev = mmb->dev;
+	struct device_state* dev = builder->dev;
 
-	struct game_menu* gm = (void*)mpkm_new(dev, mmb->mnav, mpk);
-	struct menu_presenter* mp = (void*)accmp_new(gm, mmb->mbt, dev, mpk->acc.i_slot);
-
-	return mp;
+	struct game_menu* menu = (void*)mpkm_new(dev, builder->mnav, mpk);
+	return (void*)accmp_new(menu, builder->mbt, dev, mpk->acc.i_slot);
 }

@@ -21,30 +21,27 @@ struct rpk_menu_builder* rpkmb_new(struct device_state* dev, struct menu_builder
 }
 
 
-static inline void unpack(struct menu_builder* mb, struct mb_args* args, struct rpk_menu_builder** builder, struct rumble_pak** rpk)
+static inline void* unpack(struct menu_builder* mb, struct mb_args* args, struct rpk_menu_builder** builder, struct rumble_pak** rpk)
 {
-	*builder = (void*)mb;
 	*rpk = (void*)((struct acc_mb_args*)args)->acc;
+	return (void*)mb;
 }
 
 static struct game_menu* build_menu(struct menu_builder* mb, struct mb_args* args)
 {
-	struct rpk_menu_builder* builder = NULL;
 	struct rumble_pak* rpk = NULL;
-
-	unpack(mb, args, &builder, &rpk);
+	struct rpk_menu_builder* builder = unpack(mb, args, &builder, &rpk);
 
 	return (void*)rpkm_new(builder->dev, rpk);
 }
 
 static struct menu_presenter* build_presenter(struct menu_builder* mb, struct mb_args* args)
 {
-	struct rpk_menu_builder* builder = NULL;
 	struct rumble_pak* rpk = NULL;
+	struct rpk_menu_builder* builder = unpack(mb, args, &builder, &rpk);
 
-	unpack(mb, args, &builder, &rpk);
+	struct device_state* dev = builder->dev;
 
-	struct game_menu* menu = (void*)rpkm_new(builder->dev, rpk);
-
-	return (void*)accmp_new(menu, builder->mbt, builder->dev, rpk->acc.i_slot);
+	struct game_menu* menu = (void*)rpkm_new(dev, rpk);
+	return (void*)accmp_new(menu, builder->mbt, dev, rpk->acc.i_slot);
 }
