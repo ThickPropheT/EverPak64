@@ -3,6 +3,7 @@
 #include "menu_builder.h"
 #include "device_state.h"
 #include "menu_nav_controller.h"
+#include "menu_builder_table.h"
 
 struct mpk_menu_builder
 {
@@ -10,6 +11,7 @@ struct mpk_menu_builder
 
 	struct device_state* dev;
 	struct menu_nav_controller* mnav;
+	struct menu_builder_table* mbt;
 };
 
-struct mpk_menu_builder* mpkmb_new(struct device_state* dev, struct menu_nav_controller* mnav);
+struct mpk_menu_builder* mpkmb_new(struct device_state* dev, struct menu_nav_controller* mnav, struct menu_builder_table* mbt);

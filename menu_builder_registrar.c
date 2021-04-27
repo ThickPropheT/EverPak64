@@ -11,5 +11,5 @@ void mbreg_register(struct menu_builder_table* mbt, struct device_state* dev, st
 {
 	mbt->main_builder = (void*)mmb_new(dev, mnav);
 	mbt->default_builder = (void*)dmb_new(dev, mnav);
-	mbt->acc_builders[ACCESSORY_MEMPAK] = (void*)mpkmb_new(dev, mnav);
+	mbt->acc_builders[ACCESSORY_MEMPAK] = (void*)mpkmb_new(dev, mnav, mbt);
 }
