@@ -1,7 +1,7 @@
 #include "menu_nav_controller.h"
 
 #include <malloc.h>
-#include "menu_builder_resolver.h"
+#include "menu_presenter_resolver.h"
 
 struct menu_nav_controller* mnav_new(struct device_state* dev, struct menu_state* ms, struct menu_builder_table* mbt)
 {

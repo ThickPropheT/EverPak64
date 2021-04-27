@@ -4,7 +4,7 @@
 #include "menu_builder_table.h"
 #include "menu_nav_controller.h"
 #include "menu_builder_registrar.h"
-#include "menu_builder_resolver.h"
+#include "menu_presenter_resolver.h"
 #include "main_menu.h"
 #include "game_object.h"
 
