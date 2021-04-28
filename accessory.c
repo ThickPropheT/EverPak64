@@ -45,13 +45,11 @@ u8 acc_get_number(struct accessory acc)
 }
 
 
-
 static void acc_update(const struct go_delegate* base, struct game_object* go)
 {
 	struct accessory* acc = (void*)go;
 
 	u8 slot = acc->i_slot;
 
-	// TODO migrate this to memory_pak
 	acc->status = validate_mempak(slot);
 }

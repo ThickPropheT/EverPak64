@@ -1,6 +1,7 @@
 #include "no_accessory_menu.h"
 
-#include "rpk_menu.h"
+#include "console.h"
+#include "memory_pak.h"
 
 
 static void nam_draw(const struct go_delegate* base, struct game_object* go);
@@ -26,4 +27,19 @@ static void nam_draw(const struct go_delegate* base, struct game_object* go)
 	struct accessory* acc = menu->acc;
 
 	_gm_draw_header(*acc);
+
+	switch (acc->status)
+	{
+	case MPAK_STATUS_UNREADABLE:
+		cprintf("Memory Pak missing or unreadable.");
+		break;
+
+	case MPAK_STATUS_UNFORMATTED:
+		cprintf("Memory Pak unformatted.");
+		break;
+
+	default:
+		cprintf("Memory Pak missing.");
+		break;
+	}
 }
