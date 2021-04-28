@@ -22,4 +22,6 @@ struct memory_pak
 
 struct memory_pak* mpk_new(u8 i_slot);
 
+u8 is_mpk(u8 i_slot);
+
 void mpk_format(struct memory_pak* mpk);

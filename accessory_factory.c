@@ -7,10 +7,10 @@ static struct accessory* resolve_rpak(u8 i_slot)
 {
 	// Brawler64 controllers report mempaks as a rumble pak.
 	// TODO could/should the result of this call be cached?
-	if (!validate_mempak(i_slot))
-		return (struct accessory*)mpk_new(i_slot);
+	if (is_mpk(i_slot))
+		return (void*)mpk_new(i_slot);
 
-	return (struct accessory*)rpk_new(i_slot);
+	return (void*)rpk_new(i_slot);
 }
 
 struct accessory* resolve_acc(struct device_state dev, u8 i_slot)
@@ -23,7 +23,7 @@ struct accessory* resolve_acc(struct device_state dev, u8 i_slot)
 	switch (type)
 	{
 	case ACCESSORY_MEMPAK:
-		return (struct accessory*)mpk_new(i_slot);
+		return (void*)mpk_new(i_slot);
 
 	case ACCESSORY_RUMBLEPAK:
 		return resolve_rpak(i_slot);

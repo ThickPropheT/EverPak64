@@ -22,6 +22,11 @@ struct memory_pak* mpk_new(u8 i_slot)
 	return mpk;
 }
 
+u8 is_mpk(u8 i_slot)
+{
+	return validate_mempak(i_slot) == MPAK_STATUS_READY;
+}
+
 static void load_entry(struct memory_pak* mpk, u8 i)
 {
 	get_mempak_entry(mpk->acc.i_slot, i, &mpk->entries[i]);
