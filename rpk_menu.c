@@ -1,5 +1,6 @@
 #include "rpk_menu.h"
 
+#include "menu_nav_controller.h"
 #include "console.h"
 
 
