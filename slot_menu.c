@@ -7,7 +7,7 @@
 
 
 static void sm_update(const struct go_delegate* base, struct game_object* go);
-const struct go_delegate SM_UPDATE[] = { { sm_update } };
+const struct go_delegate SM_UPDATE[] = { { sm_update, GM_UPDATE } };
 
 static void sm_draw(const struct go_delegate* base, struct game_object* go);
 const struct go_delegate SM_DRAW[] = { { sm_draw } };
