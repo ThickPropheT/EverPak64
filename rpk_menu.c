@@ -31,13 +31,15 @@ static void rpkmn_update(const struct go_delegate* base, struct game_object* go)
 	struct device_state* dev = menu->gm.dev;
 	struct controller_data keys = dev->keys_d;
 
+	struct accessory acc = menu->rpk->acc;
+
 	if (keys.c[0].Z)
 	{
 		if (menu->rumble)
-			rumble_stop(0);
+			rumble_stop(acc.i_slot);
 
 		else
-			rumble_start(0);
+			rumble_start(acc.i_slot);
 
 		menu->rumble = 1 - menu->rumble;
 	}
