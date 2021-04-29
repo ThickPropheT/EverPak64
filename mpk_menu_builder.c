@@ -5,16 +5,17 @@
 #include "mpk_menu.h"
 #include "acc_menu_presenter.h"
 
-static struct game_menu* build_menu(struct menu_builder* mb, struct mb_args* args);
-static struct menu_presenter* build_presenter(struct menu_builder* mb, struct mb_args* args);
+static void* build_menu(struct menu_builder* mb, struct mb_args* args);
+static void* build_presenter(struct menu_builder* mb, struct mb_args* args);
+
+const struct mb_type MPKMB_TYPE[] = { { build_menu, build_presenter } };
 
 struct mpk_menu_builder* mpkmb_new(struct device_state* dev, struct menu_nav_controller* mnav, struct menu_builder_table* mbt)
 {
 	struct mpk_menu_builder* mb = malloc(sizeof * mb);
 
-	mb->mb.build_menu = &build_menu;
-	mb->mb.build_presenter = &build_presenter;
-
+	mb->mb.mb_type = MPKMB_TYPE;
+	
 	mb->dev = dev;
 	mb->mnav = mnav;
 	mb->mbt = mbt;
@@ -29,15 +30,15 @@ static inline void* unpack(struct menu_builder* mb, struct mb_args* args, struct
 	return mb;
 }
 
-static struct game_menu* build_menu(struct menu_builder* mb, struct mb_args* args)
+static void* build_menu(struct menu_builder* mb, struct mb_args* args)
 {
 	struct memory_pak* mpk = NULL;
 	struct mpk_menu_builder* mmb = unpack(mb, args, &mpk);
 
-	return (void*)mpkm_new(mmb->dev, mmb->mnav, mpk);
+	return mpkm_new(mmb->dev, mmb->mnav, mpk);
 }
 
-static struct menu_presenter* build_presenter(struct menu_builder* mb, struct mb_args* args)
+static void* build_presenter(struct menu_builder* mb, struct mb_args* args)
 {
 	struct memory_pak* mpk = NULL;
 	struct mpk_menu_builder* builder = unpack(mb, args, &mpk);
@@ -45,5 +46,5 @@ static struct menu_presenter* build_presenter(struct menu_builder* mb, struct mb
 	struct device_state* dev = builder->dev;
 
 	struct game_menu* menu = (void*)mpkm_new(dev, builder->mnav, mpk);
-	return (void*)accmp_new(menu, builder->mbt, dev, mpk->acc.i_slot);
+	return accmp_new(menu, builder->mbt, dev, mpk->acc.i_slot);
 }
