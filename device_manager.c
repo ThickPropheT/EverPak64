@@ -70,4 +70,5 @@ void dev_poll(struct device_state* dev)
 	update_accessories(dev);
 
 	dev->keys_d = get_keys_down();
+	dev->keys_h = get_keys_held();
 }

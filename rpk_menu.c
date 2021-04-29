@@ -13,7 +13,7 @@ const struct go_delegate RPKM_DRAW[] = { { rpkmn_draw } };
 const struct go_type RPKM_TYPE[] = { { RPKM_UPDATE, RPKM_DRAW } };
 
 
-struct rpk_menu* rpkm_new(struct device_state* dev, struct menu_nav_controller* mnav, struct rumble_pak* rpk) 
+struct rpk_menu* rpkm_new(struct device_state* dev, struct menu_nav_controller* mnav, struct rumble_pak* rpk)
 {
 	struct rpk_menu* menu = malloc(sizeof * menu);
 
@@ -29,19 +29,57 @@ static void rpkmn_update(const struct go_delegate* base, struct game_object* go)
 	struct rpk_menu* menu = (void*)go;
 
 	struct device_state* dev = menu->gm.dev;
-	struct controller_data keys = dev->keys_d;
+
+	struct controller_data keys_d = dev->keys_d;
+	struct controller_data keys_h = dev->keys_h;
 
 	struct accessory acc = menu->rpk->acc;
 
-	if (keys.c[0].Z)
+	if (keys_d.c[0].C_down)
 	{
-		if (menu->rumble)
-			rumble_stop(acc.i_slot);
+		menu->gm.go.can_update = 1;
+	}
 
-		else
-			rumble_start(acc.i_slot);
-
-		menu->rumble = 1 - menu->rumble;
+	if (menu->gm.go.can_update == 1)
+	{
+		if (keys_d.c[0].start)
+		{
+			if (menu->rumble)
+			{
+				rumble_stop(acc.i_slot);
+				menu->rumble = 0;
+			}
+			else
+			{
+				rumble_start(acc.i_slot);
+				menu->rumble = 1;
+			}
+		}
+		else if (!menu->rumble)
+		{
+			if (keys_h.c[0].Z)
+			{
+				rumble_start(acc.i_slot);
+			}
+			else if (keys_d.c[0].C_up)
+			{
+				menu->gm.go.can_update = 2;
+			}
+			else
+			{
+				rumble_stop(acc.i_slot);
+			}
+		}
+	}
+	else if (menu->gm.go.can_update == 2)
+	{
+		rumble_start(acc.i_slot);
+		menu->gm.go.can_update = 3;
+	}
+	else if (menu->gm.go.can_update == 3)
+	{
+		rumble_stop(acc.i_slot);
+		menu->gm.go.can_update = 2;
 	}
 
 	_god_invoke(base, go);
