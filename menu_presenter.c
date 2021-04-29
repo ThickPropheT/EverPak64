@@ -3,19 +3,22 @@
 #include <malloc.h>
 
 
+static void mp_entering(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate MP_ACTIVATING[] = { { mp_entering } };
+
 static void mp_update(const struct go_delegate* base, struct game_object* go);
 const struct go_delegate MP_UPDATE[] = { { mp_update } };
 
 static void mp_draw(const struct go_delegate* base, struct game_object* go);
 const struct go_delegate MP_DRAW[] = { { mp_draw } };
 
-const struct go_type MPO_TYPE[] = { { MP_UPDATE, MP_DRAW } };
+static void mp_leaving(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate MP_DEACTIVATING[] = { { mp_leaving } };
 
 
-static void _mp_entering(struct menu_presenter* mp);
-static void _mp_leaving(struct menu_presenter* mp);
+const struct go_type MPO_TYPE[] = { { MP_ACTIVATING, MP_UPDATE, MP_DRAW, MP_DEACTIVATING } };
 
-const struct mp_type MP[] = { { _mp_entering, _mp_leaving } };
+
 
 struct menu_presenter* mp_new(struct game_menu* gm)
 {
@@ -25,8 +28,6 @@ struct menu_presenter* mp_new(struct game_menu* gm)
 
 	mp->go.can_update = 1;
 	mp->go.can_draw = 1;
-
-	mp->mp_type = MP;
 
 	mp->gm = gm;
 
@@ -40,18 +41,18 @@ void _mp_init(struct menu_presenter* mp, const struct go_type* vtable, struct ga
 	mp->go.can_update = 1;
 	mp->go.can_draw = 1;
 
-	mp->mp_type = MP;
-
 	mp->gm = gm;
 }
 
 
-static void _mp_entering(struct menu_presenter* mp)
+static void mp_entering(const struct go_delegate* base, struct game_object* go)
 {
+	struct menu_presenter* mp = (void*)go;
+
 	mp->gm->go.can_update = 1;
 	mp->gm->go.can_draw = 1;
 
-	gm_entering(mp->gm);
+	go_activating((void*)mp->gm);
 }
 
 static void mp_update(const struct go_delegate* base, struct game_object* go)
@@ -68,9 +69,11 @@ static void mp_draw(const struct go_delegate* base, struct game_object* go)
 	go_draw((struct game_object*)mp->gm);
 }
 
-static void _mp_leaving(struct menu_presenter* mp)
+static void mp_leaving(const struct go_delegate* base, struct game_object* go)
 {
-	gm_leaving(mp->gm);
+	struct menu_presenter* mp = (void*)go;
+
+	go_deactivating((void*)mp->gm);
 
 	mp->gm->go.can_update = 0;
 	mp->gm->go.can_draw = 0;

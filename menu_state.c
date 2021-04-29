@@ -29,14 +29,14 @@ void ms_init_root(struct menu_state* ms, struct menu_presenter* mp)
 	ms->root = root;
 	ms->mn = ms->root;
 
-	mp_entering(root->mp);
+	go_activating((void*)root->mp);
 }
 
 static inline void push_node(struct menu_state* ms, struct menu_presenter* mp)
 {
 	struct menu_node* current = ms->mn;
 
-	mp_leaving(current->mp);
+	go_deactivating((void*)current->mp);
 
 	struct menu_node* new_node = mn_new(mp);
 
@@ -45,7 +45,7 @@ static inline void push_node(struct menu_state* ms, struct menu_presenter* mp)
 
 	ms->mn = new_node;
 
-	mp_entering(new_node->mp);
+	go_activating((void*)new_node->mp);
 }
 
 void ms_push(struct menu_state* ms, struct menu_presenter* mp)
@@ -73,14 +73,14 @@ void ms_pop(struct menu_state* ms)
 	if (prev == NULL)
 		return;
 
-	mp_leaving(current->mp);
-
+	go_deactivating((void*)current->mp);
+	
 	free_leaf(current);
 
 	prev->next = NULL;
 	ms->mn = prev;
 
-	mp_entering(prev->mp);
+	go_activating((void*)prev->mp);
 }
 
 

@@ -6,8 +6,6 @@
 static void gm_update(const struct go_delegate* base, struct game_object* go);
 const struct go_delegate GM_UPDATE[] = { { gm_update } };
 
-const struct gm_type GM_TYPE[] = { { NULL, NULL } };
-
 
 void _gm_init(struct game_menu* gm, const struct go_type* vtable, struct device_state* dev, struct menu_nav_controller* mnav, size_t n_items)
 {
@@ -15,8 +13,6 @@ void _gm_init(struct game_menu* gm, const struct go_type* vtable, struct device_
 
 	gm->go.can_update = 1;
 	gm->go.can_draw = 1;
-
-	gm->gm_type = GM_TYPE;
 
 	gm->dev = dev;
 	gm->mnav = mnav;

@@ -5,7 +5,7 @@
 static void accmp_update(const struct go_delegate* base, struct game_object* go);
 const struct go_delegate ACCMP_UPDATE[] = { { accmp_update, MP_UPDATE } };
 
-const struct go_type ACCMP_TYPE[] = { { ACCMP_UPDATE, MP_DRAW } };
+const struct go_type ACCMP_TYPE[] = { { MP_ACTIVATING, ACCMP_UPDATE, MP_DRAW, MP_DEACTIVATING } };
 
 struct acc_menu_presenter* accmp_new(struct game_menu* gm, struct menu_builder_table* mbt, struct device_state* dev, u8 i_slot)
 {

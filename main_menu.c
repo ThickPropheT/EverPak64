@@ -11,7 +11,7 @@ const struct go_delegate MM_UPDATE[] = { { mm_update } };
 static void mm_draw(const struct go_delegate* base, struct game_object* go);
 const struct go_delegate MM_DRAW[] = { { mm_draw } };
 
-const struct go_type MM_TYPE[] = { { MM_UPDATE, MM_DRAW } };
+const struct go_type MM_TYPE[] = { { NULL, MM_UPDATE, MM_DRAW } };
 
 
 struct main_menu* mm_new(struct device_state* dev, struct menu_nav_controller* mnav)

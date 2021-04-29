@@ -12,7 +12,7 @@ const struct go_delegate SM_UPDATE[] = { { sm_update, GM_UPDATE } };
 static void sm_draw(const struct go_delegate* base, struct game_object* go);
 const struct go_delegate SM_DRAW[] = { { sm_draw } };
 
-const struct go_type SM_TYPE[] = { { SM_UPDATE, SM_DRAW } };
+const struct go_type SM_TYPE[] = { { NULL, SM_UPDATE, SM_DRAW } };
 
 
 struct slot_menu* sm_new(struct device_state* dev, struct menu_nav_controller* mnav, u8 i_slot)

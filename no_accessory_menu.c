@@ -7,7 +7,7 @@
 static void nam_draw(const struct go_delegate* base, struct game_object* go);
 const struct go_delegate NAM_DRAW[] = { { nam_draw } };
 
-const struct go_type NAM_TYPE[] = { { GM_UPDATE, NAM_DRAW } };
+const struct go_type NAM_TYPE[] = { { NULL, GM_UPDATE, NAM_DRAW } };
 
 
 struct no_accessory_menu* nam_new(struct device_state* dev, struct menu_nav_controller* mnav, struct accessory* acc)

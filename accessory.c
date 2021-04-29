@@ -7,7 +7,7 @@
 static void acc_update(const struct go_delegate* base, struct game_object* go);
 const struct go_delegate ACC_UPDATE[] = { { acc_update } };
 
-const struct go_type ACC_TYPE[] = { { ACC_UPDATE } };
+const struct go_type ACC_TYPE[] = { { NULL, ACC_UPDATE } };
 
 
 char* accessory_names[N_ACC_TYPES] =

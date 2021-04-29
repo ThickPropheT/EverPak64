@@ -4,7 +4,7 @@
 #include <string.h>
 
 
-const struct go_type RPK_TYPE[] = { { ACC_UPDATE } };
+const struct go_type RPK_TYPE[] = { { NULL, ACC_UPDATE } };
 
 
 struct rumble_pak* rpk_new(u8 i_slot)

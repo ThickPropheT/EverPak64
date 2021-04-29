@@ -7,7 +7,7 @@
 static void mpk_update(const struct go_delegate* base, struct game_object * go);
 const struct go_delegate MPK_UPDATE[] = { { mpk_update, ACC_UPDATE } };
 
-const struct go_type MPK_TYPE[] = { { MPK_UPDATE } };
+const struct go_type MPK_TYPE[] = { { NULL, MPK_UPDATE } };
 
 
 struct memory_pak* mpk_new(u8 i_slot)

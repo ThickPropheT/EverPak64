@@ -10,7 +10,7 @@ const struct go_delegate MPKM_UPDATE[] = { { mpkm_update, GM_UPDATE } };
 static void mpkm_draw(const struct go_delegate* base, struct game_object* go);
 const struct go_delegate MPKM_DRAW[] = { { mpkm_draw } };
 
-const struct go_type MPKM_TYPE[] = { { MPKM_UPDATE, MPKM_DRAW } };
+const struct go_type MPKM_TYPE[] = { { NULL, MPKM_UPDATE, MPKM_DRAW } };
 
 
 struct mpk_menu* mpkm_new(struct device_state* dev, struct menu_nav_controller* mnav, struct memory_pak* mpk)
