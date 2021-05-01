@@ -17,3 +17,8 @@ struct rpk_menu
 };
 
 struct rpk_menu* rpkm_new(struct device_state* dev, struct menu_nav_controller* mnav, struct rumble_pak* rpk);
+
+static inline struct rpk_menu* acc_to_rpkm(struct device_state* dev, struct menu_nav_controller* mnav, struct accessory* acc)
+{
+	return rpkm_new(dev, mnav, (void*)acc);
+}

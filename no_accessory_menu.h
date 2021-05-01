@@ -14,3 +14,8 @@ struct no_accessory_menu
 };
 
 struct no_accessory_menu* nam_new(struct device_state* dev, struct menu_nav_controller* mnav, struct accessory* acc);
+
+static inline struct game_menu* nam_from_acc(struct device_state* dev, struct menu_nav_controller* mnav, struct accessory* acc)
+{
+	return (void*)nam_new(dev, mnav, acc);
+}
