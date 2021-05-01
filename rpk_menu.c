@@ -21,6 +21,8 @@ struct rpk_menu* rpkm_new(struct device_state* dev, struct menu_nav_controller* 
 
 	menu->rpk = rpk;
 
+	menu->rumble = 0;
+
 	return menu;
 }
 
