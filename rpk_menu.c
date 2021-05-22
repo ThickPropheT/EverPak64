@@ -10,7 +10,10 @@ const struct go_delegate RPKM_UPDATE[] = { { rpkmn_update, GM_UPDATE } };
 static void rpkmn_draw(const struct go_delegate* base, struct game_object* go);
 const struct go_delegate RPKM_DRAW[] = { { rpkmn_draw } };
 
-const struct go_type RPKM_TYPE[] = { { NULL, RPKM_UPDATE, RPKM_DRAW } };
+static void rpkmn_deactivating(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate RPKM_DEACTIVATING[] = { { rpkmn_deactivating } };
+
+const struct go_type RPKM_TYPE[] = { { NULL, RPKM_UPDATE, RPKM_DRAW, RPKM_DEACTIVATING } };
 
 
 struct rpk_menu* rpkm_new(struct device_state* dev, struct menu_nav_controller* mnav, struct rumble_pak* rpk)
@@ -95,4 +98,12 @@ static void rpkmn_draw(const struct go_delegate* base, struct game_object* go)
 	_gm_draw_header(*acc);
 
 	cprintf("Rumble (Z)");
+}
+
+static void rpkmn_deactivating(const struct go_delegate* base, struct game_object* go)
+{
+	struct rpk_menu* menu = (void*)go;
+	struct accessory acc = menu->rpk->acc;
+
+	rumble_stop(acc.i_slot);
 }
