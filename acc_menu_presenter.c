@@ -27,10 +27,7 @@ static void replace_menu(struct acc_menu_presenter* accmp)
 {
 	free(accmp->mp.gm);
 
-	struct menu_builder_table* mbt = accmp->mbt;
-	u8 slot = accmp->i_slot;
-
-	accmp->mp.gm = gmres_acc(mbt, accmp->dev, slot);
+	accmp->mp.gm = gmres_acc(accmp->mbt, accmp->dev, accmp->i_slot);
 }
 
 static void accmp_update(const struct go_delegate* base, struct game_object* go)
