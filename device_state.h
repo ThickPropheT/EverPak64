@@ -18,6 +18,7 @@ struct device_state
 
 	struct controller_data keys_d;
 	struct controller_data keys_h;
+	struct controller_data keys_u;
 };
 
 

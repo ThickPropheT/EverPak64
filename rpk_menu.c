@@ -26,6 +26,10 @@ struct rpk_menu* rpkm_new(struct device_state* dev, struct menu_nav_controller* 
 
 	menu->rumble = 0;
 
+	menu->pwm_tick = 0;
+	menu->pwm_high = 1;
+	menu->pwm_low = 0;
+
 	return menu;
 }
 
@@ -37,55 +41,88 @@ static void rpkmn_update(const struct go_delegate* base, struct game_object* go)
 
 	struct controller_data keys_d = dev->keys_d;
 	struct controller_data keys_h = dev->keys_h;
+	struct controller_data keys_u = dev->keys_u;
 
 	struct accessory acc = menu->rpk->acc;
 
-	if (keys_d.c[0].C_down)
+	if (keys_d.c[0].C_left)
 	{
-		menu->gm.go.can_update = 1;
+		menu->pwm_low--;
+	}
+	else if (keys_d.c[0].C_up)
+	{
+		menu->pwm_high++;
+	}
+	else if (keys_d.c[0].C_right)
+	{
+		menu->pwm_low++;
+	}
+	else if (keys_d.c[0].C_down)
+	{
+		menu->pwm_high--;
 	}
 
-	if (menu->gm.go.can_update == 1)
+
+	u8 rumble = menu->rumble;
+
+	if (keys_h.c[0].Z)
 	{
-		if (keys_d.c[0].start)
+		rumble = 1;
+	}
+	else if (keys_u.c[0].Z)
+	{
+		rumble = 0;
+	}
+	else if (keys_d.c[0].start)
+	{
+		rumble = !menu->rumble;
+	}
+
+
+	u8 rumbleChanged = rumble != menu->rumble;
+
+	if (rumbleChanged)
+	{
+		menu->rumble = rumble;
+
+		menu->pwm_tick = 0;
+
+		if (!rumble)
+			rumble_stop(acc.i_slot);
+	}
+
+
+	if (menu->pwm_high == 0)
+	{
+		menu->pwm_high = 1;
+	}
+
+
+	if (rumble)
+	{
+		u8 tick = menu->pwm_tick;
+		menu->pwm_tick++;
+
+		u8 can_pulse = menu->pwm_low > 0;
+
+		u8 rising = tick == menu->pwm_high + menu->pwm_low;
+		u8 falling = tick == menu->pwm_high;
+
+		if (tick == 0)
 		{
-			if (menu->rumble)
-			{
-				rumble_stop(acc.i_slot);
-				menu->rumble = 0;
-			}
-			else
-			{
-				rumble_start(acc.i_slot);
-				menu->rumble = 1;
-			}
+			rumble_start(acc.i_slot);
 		}
-		else if (!menu->rumble)
+		else if (can_pulse && falling)
 		{
-			if (keys_h.c[0].Z)
-			{
-				rumble_start(acc.i_slot);
-			}
-			else if (keys_d.c[0].C_up)
-			{
-				menu->gm.go.can_update = 2;
-			}
-			else
-			{
-				rumble_stop(acc.i_slot);
-			}
+			rumble_stop(acc.i_slot);
+		}
+		else if (can_pulse && rising)
+		{
+			rumble_start(acc.i_slot);
+			menu->pwm_tick = 1;
 		}
 	}
-	else if (menu->gm.go.can_update == 2)
-	{
-		rumble_start(acc.i_slot);
-		menu->gm.go.can_update = 3;
-	}
-	else if (menu->gm.go.can_update == 3)
-	{
-		rumble_stop(acc.i_slot);
-		menu->gm.go.can_update = 2;
-	}
+
 
 	_god_invoke(base, go);
 }
@@ -98,6 +135,10 @@ static void rpkmn_draw(const struct go_delegate* base, struct game_object* go)
 	_gm_draw_header(*acc);
 
 	cprintf("Rumble (Z)");
+	cprintf("rumble: %d", menu->rumble);
+	cprintf("tick: %hu", menu->pwm_tick);
+	cprintf("pwm high: %d", menu->pwm_high);
+	cprintf("pwm low: %d", menu->pwm_low);
 }
 
 static void rpkmn_deactivating(const struct go_delegate* base, struct game_object* go)
