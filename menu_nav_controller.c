@@ -19,16 +19,8 @@ void mnav_to_sm(struct menu_nav_controller* mnav, u8 i_slot)
 	struct menu_state* ms = mnav->ms;
 	struct menu_builder_table* mbt = mnav->mbt;
 
-	struct menu_presenter* acc_menu;
-
-	if (mpres_try_acc(mbt, mnav->dev, i_slot, &acc_menu))
-	{
-		ms_push(ms, acc_menu);
-	}
-	else
-	{
-		ms_push(ms, mpres_default(mbt, i_slot));
-	}
+	struct menu_presenter* acc_menu = mpres_acc(mbt, mnav->dev, i_slot);
+	ms_push(ms, acc_menu);
 }
 
 void mnav_pop(struct menu_nav_controller* mnav)

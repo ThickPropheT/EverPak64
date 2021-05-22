@@ -7,8 +7,6 @@ struct menu_builder_table
 {
 	struct menu_builder* main_builder;
 
-	struct menu_builder* default_builder;
-
 	struct menu_builder* acc_builders[N_ACC_TYPES];
 };
 

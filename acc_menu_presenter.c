@@ -30,13 +30,7 @@ static void replace_menu(struct acc_menu_presenter* accmp)
 	struct menu_builder_table* mbt = accmp->mbt;
 	u8 slot = accmp->i_slot;
 
-	struct game_menu* gm;
-	if (!gmres_try_acc(mbt, accmp->dev, slot, &gm))
-	{
-		gm = gmres_default(mbt, slot);
-	}
-
-	accmp->mp.gm = gm;
+	accmp->mp.gm = gmres_acc(mbt, accmp->dev, slot);
 }
 
 static void accmp_update(const struct go_delegate* base, struct game_object* go)

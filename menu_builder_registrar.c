@@ -3,7 +3,6 @@
 #include <malloc.h>
 
 #include "main_menu_builder.h"
-#include "default_menu_builder.h"
 #include "acc_menu_builder.h"
 
 #include "acc_menu_presenter.h"
@@ -17,7 +16,6 @@
 void mbreg_register(struct menu_builder_table* mbt, struct device_state* dev, struct menu_nav_controller* mnav)
 {
 	mbt->main_builder = (void*)mmb_new(dev, mnav);
-	mbt->default_builder = (void*)dmb_new(dev, mnav);
 
 	build_presenter_delegate build_acc = (void*)&accmp_new;
 
