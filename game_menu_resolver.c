@@ -15,12 +15,5 @@ struct game_menu* gmres_acc(struct menu_builder_table* mbt, struct device_state*
 {
 	struct accessory* acc = dev->accessories[i_slot];
 
-	struct menu_builder* mb = mbt->acc_builders[acc->type];
-
-	if (mb == NULL)
-	{
-		mb = mbt->acc_builders[ACCESSORY_NONE];
-	}
-
-	return gmres_acc_impl(mb, acc);
+	return gmres_acc_impl(mbt_get_builder(mbt, acc), acc);
 }

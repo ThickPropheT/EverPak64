@@ -21,12 +21,5 @@ struct menu_presenter* mpres_acc(struct menu_builder_table* mbt, struct device_s
 {
 	struct accessory* acc = dev->accessories[i_slot];
 
-	struct menu_builder* mb = mbt->acc_builders[acc->type];
-
-	if (mb == NULL)
-	{
-		mb = mbt->acc_builders[ACCESSORY_NONE];
-	}
-
-	return mpres_acc_impl(mb, acc);
+	return mpres_acc_impl(mbt_get_builder(mbt, acc), acc);
 }
