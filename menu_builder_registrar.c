@@ -21,7 +21,7 @@ void mbreg_register(struct menu_builder_table* mbt, struct device_state* dev, st
 
 	build_presenter_delegate build_acc = (void*)&accmp_new;
 
-	mbt->acc_builders[ACCESSORY_NONE] = (void*)accmb_new(dev, mnav, mbt, (build_menu_delegate)&nam_from_acc, build_acc);
-	mbt->acc_builders[ACCESSORY_MEMPAK] = (void*)accmb_new(dev, mnav, mbt, (build_menu_delegate)&mpkm_from_acc, build_acc);
-	mbt->acc_builders[ACCESSORY_RUMBLEPAK] = (void*)accmb_new(dev, mnav, mbt, (build_menu_delegate)&acc_to_rpkm, build_acc);
+	mbt->acc_builders[ACCESSORY_NONE] = (void*)accmb_new(dev, mnav, mbt, (build_menu_delegate)&nam_new, build_acc);
+	mbt->acc_builders[ACCESSORY_MEMPAK] = (void*)accmb_new(dev, mnav, mbt, (build_menu_delegate)&mpkm_new, build_acc);
+	mbt->acc_builders[ACCESSORY_RUMBLEPAK] = (void*)accmb_new(dev, mnav, mbt, (build_menu_delegate)&rpkm_new, build_acc);
 }

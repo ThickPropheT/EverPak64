@@ -15,8 +15,3 @@ struct mpk_menu
 };
 
 struct mpk_menu* mpkm_new(struct device_state* dev, struct menu_nav_controller* mnav, struct memory_pak* mpk);
-
-static inline struct game_menu* mpkm_from_acc(struct device_state* dev, struct menu_nav_controller* mnav, struct accessory* acc)
-{
-	return (void*)mpkm_new(dev, mnav, (void*)acc);
-}
