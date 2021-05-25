@@ -33,17 +33,9 @@ struct rpk_menu* rpkm_new(struct device_state* dev, struct menu_nav_controller* 
 	return menu;
 }
 
-static void rpkmn_update(const struct go_delegate* base, struct game_object* go)
+static inline void pwm_get_input(struct device_state* dev, struct rpk_menu* menu)
 {
-	struct rpk_menu* menu = (void*)go;
-
-	struct device_state* dev = menu->gm.dev;
-
 	struct controller_data keys_d = dev->keys_d;
-	struct controller_data keys_h = dev->keys_h;
-	struct controller_data keys_u = dev->keys_u;
-
-	struct accessory acc = menu->rpk->acc;
 
 	if (keys_d.c[0].C_left)
 	{
@@ -61,23 +53,35 @@ static void rpkmn_update(const struct go_delegate* base, struct game_object* go)
 	{
 		menu->pwm_high--;
 	}
+}
 
+static inline void rmbl_get_input(struct device_state* dev, struct rpk_menu* menu, u8* rumble)
+{
+	struct controller_data keys_d = dev->keys_d;
+	struct controller_data keys_h = dev->keys_h;
+	struct controller_data keys_u = dev->keys_u;
 
-	u8 rumble = menu->rumble;
+	u8 r = menu->rumble;
 
 	if (keys_h.c[0].Z)
 	{
-		rumble = 1;
+		r = 1;
 	}
 	else if (keys_u.c[0].Z)
 	{
-		rumble = 0;
+		r = 0;
 	}
 	else if (keys_d.c[0].start)
 	{
-		rumble = !menu->rumble;
+		r = !menu->rumble;
 	}
 
+	*rumble = r;
+}
+
+static inline void reset_get_input(struct device_state* dev, struct rpk_menu* menu)
+{
+	struct controller_data keys_d = dev->keys_d;
 
 	if (keys_d.c[0].R)
 	{
@@ -87,19 +91,40 @@ static void rpkmn_update(const struct go_delegate* base, struct game_object* go)
 		menu->pwm_high = 1;
 		menu->pwm_low = 0;
 	}
+}
+
+static inline void set_rumble(struct rpk_menu* menu, u8 value)
+{
+	if (menu->rumble == value)
+		return;
+
+	menu->rumble = value;
+
+	menu->pwm_tick = 0;
+
+	if (value)
+		return;
+
+	rumble_stop(menu->rpk->acc.i_slot);
+}
+
+static void rpkmn_update(const struct go_delegate* base, struct game_object* go)
+{
+	struct rpk_menu* menu = (void*)go;
+
+	struct device_state* dev = menu->gm.dev;
+
+	struct accessory acc = menu->rpk->acc;
 
 
-	u8 rumbleChanged = rumble != menu->rumble;
+	pwm_get_input(dev, menu);
 
-	if (rumbleChanged)
-	{
-		menu->rumble = rumble;
+	u8 rumble;
+	rmbl_get_input(dev, menu, &rumble);
 
-		menu->pwm_tick = 0;
+	reset_get_input(dev, menu);
 
-		if (!rumble)
-			rumble_stop(acc.i_slot);
-	}
+	set_rumble(menu, rumble);
 
 
 	if (menu->pwm_high == 0)
