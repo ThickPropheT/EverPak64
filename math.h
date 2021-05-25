@@ -2,4 +2,8 @@
 
 #include "types.h"
 
-u64 cmod(u64 x, u64 m);
+/// @brief clamp modulus
+static inline u64 cmod(u64 x, u64 m)
+{
+	return (x % m + m) % m;
+}
