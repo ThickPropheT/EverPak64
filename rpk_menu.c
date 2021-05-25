@@ -79,6 +79,16 @@ static void rpkmn_update(const struct go_delegate* base, struct game_object* go)
 	}
 
 
+	if (keys_d.c[0].R)
+	{
+		menu->rumble = 0;
+
+		menu->pwm_tick = 0;
+		menu->pwm_high = 1;
+		menu->pwm_low = 0;
+	}
+
+
 	u8 rumbleChanged = rumble != menu->rumble;
 
 	if (rumbleChanged)
