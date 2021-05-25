@@ -2,6 +2,7 @@
 
 #include "menu_nav_controller.h"
 #include "console.h"
+#include "math.h"
 
 
 static void rpkmn_update(const struct go_delegate* base, struct game_object* go);
@@ -24,11 +25,7 @@ struct rpk_menu* rpkm_new(struct device_state* dev, struct menu_nav_controller* 
 
 	menu->rpk = rpk;
 
-	menu->rumble = 0;
-
-	menu->pwm_tick = 0;
-	menu->pwm_high = 1;
-	menu->pwm_low = 0;
+	menu->rumble_pwm = pwm_new(0, 1, 0);
 
 	return menu;
 }
@@ -37,21 +34,23 @@ static inline void pwm_get_input(struct device_state* dev, struct rpk_menu* menu
 {
 	struct controller_data keys_d = dev->keys_d;
 
+	struct pwm_state* pwm = menu->rumble_pwm;
+
 	if (keys_d.c[0].C_left)
 	{
-		menu->pwm_low--;
+		pwm_dec_low(pwm);
 	}
 	else if (keys_d.c[0].C_up)
 	{
-		menu->pwm_high++;
+		pwm_inc_high(pwm);
 	}
 	else if (keys_d.c[0].C_right)
 	{
-		menu->pwm_low++;
+		pwm_inc_low(pwm);
 	}
 	else if (keys_d.c[0].C_down)
 	{
-		menu->pwm_high--;
+		pwm_dec_high(pwm);
 	}
 }
 
@@ -61,7 +60,9 @@ static inline void rmbl_get_input(struct device_state* dev, struct rpk_menu* men
 	struct controller_data keys_h = dev->keys_h;
 	struct controller_data keys_u = dev->keys_u;
 
-	u8 r = menu->rumble;
+	struct pwm_state* pwm = menu->rumble_pwm;
+
+	u8 r = pwm->enabled;
 
 	if (keys_h.c[0].Z)
 	{
@@ -73,7 +74,7 @@ static inline void rmbl_get_input(struct device_state* dev, struct rpk_menu* men
 	}
 	else if (keys_d.c[0].start)
 	{
-		r = !menu->rumble;
+		r = !pwm->enabled;
 	}
 
 	*rumble = r;
@@ -85,22 +86,16 @@ static inline void reset_get_input(struct device_state* dev, struct rpk_menu* me
 
 	if (keys_d.c[0].R)
 	{
-		menu->rumble = 0;
-
-		menu->pwm_tick = 0;
-		menu->pwm_high = 1;
-		menu->pwm_low = 0;
+		pwm_reset(menu->rumble_pwm);
 	}
 }
 
 static inline void set_rumble(struct rpk_menu* menu, u8 value)
 {
-	if (menu->rumble == value)
+	struct pwm_state* pwm = menu->rumble_pwm;
+
+	if (!pwm_set_enabled(pwm, value))
 		return;
-
-	menu->rumble = value;
-
-	menu->pwm_tick = 0;
 
 	if (value)
 		return;
@@ -124,38 +119,26 @@ static void rpkmn_update(const struct go_delegate* base, struct game_object* go)
 
 	reset_get_input(dev, menu);
 
+
 	set_rumble(menu, rumble);
 
 
-	if (menu->pwm_high == 0)
+	switch (pwm_update(menu->rumble_pwm))
 	{
-		menu->pwm_high = 1;
-	}
+	case INIT:
+		rumble_start(acc.i_slot);
+		break;
 
+	case RISING:
+		rumble_start(acc.i_slot);
+		break;
 
-	if (rumble)
-	{
-		u8 tick = menu->pwm_tick;
-		menu->pwm_tick++;
+	case FALLING:
+		rumble_stop(acc.i_slot);
+		break;
 
-		u8 can_pulse = menu->pwm_low > 0;
-
-		u8 rising = tick == menu->pwm_high + menu->pwm_low;
-		u8 falling = tick == menu->pwm_high;
-
-		if (tick == 0)
-		{
-			rumble_start(acc.i_slot);
-		}
-		else if (can_pulse && falling)
-		{
-			rumble_stop(acc.i_slot);
-		}
-		else if (can_pulse && rising)
-		{
-			rumble_start(acc.i_slot);
-			menu->pwm_tick = 1;
-		}
+	case NONE:
+		break;
 	}
 
 
@@ -169,11 +152,13 @@ static void rpkmn_draw(const struct go_delegate* base, struct game_object* go)
 
 	_gm_draw_header(*acc);
 
+	struct pwm_state* pwm = menu->rumble_pwm;
+
 	cprintf("Rumble (Z)");
-	cprintf("rumble: %d", menu->rumble);
-	cprintf("tick: %hu", menu->pwm_tick);
-	cprintf("pwm high: %d", menu->pwm_high);
-	cprintf("pwm low: %d", menu->pwm_low);
+	cprintf("rumble: %d", pwm->enabled);
+	cprintf("tick: %llu", pwm->tick);
+	cprintf("pwm high: %llu", pwm->high_interval);
+	cprintf("pwm low: %llu", pwm->low_interval);
 }
 
 static void rpkmn_deactivating(const struct go_delegate* base, struct game_object* go)
@@ -182,4 +167,6 @@ static void rpkmn_deactivating(const struct go_delegate* base, struct game_objec
 	struct accessory acc = menu->rpk->acc;
 
 	rumble_stop(acc.i_slot);
+
+	pwm_free(menu->rumble_pwm);
 }
