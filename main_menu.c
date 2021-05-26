@@ -20,15 +20,7 @@ struct main_menu* mm_new(struct device_state* dev, struct menu_nav_controller* m
 
 	_gm_init(&mm->gm, MM_TYPE, dev, mnav, N_SLOTS);
 
-	for (int i = 0; i < N_SLOTS; i++)
-		mm->slots[i] = sm_new(dev, mnav, i);
-
 	return mm;
-}
-
-struct slot_menu* mm_get_current(struct main_menu* mm)
-{
-	return mm->slots[mm->gm.i_hovered_item];
 }
 
 static void mm_update(const struct go_delegate* base, struct game_object* go)
