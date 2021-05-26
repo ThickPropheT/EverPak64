@@ -155,10 +155,10 @@ static void rpkmn_draw(const struct go_delegate* base, struct game_object* go)
 	struct pwm_state* pwm = menu->rumble_pwm;
 
 	cprintf("Rumble (Z)");
-	cprintf("rumble: %d", pwm->enabled);
-	cprintf("tick: %llu", pwm->tick);
-	cprintf("pwm high: %llu", pwm->high_interval);
-	cprintf("pwm low: %llu", pwm->low_interval);
+	cprintf("rumble: %4d", pwm->enabled);
+	cprintf("tick: %6llu", pwm->tick);
+	cprintf("pwm high: %2llu", pwm->high_interval);
+	cprintf("pwm low: %3llu", pwm->low_interval);
 }
 
 static void rpkmn_deactivating(const struct go_delegate* base, struct game_object* go)
