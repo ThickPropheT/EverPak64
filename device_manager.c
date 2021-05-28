@@ -30,8 +30,6 @@ struct device_state dev_new(void)
 
 static void acc_flags_changed(struct device_state* dev, u16 from, u16 to)
 {
-	dev->controllers = get_controllers_present();
-
 	for (u8 i = 0; i < N_SLOTS; i++)
 	{
 		u16 f = get_flag(i);
@@ -44,16 +42,17 @@ static void acc_flags_changed(struct device_state* dev, u16 from, u16 to)
 	}
 }
 
-static void set_acc_flags(struct device_state* dev, u16 value)
+static u8 set_acc_flags(struct device_state* dev, u16 value)
 {
 	if (dev->acc_flags == value)
-		return;
+		return 0;
 
 	u16 old_value = dev->acc_flags;
 
 	dev->acc_flags = value;
 
 	acc_flags_changed(dev, old_value, value);
+	return 1;
 }
 
 static void update_accessories(struct device_state* dev)
@@ -71,7 +70,10 @@ void dev_poll(struct device_state* dev)
 	struct controller_data out;
 	u16 acc = get_accessories_present(&out);
 
-	set_acc_flags(dev, acc);
+	if (set_acc_flags(dev, acc)
+		|| dev->acc_flags == 0)
+		dev->controllers = get_controllers_present();
+
 	update_accessories(dev);
 
 	dev->keys_d = get_keys_down();
