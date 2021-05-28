@@ -12,6 +12,11 @@ struct device_state dev_new(void)
 {
 	struct device_state dev = { };
 
+	dev.controllers = get_controllers_present();
+	
+	struct controller_data out;
+	dev.acc_flags = get_accessories_present(&out);
+
 	for (u8 i = 0; i < N_SLOTS; i++)
 		// TODO this will result in all accessories being accessory
 		// TODO since accessories_f will still be 0 becuase
