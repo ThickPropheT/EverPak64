@@ -7,14 +7,14 @@
 #include "keys.h"
 
 
-static void rpkmn_update(const struct go_delegate* base, struct game_object* go);
-const struct go_delegate RPKM_UPDATE[] = { { rpkmn_update, GM_UPDATE } };
+static void rpkm_update(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate RPKM_UPDATE[] = { { rpkm_update, GM_UPDATE } };
 
-static void rpkmn_draw(const struct go_delegate* base, struct game_object* go);
-const struct go_delegate RPKM_DRAW[] = { { rpkmn_draw } };
+static void rpkm_draw(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate RPKM_DRAW[] = { { rpkm_draw } };
 
-static void rpkmn_deactivating(const struct go_delegate* base, struct game_object* go);
-const struct go_delegate RPKM_DEACTIVATING[] = { { rpkmn_deactivating } };
+static void rpkm_deactivating(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate RPKM_DEACTIVATING[] = { { rpkm_deactivating } };
 
 const struct go_type RPKM_TYPE[] = { { NULL, RPKM_UPDATE, RPKM_DRAW, RPKM_DEACTIVATING } };
 
@@ -100,7 +100,7 @@ static inline void set_rumble(struct rpk_menu* menu, u8 value)
 	rumble_stop(menu->rpk->acc.i_slot);
 }
 
-static void rpkmn_update(const struct go_delegate* base, struct game_object* go)
+static void rpkm_update(const struct go_delegate* base, struct game_object* go)
 {
 	struct rpk_menu* menu = (void*)go;
 
@@ -142,7 +142,7 @@ static void rpkmn_update(const struct go_delegate* base, struct game_object* go)
 	_god_invoke(base, go);
 }
 
-static void rpkmn_draw(const struct go_delegate* base, struct game_object* go)
+static void rpkm_draw(const struct go_delegate* base, struct game_object* go)
 {
 	struct rpk_menu* menu = (void*)go;
 	struct accessory* acc = (void*)menu->rpk;
@@ -158,7 +158,7 @@ static void rpkmn_draw(const struct go_delegate* base, struct game_object* go)
 	cprintf("pwm low: %3llu", pwm->low_interval);
 }
 
-static void rpkmn_deactivating(const struct go_delegate* base, struct game_object* go)
+static void rpkm_deactivating(const struct go_delegate* base, struct game_object* go)
 {
 	struct rpk_menu* menu = (void*)go;
 	struct accessory acc = menu->rpk->acc;
