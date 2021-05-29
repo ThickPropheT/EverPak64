@@ -64,7 +64,7 @@ static void mm_draw(const struct go_delegate* base, struct game_object* go)
 	{
 		struct controller* ctrl = cman->controllers[i];
 
-		u8 sn = ctrl->i_slot + 1;
+		u8 sn = i + 1;
 
 		char* sel =
 			i == mm->gm.i_hovered_item
