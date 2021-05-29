@@ -39,11 +39,6 @@ struct accessory* acc_new(u8 i_slot)
 	return acc;
 }
 
-u8 acc_get_number(struct accessory acc)
-{
-	return acc.i_slot + 1;
-}
-
 
 static void acc_update(const struct go_delegate* base, struct game_object* go)
 {

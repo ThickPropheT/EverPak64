@@ -19,13 +19,14 @@ const struct go_delegate RPKM_DEACTIVATING[] = { { rpkmn_deactivating } };
 const struct go_type RPKM_TYPE[] = { { NULL, RPKM_UPDATE, RPKM_DRAW, RPKM_DEACTIVATING } };
 
 
-struct rpk_menu* rpkm_new(struct device_state* dev, struct menu_nav_controller* mnav, struct rumble_pak* rpk)
+struct rpk_menu* rpkm_new(struct device_state* dev, struct controller_manager* cman, struct menu_nav_controller* mnav, struct controller* ctrl)
 {
 	struct rpk_menu* menu = malloc(sizeof * menu);
 
-	_gm_init(&menu->gm, RPKM_TYPE, dev, mnav, 0);
+	_gm_init(&menu->gm, RPKM_TYPE, dev, cman, mnav, 0);
 
-	menu->rpk = rpk;
+	menu->ctrl = ctrl;
+	menu->rpk = (void*)ctrl->acc;
 
 	menu->rumble_pwm = pwm_new(0, 1, 0);
 
@@ -34,23 +35,22 @@ struct rpk_menu* rpkm_new(struct device_state* dev, struct menu_nav_controller* 
 
 static inline void pwm_get_input(struct device_state* dev, struct rpk_menu* menu)
 {
+	struct controller* ctrl = menu->ctrl;
 	struct pwm_state* pwm = menu->rumble_pwm;
 
-	struct controller* any = ctrl_any(dev);
-
-	if (ctrl_key_down(any, &key_C_left))
+	if (ctrl_key_down(ctrl, &key_C_left))
 	{
 		pwm_dec_low(pwm);
 	}
-	else if (ctrl_key_down(any, &key_C_up))
+	else if (ctrl_key_down(ctrl, &key_C_up))
 	{
 		pwm_inc_high(pwm);
 	}
-	else if (ctrl_key_down(any, &key_C_right))
+	else if (ctrl_key_down(ctrl, &key_C_right))
 	{
 		pwm_inc_low(pwm);
 	}
-	else if (ctrl_key_down(any, &key_C_down))
+	else if (ctrl_key_down(ctrl, &key_C_down))
 	{
 		pwm_dec_high(pwm);
 	}
@@ -58,21 +58,20 @@ static inline void pwm_get_input(struct device_state* dev, struct rpk_menu* menu
 
 static inline void rmbl_get_input(struct device_state* dev, struct rpk_menu* menu, u8* rumble)
 {
-	struct controller* any = ctrl_any(dev);
-
+	struct controller* ctrl = menu->ctrl;
 	struct pwm_state* pwm = menu->rumble_pwm;
 
 	u8 r = pwm->enabled;
 
-	if (ctrl_key_held(any, &key_Z))
+	if (ctrl_key_held(ctrl, &key_Z))
 	{
 		r = 1;
 	}
-	else if (ctrl_key_up(any, &key_Z))
+	else if (ctrl_key_up(ctrl, &key_Z))
 	{
 		r = 0;
 	}
-	else if (ctrl_key_down(any, &key_start))
+	else if (ctrl_key_down(ctrl, &key_start))
 	{
 		r = !pwm->enabled;
 	}
@@ -82,7 +81,7 @@ static inline void rmbl_get_input(struct device_state* dev, struct rpk_menu* men
 
 static inline void reset_get_input(struct device_state* dev, struct rpk_menu* menu)
 {
-	if (ctrl_key_down(ctrl_any(dev), &key_R))
+	if (ctrl_key_down(menu->ctrl, &key_R))
 	{
 		pwm_reset(menu->rumble_pwm);
 	}

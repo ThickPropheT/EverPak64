@@ -9,17 +9,17 @@
 #include "game_object.h"
 
 
-struct menu_tree mt_new(struct device_state* dev)
+struct menu_tree mt_new(struct device_state* dev, struct controller_manager* cman)
 {
 	struct menu_state* ms = ms_new();
 	struct menu_builder_table* mbt = mbt_new();
-	struct menu_nav_controller* mnav = mnav_new(dev, ms, mbt);
+	struct menu_nav_controller* mnav = mnav_new(cman, ms, mbt);
 
-	mbreg_register(mbt, dev, mnav);
+	mbreg_register(mbt, dev, cman, mnav);
 
 	ms_init_root(ms, mpres_main(mbt));
 
-	return (struct menu_tree) { dev, mnav };
+	return (struct menu_tree) { dev, cman, mnav };
 }
 
 
@@ -27,7 +27,7 @@ void mt_update(struct menu_tree* mt)
 {
 	// TODO prevents weirdness if controller 1 is removed
 	// TODO update this when any/all controllers can input
-	if (!(mt->dev->controllers & CONTROLLER_1_INSERTED))
+	if (!(mt->cman->ctrl_flags & CONTROLLER_1_INSERTED))
 		return;
 
 	struct mn_enumerator mne = ms_get_enumerator(mt->mnav->ms);

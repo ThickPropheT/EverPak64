@@ -7,7 +7,7 @@ const struct go_delegate ACCMP_UPDATE[] = { { accmp_update, MP_UPDATE } };
 
 const struct go_type ACCMP_TYPE[] = { { MP_ACTIVATING, ACCMP_UPDATE, MP_DRAW, MP_DEACTIVATING } };
 
-struct acc_menu_presenter* accmp_new(struct game_menu* gm, struct menu_builder_table* mbt, struct device_state* dev, u8 i_slot)
+struct acc_menu_presenter* accmp_new(struct game_menu* gm, struct menu_builder_table* mbt, struct device_state* dev, struct controller_manager* cman, u8 i_slot)
 {
 	struct acc_menu_presenter* accmp = malloc(sizeof * accmp);
 
@@ -15,6 +15,7 @@ struct acc_menu_presenter* accmp_new(struct game_menu* gm, struct menu_builder_t
 
 	accmp->mbt = mbt;
 	accmp->dev = dev;
+	accmp->cman = cman;
 
 	accmp->i_slot = i_slot;
 
@@ -27,7 +28,7 @@ static void replace_menu(struct acc_menu_presenter* accmp)
 {
 	free(accmp->mp.gm);
 
-	accmp->mp.gm = gmres_acc(accmp->mbt, accmp->dev, accmp->i_slot);
+	accmp->mp.gm = gmres_acc(accmp->mbt, accmp->cman, accmp->i_slot);
 }
 
 static void accmp_update(const struct go_delegate* base, struct game_object* go)

@@ -7,7 +7,7 @@ static void gm_update(const struct go_delegate* base, struct game_object* go);
 const struct go_delegate GM_UPDATE[] = { { gm_update } };
 
 
-void _gm_init(struct game_menu* gm, const struct go_type* vtable, struct device_state* dev, struct menu_nav_controller* mnav, size_t n_items)
+void _gm_init(struct game_menu* gm, const struct go_type* vtable, struct device_state* dev, struct controller_manager* cman, struct menu_nav_controller* mnav, size_t n_items)
 {
 	_go_init(&gm->go, vtable);
 
@@ -15,6 +15,7 @@ void _gm_init(struct game_menu* gm, const struct go_type* vtable, struct device_
 	gm->go.can_draw = 1;
 
 	gm->dev = dev;
+	gm->cman = cman;
 	gm->mnav = mnav;
 
 	gm->i_hovered_item = 0;

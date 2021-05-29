@@ -10,13 +10,13 @@ const struct go_delegate NAM_DRAW[] = { { nam_draw } };
 const struct go_type NAM_TYPE[] = { { NULL, GM_UPDATE, NAM_DRAW } };
 
 
-struct no_accessory_menu* nam_new(struct device_state* dev, struct menu_nav_controller* mnav, struct accessory* acc)
+struct no_accessory_menu* nam_new(struct device_state* dev, struct controller_manager* cman, struct menu_nav_controller* mnav, struct controller* ctrl)
 {
 	struct no_accessory_menu* menu = malloc(sizeof * menu);
 
-	_gm_init(&menu->gm, NAM_TYPE, dev, mnav, 0);
+	_gm_init(&menu->gm, NAM_TYPE, dev, cman, mnav, 0);
 
-	menu->acc = acc;
+	menu->ctrl = ctrl;
 
 	return menu;
 }
@@ -24,9 +24,20 @@ struct no_accessory_menu* nam_new(struct device_state* dev, struct menu_nav_cont
 static void nam_draw(const struct go_delegate* base, struct game_object* go)
 {
 	struct no_accessory_menu* menu = (void*)go;
-	struct accessory* acc = menu->acc;
+	struct controller* ctrl = menu->ctrl;
+	struct accessory* acc = ctrl->acc;
 
 	_gm_draw_header(*acc);
+
+	switch (ctrl->status)
+	{
+	case CTRL_STATUS_MISSING:
+		cprintf("Controller missing.");
+		return;
+
+	default:
+		break;
+	}
 
 	switch (acc->status)
 	{

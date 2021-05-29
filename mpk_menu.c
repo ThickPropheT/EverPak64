@@ -13,13 +13,14 @@ const struct go_delegate MPKM_DRAW[] = { { mpkm_draw } };
 const struct go_type MPKM_TYPE[] = { { NULL, MPKM_UPDATE, MPKM_DRAW } };
 
 
-struct mpk_menu* mpkm_new(struct device_state* dev, struct menu_nav_controller* mnav, struct memory_pak* mpk)
+struct mpk_menu* mpkm_new(struct device_state* dev, struct controller_manager* cman, struct menu_nav_controller* mnav, struct controller* ctrl)
 {
 	struct mpk_menu* mpkm = malloc(sizeof * mpkm);
 
-	_gm_init(&mpkm->gm, MPKM_TYPE, dev, mnav, 0);
+	_gm_init(&mpkm->gm, MPKM_TYPE, dev, cman, mnav, 0);
 
-	mpkm->mpk = mpk;
+	mpkm->ctrl = ctrl;
+	mpkm->mpk = (void*)ctrl->acc;
 
 	return mpkm;
 }

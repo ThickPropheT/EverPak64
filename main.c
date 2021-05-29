@@ -7,6 +7,7 @@
 
 #include "game_object.h"
 #include "device_manager.h"
+#include "controller_manager.h"
 #include "pinwheel.h"
 #include "fps_counter.h"
 #include "color_palette.h"
@@ -80,8 +81,9 @@ int main(void)
 	graphics_set_color(FG_TEXT_COLOR, BG_TEXT_COLOR);
 
 	struct device_state dev = dev_new();
+	struct controller_manager* cman = cman_new(&dev);
 
-	struct menu_tree mt = mt_new(&dev);
+	struct menu_tree mt = mt_new(&dev, cman);
 
 	while (1)
 	{
@@ -89,6 +91,7 @@ int main(void)
 		fps_update();
 
 		dev_poll(&dev);
+		cman_update(cman);
 
 		update(&mt);
 

@@ -12,11 +12,6 @@ struct device_state dev_new(void)
 {
 	struct device_state dev = { };
 
-	dev.controllers = get_controllers_present();
-	
-	struct controller_data out;
-	dev.acc_flags = get_accessories_present(&out);
-
 	for (u8 i = 0; i < N_SLOTS; i++)
 		// TODO this will result in all accessories being accessory
 		// TODO since accessories_f will still be 0 becuase
@@ -42,17 +37,16 @@ static void acc_flags_changed(struct device_state* dev, u16 from, u16 to)
 	}
 }
 
-static u8 set_acc_flags(struct device_state* dev, u16 value)
+static void set_acc_flags(struct device_state* dev, u16 value)
 {
 	if (dev->acc_flags == value)
-		return 0;
+		return;
 
 	u16 old_value = dev->acc_flags;
 
 	dev->acc_flags = value;
 
 	acc_flags_changed(dev, old_value, value);
-	return 1;
 }
 
 static void update_accessories(struct device_state* dev)
@@ -70,9 +64,7 @@ void dev_poll(struct device_state* dev)
 	struct controller_data out;
 	u16 acc = get_accessories_present(&out);
 
-	if (set_acc_flags(dev, acc)
-		|| dev->acc_flags == 0)
-		dev->controllers = get_controllers_present();
+	set_acc_flags(dev, acc);
 
 	update_accessories(dev);
 

@@ -3,11 +3,11 @@
 #include <malloc.h>
 #include "menu_presenter_resolver.h"
 
-struct menu_nav_controller* mnav_new(struct device_state* dev, struct menu_state* ms, struct menu_builder_table* mbt)
+struct menu_nav_controller* mnav_new(struct controller_manager* cman, struct menu_state* ms, struct menu_builder_table* mbt)
 {
 	struct menu_nav_controller* mnav = malloc(sizeof * mnav);
 
-	mnav->dev = dev;
+	mnav->cman = cman;
 	mnav->ms = ms;
 	mnav->mbt = mbt;
 
@@ -16,11 +16,10 @@ struct menu_nav_controller* mnav_new(struct device_state* dev, struct menu_state
 
 void mnav_to_sm(struct menu_nav_controller* mnav, u8 i_slot)
 {
-	struct menu_state* ms = mnav->ms;
-	struct menu_builder_table* mbt = mnav->mbt;
+	struct menu_presenter* acc_menu =
+		mpres_acc(mnav->mbt, mnav->cman, i_slot);
 
-	struct menu_presenter* acc_menu = mpres_acc(mbt, mnav->dev, i_slot);
-	ms_push(ms, acc_menu);
+	ms_push(mnav->ms, acc_menu);
 }
 
 void mnav_pop(struct menu_nav_controller* mnav)
