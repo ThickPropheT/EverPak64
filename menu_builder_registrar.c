@@ -1,7 +1,5 @@
 #include "menu_builder_registrar.h"
 
-#include <malloc.h>
-
 #include "main_menu_builder.h"
 #include "acc_menu_builder.h"
 
