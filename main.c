@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdarg.h>
-#include <malloc.h>
 #include <string.h>
 #include <stdint.h>
 #include <libdragon.h>
