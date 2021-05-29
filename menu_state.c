@@ -5,7 +5,7 @@
 
 struct menu_state* ms_new(void)
 {
-	struct menu_state* ms = malloc(sizeof * ms);
+	struct menu_state* ms = calloc(1, sizeof * ms);
 	return ms;
 }
 
