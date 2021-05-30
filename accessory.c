@@ -33,6 +33,9 @@ struct accessory* acc_new(u8 i_slot)
 
 	acc->go.go_type = ACC_TYPE;
 
+	acc->go.can_update = 0;
+	acc->go.can_draw = 0;
+
 	acc->i_slot = i_slot;
 	acc->type = ACCESSORY_NONE;
 
