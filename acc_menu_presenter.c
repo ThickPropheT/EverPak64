@@ -26,9 +26,13 @@ struct acc_menu_presenter* accmp_new(struct game_menu* gm, struct menu_builder_t
 
 static void replace_menu(struct acc_menu_presenter* accmp)
 {
+	go_deactivating((void*)accmp->mp.gm);
+
 	free(accmp->mp.gm);
 
 	accmp->mp.gm = gmres_acc(accmp->mbt, accmp->cman, accmp->i_slot);
+
+	go_activating((void*)accmp->mp.gm);
 }
 
 static void accmp_update(const struct go_delegate* base, struct game_object* go)
