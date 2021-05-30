@@ -59,14 +59,14 @@ static void mp_update(const struct go_delegate* base, struct game_object* go)
 {
 	struct menu_presenter* mp = (void*)go;
 
-	go_update((struct game_object*)mp->gm);
+	go_update((void*)mp->gm);
 }
 
 static void mp_draw(const struct go_delegate* base, struct game_object* go)
 {
 	struct menu_presenter* mp = (void*)go;
 
-	go_draw((struct game_object*)mp->gm);
+	go_draw((void*)mp->gm);
 }
 
 static void mp_leaving(const struct go_delegate* base, struct game_object* go)
