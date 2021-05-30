@@ -10,6 +10,14 @@
 
 extern const struct go_type RPKM_TYPE[];
 
+struct rumble_state
+{
+	struct input_handler* handler;
+
+	struct pwm_state* pwm;
+	u8 rumble;
+};
+
 struct rpk_menu
 {
 	struct game_menu gm;
@@ -17,6 +25,7 @@ struct rpk_menu
 	struct controller* ctrl;
 	struct rumble_pak* rpk;
 
+	struct rumble_state* state;
 	struct pwm_state* rumble_pwm;
 };
 

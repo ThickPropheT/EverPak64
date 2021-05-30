@@ -1,6 +1,7 @@
 #include "menu_presenter.h"
 
 #include <malloc.h>
+#include "console.h"
 
 
 static void mp_entering(const struct go_delegate* base, struct game_object* go);

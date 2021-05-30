@@ -7,6 +7,9 @@
 #include "keys.h"
 
 
+static void rpkm_activating(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate RPKM_ACTIVATING[] = { { rpkm_activating } };
+
 static void rpkm_update(const struct go_delegate* base, struct game_object* go);
 const struct go_delegate RPKM_UPDATE[] = { { rpkm_update, GM_UPDATE } };
 
@@ -16,8 +19,18 @@ const struct go_delegate RPKM_DRAW[] = { { rpkm_draw } };
 static void rpkm_deactivating(const struct go_delegate* base, struct game_object* go);
 const struct go_delegate RPKM_DEACTIVATING[] = { { rpkm_deactivating } };
 
-const struct go_type RPKM_TYPE[] = { { NULL, RPKM_UPDATE, RPKM_DRAW, RPKM_DEACTIVATING } };
+const struct go_type RPKM_TYPE[] = { { RPKM_ACTIVATING, RPKM_UPDATE, RPKM_DRAW, RPKM_DEACTIVATING } };
 
+
+struct rumble_state* rs_new(struct pwm_state* pwm)
+{
+	struct rumble_state* rs = calloc(1, sizeof * rs);
+
+	rs->pwm = pwm;
+	rs->rumble = 0;
+
+	return rs;
+}
 
 struct rpk_menu* rpkm_new(struct device_state* dev, struct controller_manager* cman, struct menu_nav_controller* mnav, struct controller* ctrl)
 {
@@ -29,15 +42,15 @@ struct rpk_menu* rpkm_new(struct device_state* dev, struct controller_manager* c
 	menu->rpk = (void*)ctrl->acc;
 
 	menu->rumble_pwm = pwm_new(0, 1, 0);
+	menu->state = rs_new(menu->rumble_pwm);
 
 	return menu;
 }
 
-static inline void pwm_get_input(struct device_state* dev, struct rpk_menu* menu)
-{
-	struct controller* ctrl = menu->ctrl;
-	struct pwm_state* pwm = menu->rumble_pwm;
 
+
+static inline void pwm_handle_input(struct controller* ctrl, struct pwm_state* pwm)
+{
 	if (ctrl_key_down(ctrl, &key_C_left))
 	{
 		pwm_dec_low(pwm);
@@ -56,12 +69,11 @@ static inline void pwm_get_input(struct device_state* dev, struct rpk_menu* menu
 	}
 }
 
-static inline void rmbl_get_input(struct device_state* dev, struct rpk_menu* menu, u8* rumble)
+static inline void rmbl_handle_input(struct controller* ctrl, struct rumble_state* state)
 {
-	struct controller* ctrl = menu->ctrl;
-	struct pwm_state* pwm = menu->rumble_pwm;
+	struct pwm_state* pwm = state->pwm;
 
-	u8 r = pwm->enabled;
+	u8 r = state->rumble;
 
 	if (ctrl_key_held(ctrl, &key_Z))
 	{
@@ -76,16 +88,37 @@ static inline void rmbl_get_input(struct device_state* dev, struct rpk_menu* men
 		r = !pwm->enabled;
 	}
 
-	*rumble = r;
+	state->rumble = r;
 }
 
-static inline void reset_get_input(struct device_state* dev, struct rpk_menu* menu)
+static inline void reset_handle_input(struct controller* ctrl, struct pwm_state* pwm)
 {
-	if (ctrl_key_down(menu->ctrl, &key_R))
+	if (ctrl_key_down(ctrl, &key_R))
 	{
-		pwm_reset(menu->rumble_pwm);
+		pwm_reset(pwm);
 	}
 }
+
+static void rpkm_handle_input(struct controller* ctrl, void* context)
+{
+	struct rumble_state* state = context;
+
+	pwm_handle_input(ctrl, state->pwm);
+	rmbl_handle_input(ctrl, state);
+	reset_handle_input(ctrl, state->pwm);
+}
+
+static void rpkm_activating(const struct go_delegate* base, struct game_object* go)
+{
+	struct rpk_menu* menu = (void*)go;
+	struct controller_manager* cman = menu->gm.cman;
+	struct rumble_state* state = menu->state;
+
+	state->handler =
+		cman_add_handler(cman, cman->any_controller, state, &rpkm_handle_input);
+}
+
+
 
 static inline void set_rumble(struct rpk_menu* menu, u8 value)
 {
@@ -103,21 +136,10 @@ static inline void set_rumble(struct rpk_menu* menu, u8 value)
 static void rpkm_update(const struct go_delegate* base, struct game_object* go)
 {
 	struct rpk_menu* menu = (void*)go;
-
-	struct device_state* dev = menu->gm.dev;
-
 	struct accessory acc = menu->rpk->acc;
 
 
-	pwm_get_input(dev, menu);
-
-	u8 rumble;
-	rmbl_get_input(dev, menu, &rumble);
-
-	reset_get_input(dev, menu);
-
-
-	set_rumble(menu, rumble);
+	set_rumble(menu, menu->state->rumble);
 
 
 	switch (pwm_update(menu->rumble_pwm))
@@ -142,6 +164,8 @@ static void rpkm_update(const struct go_delegate* base, struct game_object* go)
 	_god_invoke(base, go);
 }
 
+
+
 static void rpkm_draw(const struct go_delegate* base, struct game_object* go)
 {
 	struct rpk_menu* menu = (void*)go;
@@ -164,6 +188,9 @@ static void rpkm_deactivating(const struct go_delegate* base, struct game_object
 	struct accessory acc = menu->rpk->acc;
 
 	rumble_stop(acc.i_slot);
+
+	cman_rem_handler(menu->gm.cman, menu->state->handler);
+	free(menu->state);
 
 	pwm_free(menu->rumble_pwm);
 }
