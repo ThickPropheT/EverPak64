@@ -4,15 +4,19 @@
 #include <malloc.h>
 #include "console.h"
 #include "controller.h"
+#include "keys.h"
 
 
-static void mm_update(const struct go_delegate* base, struct game_object* go);
-const struct go_delegate MM_UPDATE[] = { { mm_update } };
+static void mm_activating(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate MM_ACTIVATING[] = { { mm_activating } };
 
 static void mm_draw(const struct go_delegate* base, struct game_object* go);
 const struct go_delegate MM_DRAW[] = { { mm_draw } };
 
-const struct go_type MM_TYPE[] = { { NULL, MM_UPDATE, MM_DRAW } };
+static void mm_deactivating(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate MM_DEACTIVATING[] = { { mm_deactivating } };
+
+const struct go_type MM_TYPE[] = { { MM_ACTIVATING, NULL, MM_DRAW, MM_DEACTIVATING } };
 
 
 struct main_menu* mm_new(struct device_state* dev, struct controller_manager* cman, struct menu_nav_controller* mnav)
@@ -24,34 +28,43 @@ struct main_menu* mm_new(struct device_state* dev, struct controller_manager* cm
 	return mm;
 }
 
-static void mm_update(const struct go_delegate* base, struct game_object* go)
+
+
+static void mm_handle_input(struct controller* ctrl, void* context)
 {
-	struct main_menu* mm = (void*)go;
-	struct game_menu* gm = &mm->gm;
+	struct game_menu* gm = (void*)context;
 
-	struct controller_data keys = gm->dev->keys_d;
-
-	if (keys.c[0].up)
+	if (ctrl_key_down(ctrl, &key_up))
 	{
 		_gm_hover_prev(gm);
 	}
-	else if (keys.c[0].down)
+	else if (ctrl_key_down(ctrl, &key_down))
 	{
 		_gm_hover_next(gm);
 	}
-	else if (keys.c[0].left)
+	else if (ctrl_key_down(ctrl, &key_left))
 	{
 		_gm_hover_prev(gm);
 	}
-	else if (keys.c[0].right)
+	else if (ctrl_key_down(ctrl, &key_right))
 	{
 		_gm_hover_next(gm);
 	}
-	else if (keys.c[0].A)
+	else if (ctrl_key_down(ctrl, &key_A))
 	{
 		mnav_to_sm(gm->mnav, gm->i_hovered_item);
 	}
 }
+
+static void mm_activating(const struct go_delegate* base, struct game_object* go)
+{
+	struct main_menu* menu = (void*)go;
+	struct controller_manager* cman = menu->gm.cman;
+
+	menu->input_handler =
+		cman_add_handler(cman, cman->any_controller, menu, &mm_handle_input);
+}
+
 
 static void mm_draw(const struct go_delegate* base, struct game_object* go)
 {
@@ -78,4 +91,12 @@ static void mm_draw(const struct go_delegate* base, struct game_object* go)
 
 		cprintf("%s [%s] Slot %u\n", sel, pres, sn);
 	}
+}
+
+
+static void mm_deactivating(const struct go_delegate* base, struct game_object* go)
+{
+	struct main_menu* menu = (void*)go;
+
+	cman_rem_handler(menu->gm.cman, menu->input_handler);
 }
