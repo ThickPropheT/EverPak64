@@ -4,13 +4,37 @@
 #include <libdragon.h>
 #include "console.h"
 
+
+
 #define ANY_SLOT N_SLOTS
+
+
+
+static struct input_handler* ih_new(struct controller* ctrl, void* context, handle_input handle)
+{
+	struct input_handler* handler = malloc(sizeof * handler);
+
+	handler->is_disposed = 0;
+
+	handler->ctrl = ctrl;
+	handler->context = context;
+	handler->handle = handle;
+
+	handler->prev = NULL;
+	handler->next = NULL;
+
+	return handler;
+}
+
+
 
 static struct input_handler_list* ihl_new(void)
 {
 	struct input_handler_list* list = calloc(1, sizeof * list);
 	return list;
 }
+
+
 
 struct controller_manager* cman_new(struct device_state* dev)
 {
@@ -31,6 +55,8 @@ struct controller_manager* cman_new(struct device_state* dev)
 
 	return cman;
 }
+
+
 
 static inline void flags_changed(struct controller_manager* cman, u16 ctrl_from, u16 ctrl_to, u16 acc_from, u16 acc_to)
 {
@@ -89,60 +115,6 @@ static inline void update_flags(struct controller_manager* cman)
 }
 
 
-static inline void cman_handle_input(struct controller_manager* cman)
-{
-	for (u8 slot = 0; slot < N_SLOTS; slot++)
-	{
-		struct controller* ctrl = cman->controllers[slot];
-
-		if (ctrl->status != CTRL_STATUS_READY)
-			continue;
-
-		u8 h_slot = slot;
-
-		struct input_handler* handler = cman->input_handlers[h_slot]->head;
-
-		while (handler != NULL)
-		{
-			handler->handle(ctrl, handler->context);
-
-			handler = handler->next;
-		}
-
-		handler = cman->input_handlers[ANY_SLOT]->head;
-
-		while (handler != NULL)
-		{
-			handler->handle(ctrl, handler->context);
-
-			handler = handler->next;
-		}
-	}
-}
-
-void cman_update(struct controller_manager* cman)
-{
-	update_flags(cman);
-
-	cman_handle_input(cman);
-}
-
-
-
-static struct input_handler* ih_new(struct controller* ctrl, void* context, handle_input handle)
-{
-	struct input_handler* handler = malloc(sizeof * handler);
-
-	handler->ctrl = ctrl;
-	handler->context = context;
-	handler->handle = handle;
-
-	handler->prev = NULL;
-	handler->next = NULL;
-
-	return handler;
-}
-
 
 static inline void add_handler(struct controller_manager* cman, u8 i_slot, struct input_handler* handler)
 {
@@ -161,16 +133,6 @@ static inline void add_handler(struct controller_manager* cman, u8 i_slot, struc
 	list->tail = handler;
 }
 
-struct input_handler* cman_add_handler(struct controller_manager* cman, struct controller* ctrl, void* context, handle_input handle)
-{
-	struct input_handler* handler = ih_new(ctrl, context, handle);
-
-	add_handler(cman, ctrl->i_slot, handler);
-
-	return handler;
-}
-
-
 static inline void remove_handler(struct controller_manager* cman, u8 i_slot, struct input_handler* handler)
 {
 	if (handler->prev != NULL)
@@ -186,10 +148,61 @@ static inline void remove_handler(struct controller_manager* cman, u8 i_slot, st
 
 	if (list->head == handler)
 		list->head = handler->next;
+
+	free(handler);
+}
+
+
+static void invoke_handlers(struct controller_manager* cman, struct input_handler* handler, struct controller* ctrl)
+{
+	while (handler != NULL)
+	{
+		if (!handler->is_disposed)
+			handler->handle(ctrl, handler->context);
+
+		struct input_handler* next = handler->next;
+
+		if (handler->is_disposed)
+			remove_handler(cman, handler->ctrl->i_slot, handler);
+
+		handler = next;
+	}
+}
+
+static inline void cman_handle_input(struct controller_manager* cman)
+{
+	for (u8 slot = 0; slot < N_SLOTS; slot++)
+	{
+		struct controller* ctrl = cman->controllers[slot];
+
+		if (ctrl->status != CTRL_STATUS_READY)
+			continue;
+
+		invoke_handlers(cman, cman->input_handlers[slot]->head, ctrl);
+		invoke_handlers(cman, cman->input_handlers[ANY_SLOT]->head, ctrl);
+	}
+}
+
+
+void cman_update(struct controller_manager* cman)
+{
+	update_flags(cman);
+
+	cman_handle_input(cman);
+}
+
+
+
+struct input_handler* cman_add_handler(struct controller_manager* cman, struct controller* ctrl, void* context, handle_input handle)
+{
+	struct input_handler* handler = ih_new(ctrl, context, handle);
+
+	add_handler(cman, ctrl->i_slot, handler);
+
+	return handler;
 }
 
 void cman_rem_handler(struct controller_manager* cman, struct input_handler* handler)
 {
-	remove_handler(cman, handler->ctrl->i_slot, handler);
-	free(handler);
+	handler->is_disposed = 1;
 }

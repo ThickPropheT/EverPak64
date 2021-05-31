@@ -12,6 +12,8 @@ typedef void (*handle_input)(struct controller* ctrl, void* context);
 
 struct input_handler
 {
+	u8 is_disposed;
+
 	struct controller* ctrl;
 	void* context;
 
