@@ -185,7 +185,7 @@ static inline void remove_handler(struct controller_manager* cman, u8 i_slot, st
 		list->tail = handler->prev;
 
 	if (list->head == handler)
-		list->head = NULL;
+		list->head = handler->next;
 }
 
 void cman_rem_handler(struct controller_manager* cman, struct input_handler* handler)
