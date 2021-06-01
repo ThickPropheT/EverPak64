@@ -12,9 +12,6 @@ extern const struct go_type RPKM_TYPE[];
 
 struct rumble_state
 {
-	struct input_handler* handler;
-
-	struct pwm_state* pwm;
 	u8 rumble;
 };
 
@@ -27,6 +24,8 @@ struct rpk_menu
 
 	struct rumble_state* state;
 	struct pwm_state* rumble_pwm;
+
+	struct input_handler* input_handler;
 };
 
 struct rpk_menu* rpkm_new(struct device_state* dev, struct controller_manager* cman, struct menu_nav_controller* mnav, struct controller* ctrl);

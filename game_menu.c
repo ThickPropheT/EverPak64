@@ -1,6 +1,7 @@
 #include "game_menu.h"
 
 #include "math.h"
+#include "keys.h"
 #include "console.h"
 
 static void gm_update(const struct go_delegate* base, struct game_object* go);
@@ -32,6 +33,14 @@ void _gm_hover_next(struct game_menu* gm)
 	gm->i_hovered_item = cmod(gm->i_hovered_item + 1, gm->n_items);
 }
 
+void _gm_handle_input(struct controller* ctrl, struct game_menu* menu)
+{
+	if (ctrl_key_down(ctrl, &key_B))
+	{
+		mnav_pop(menu->mnav);
+	}
+}
+
 void _gm_draw_header(struct accessory acc)
 {
 	u8 sn = acc.i_slot + 1;
@@ -44,11 +53,5 @@ void _gm_draw_header(struct accessory acc)
 
 static void gm_update(const struct go_delegate* base, struct game_object* go)
 {
-	struct game_menu* menu = (void*)go;
-	struct controller_data keys = menu->dev->keys_d;
 
-	if (keys.c[0].B)
-	{
-		mnav_pop(menu->mnav);
-	}
 }

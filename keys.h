@@ -7,6 +7,11 @@ static inline unsigned key_A(struct SI_condat c)
 	return c.A;
 }
 
+static inline unsigned key_B(struct SI_condat c)
+{
+	return c.B;
+}
+
 static inline unsigned key_Z(struct SI_condat c)
 {
 	return c.Z;
@@ -35,6 +40,11 @@ static inline unsigned key_left(struct SI_condat c)
 static inline unsigned key_right(struct SI_condat c)
 {
 	return c.right;
+}
+
+static inline unsigned key_L(struct SI_condat c)
+{
+	return c.L;
 }
 
 static inline unsigned key_R(struct SI_condat c)

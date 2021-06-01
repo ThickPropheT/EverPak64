@@ -2,15 +2,19 @@
 
 #include "menu_nav_controller.h"
 #include "console.h"
+#include "keys.h"
 
 
-static void mpkm_update(const struct go_delegate* base, struct game_object* go);
-const struct go_delegate MPKM_UPDATE[] = { { mpkm_update, GM_UPDATE } };
+static void mpkm_activating(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate MPKM_ACTIVATING[] = { { mpkm_activating } };
 
 static void mpkm_draw(const struct go_delegate* base, struct game_object* go);
 const struct go_delegate MPKM_DRAW[] = { { mpkm_draw } };
 
-const struct go_type MPKM_TYPE[] = { { NULL, MPKM_UPDATE, MPKM_DRAW } };
+static void mpkm_deactivating(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate MPKM_DEACTIVATING[] = { { mpkm_deactivating } };
+
+const struct go_type MPKM_TYPE[] = { { MPKM_ACTIVATING, NULL, MPKM_DRAW, MPKM_DEACTIVATING } };
 
 
 struct mpk_menu* mpkm_new(struct device_state* dev, struct controller_manager* cman, struct menu_nav_controller* mnav, struct controller* ctrl)
@@ -26,21 +30,30 @@ struct mpk_menu* mpkm_new(struct device_state* dev, struct controller_manager* c
 }
 
 
-static void mpkm_update(const struct go_delegate* base, struct game_object* go)
-{
-	struct mpk_menu* mpkm = (void*)go;
 
-	struct controller_data keys = mpkm->gm.dev->keys_d;
+static void mpkm_handle_input(struct controller* ctrl, void* context)
+{
+	struct mpk_menu* mpkm = context;
 
 	// for safety
-	if (keys.c[0].L
-		&& keys.c[0].Z
-		&& keys.c[0].R)
+	if (ctrl_key_down(ctrl, &key_L)
+		&& ctrl_key_down(ctrl, &key_Z)
+		&& ctrl_key_down(ctrl, &key_R))
 	{
 		mpk_format(mpkm->mpk);
 	}
 
-	_god_invoke(base, go);
+	_gm_handle_input(ctrl, (void*)mpkm);
+}
+
+
+static void mpkm_activating(const struct go_delegate* base, struct game_object* go)
+{
+	struct mpk_menu* menu = (void*)go;
+	struct controller_manager* cman = menu->gm.cman;
+
+	menu->input_handler =
+		cman_add_handler(cman, cman->any_controller, menu, &mpkm_handle_input);
 }
 
 static void draw_header(struct accessory acc)
@@ -127,4 +140,13 @@ static void mpkm_draw(const struct go_delegate* base, struct game_object* go)
 	}
 
 	draw_entries(*mpk);
+}
+
+
+
+static void mpkm_deactivating(const struct go_delegate* base, struct game_object* go)
+{
+	struct mpk_menu* menu = (void*)go;
+
+	cman_rem_handler(menu->gm.cman, menu->input_handler);
 }

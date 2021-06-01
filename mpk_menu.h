@@ -16,6 +16,8 @@ struct mpk_menu
 
 	struct controller* ctrl;
 	struct memory_pak* mpk;
+
+	struct input_handler* input_handler;
 };
 
 struct mpk_menu* mpkm_new(struct device_state* dev, struct controller_manager* cman, struct menu_nav_controller* mnav, struct controller* ctrl);
