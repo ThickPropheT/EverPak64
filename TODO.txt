@@ -1,3 +1,5 @@
+improve folder structure
+
 investigate defects:
 	start game with no accessory for slot 0
 
@@ -6,24 +8,14 @@ determine if document formatting can be configured
 	prefer this: 'sizeof *my_var' to this: 'sizeof * my_var'
 
 consider adding unit tests
+	lol good luck
 
 aggregate various pieces of global game state into a game_state struct
 	i.e. device_state & menu_state
 	pass that struct around to update and draw methods
 	remove references to those pieces of state that currently live in disparate structs
 
-determine what line endings are being used throughout and standardize
-	lookin at you slot_menu.c
-
-i don't think I_DEFAULT_SELECTED and I_DEFAULT_DEPTH are wired up in main_menu
-
 re-evaluate use of size_t
-
-add support for input from any/all controller slots
-	/*struct SI_condat c = keys.c[0];*/
-	^ this is the data type for keys.c
-
-improve folder structure
 
 find a way to remove unused #includes
 
@@ -54,7 +46,7 @@ determine how #define works in examples like #define N get_n()
 		is there a way to make it do this one?
 
 
-migrate from NP++ to real IDE
+investigate migrating from VS to VS Code
 	VS Code is possible
 		any clues in comments in the PRGE mine sweeper videos?
 	https://stackoverflow.com/questions/20821416/c-programming-in-visual-studio/32187564
