@@ -18,6 +18,9 @@
 #include "console.h"
 
 
+#define TITLE			"EverPak64"
+#define VERSION			"0.1.0.1"
+
 // render pinwheel @ ~15Hz
 #define FIFTEEN_FPS		66
 // render fps counter @ 0.5Hz
@@ -46,6 +49,11 @@ void update(struct menu_tree* mt)
 }
 
 
+
+void draw_header(char pinwheel, float fps)
+{
+	cprintf("(%c) %.1f fps [%s v%s]\n\n", pinwheel, fps, TITLE, VERSION);
+}
 
 void draw(struct menu_tree* mt)
 {
@@ -96,7 +104,7 @@ int main(void)
 
 		cs_clear(BG_COLOR);
 
-		cprintf("(%c) %.1f fps [menu.z64]\n\n", pinwheel, fps);
+		draw_header(pinwheel, fps);
 
 		draw(&mt);
 

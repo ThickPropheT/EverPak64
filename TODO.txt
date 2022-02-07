@@ -1,6 +1,10 @@
 improve folder structure
 
 investigate defects:
+	once accessory inserted for controller, main menu will always display + regardless of if it has been removed
+
+	unplugging controller in slot 1 with no accessory causes selection cursor to jump to position 0 on main menu
+
 	start game with no accessory for slot 0
 
 determine if document formatting can be configured
