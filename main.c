@@ -43,26 +43,26 @@ void sleep(unsigned long ms)
 
 
 
-void update(struct menu_tree* mt)
+static inline void update(struct menu_tree* mt)
 {
 	mt_update(mt);
 }
 
 
 
-void draw_header(char pinwheel, float fps)
+static inline void draw_header(char pinwheel, float fps)
 {
 	cprintf("(%c) %.1f fps [%s v%s]\n\n", pinwheel, fps, TITLE, VERSION);
 }
 
-void draw(struct menu_tree* mt)
+static inline void draw(struct menu_tree* mt)
 {
 	mt_draw(mt);
 }
 
 
 
-void set_up(void)
+static void set_up(void)
 {
 	/* enable interrupts (on the CPU) */
 	init_interrupts();
