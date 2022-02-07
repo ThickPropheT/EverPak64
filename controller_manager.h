@@ -3,6 +3,7 @@
 #include "controller.h"
 #include "device_state.h"
 #include "types.h"
+#include "linked_list.h"
 
 
 #define N_HANDLERS	N_SLOTS + 1
@@ -12,23 +13,15 @@ typedef void (*handle_input)(struct controller* ctrl, void* context);
 
 struct input_handler
 {
+	struct ll_node node;
+
 	u8 is_disposed;
 
 	struct controller* ctrl;
 	void* context;
 
 	handle_input handle;
-
-	struct input_handler* prev;
-	struct input_handler* next;
 };
-
-struct input_handler_list
-{
-	struct input_handler* head;
-	struct input_handler* tail;
-};
-
 
 struct controller_manager
 {
@@ -40,7 +33,8 @@ struct controller_manager
 	struct controller* controllers[N_SLOTS];
 	struct controller* any_controller;
 
-	struct input_handler_list* input_handlers[N_HANDLERS];
+	struct linked_list* input_handlers[N_HANDLERS];
+
 };
 
 struct controller_manager* cman_new(struct device_state* dev);

@@ -20,18 +20,9 @@ static struct input_handler* ih_new(struct controller* ctrl, void* context, hand
 	handler->context = context;
 	handler->handle = handle;
 
-	handler->prev = NULL;
-	handler->next = NULL;
+	ll_node_init((void*)handler);
 
 	return handler;
-}
-
-
-
-static struct input_handler_list* ihl_new(void)
-{
-	struct input_handler_list* list = calloc(1, sizeof * list);
-	return list;
 }
 
 
@@ -51,7 +42,7 @@ struct controller_manager* cman_new(struct device_state* dev)
 	cman->any_controller = ctrl_new(dev, NULL, ANY_SLOT);
 
 	for (u8 i = 0; i < N_HANDLERS; i++)
-		cman->input_handlers[i] = ihl_new();
+		cman->input_handlers[i] = ll_new();
 
 	return cman;
 }
@@ -118,37 +109,12 @@ static inline void update_flags(struct controller_manager* cman)
 
 static inline void add_handler(struct controller_manager* cman, u8 i_slot, struct input_handler* handler)
 {
-	struct input_handler_list* list = cman->input_handlers[i_slot];
-
-	if (list->head == NULL)
-	{
-		list->head = handler;
-		list->tail = handler;
-		return;
-	}
-
-	handler->prev = list->tail;
-	list->tail->next = handler;
-
-	list->tail = handler;
+	ll_add_last(cman->input_handlers[i_slot], (void*)handler);
 }
 
 static inline void remove_handler(struct controller_manager* cman, u8 i_slot, struct input_handler* handler)
 {
-	if (handler->prev != NULL)
-		handler->prev->next = handler->next;
-
-	if (handler->next != NULL)
-		handler->next->prev = handler->prev;
-
-	struct input_handler_list* list = cman->input_handlers[i_slot];
-
-	if (list->tail == handler)
-		list->tail = handler->prev;
-
-	if (list->head == handler)
-		list->head = handler->next;
-
+	ll_remove(cman->input_handlers[i_slot], (void*)handler);
 	free(handler);
 }
 
@@ -160,7 +126,7 @@ static void invoke_handlers(struct controller_manager* cman, struct input_handle
 		if (!handler->is_disposed)
 			handler->handle(ctrl, handler->context);
 
-		struct input_handler* next = handler->next;
+		struct input_handler* next = (void*)handler->node.next;
 
 		if (handler->is_disposed)
 			remove_handler(cman, handler->ctrl->i_slot, handler);
@@ -178,8 +144,10 @@ static inline void cman_handle_input(struct controller_manager* cman)
 		if (ctrl->status != CTRL_STATUS_READY)
 			continue;
 
-		invoke_handlers(cman, cman->input_handlers[slot]->head, ctrl);
-		invoke_handlers(cman, cman->input_handlers[ANY_SLOT]->head, ctrl);
+		struct linked_list** input_handlers = cman->input_handlers;
+
+		invoke_handlers(cman, (void*)input_handlers[slot]->head, ctrl);
+		invoke_handlers(cman, (void*)input_handlers[ANY_SLOT]->head, ctrl);
 	}
 }
 
