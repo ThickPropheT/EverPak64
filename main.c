@@ -26,10 +26,12 @@
 // render fps counter @ 0.5Hz
 #define HALF_FPS		2000
 
+#define RENDERER		Gx2D
+#define BIT_DEPTH		DEPTH_32_BPP
 
-#define BG_COLOR 		0x10001
+#define BG_COLOR 		BLACK(BIT_DEPTH)
 #define BG_TEXT_COLOR	TRANS
-#define FG_TEXT_COLOR	0x364D364D
+#define FG_TEXT_COLOR	LIME(BIT_DEPTH, RENDERER)
 
 
 // #### TODO MOVE THIS ####
@@ -68,7 +70,7 @@ static void set_up(void)
 	init_interrupts();
 
 	/* Initialize peripherals */
-	cs_init(Gx2D, DEPTH_16_BPP);
+	cs_init(RENDERER, BIT_DEPTH);
 
 	controller_init();
 }
