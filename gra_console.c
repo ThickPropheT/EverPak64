@@ -1,8 +1,5 @@
 #include "gra_console.h"
 
-#ifndef BIN_TYPES
-#define BIN_TYPES
-
 #define X_SCALE		8
 #define X_OFFSET	20
 
@@ -16,5 +13,3 @@ void gra_print(display_context_t dc, char *text, int x, int y)
 	
 	graphics_draw_text(dc, x, y, text);
 }
-
-#endif
