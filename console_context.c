@@ -1,24 +1,32 @@
 #include "console_context.h"
 
-struct console_context cc_new(enum renderer r, bitdepth_t d)
+#define X_SCALE		8
+#define X_OFFSET	20
+
+#define Y_SCALE		8
+#define Y_OFFSET	16
+
+struct console_context cc_new(void)
 {
-	renderer_init(r, d);
 	return (struct console_context) { (display_context_t)NULL, 0, 0 };
 }
 
 void cc_clear(struct console_context* cc, uint32_t bg_color)
 {
-	cc->dc = renderer_clear(bg_color);
+	graphics_fill_screen(cc->dc, bg_color);
 	cc->c = 0;
 	cc->r = 0;
 }
 
-void cc_println(struct console_context* cc)
+static inline void draw_line(display_context_t dc, char* text, int x, int y)
 {
-	renderer_print(cc->dc, cc->buf, cc->c, (cc->r)++);
+	x = (x * X_SCALE) + X_OFFSET;
+	y = (y * Y_SCALE) + Y_OFFSET;
+
+	graphics_draw_text(dc, x, y, text);
 }
 
-void cc_render(struct console_context* cc)
+void cc_println(struct console_context* cc)
 {
-	renderer_render(cc->dc);
+	draw_line(cc->dc, cc->buf, cc->c, (cc->r)++);
 }

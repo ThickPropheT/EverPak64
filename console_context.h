@@ -24,10 +24,8 @@ struct console_context
 	char buf[BUFFER_LEN];
 };
 
-struct console_context cc_new(enum renderer r, bitdepth_t d);
+struct console_context cc_new(void);
 
 void cc_clear(struct console_context* cc, uint32_t bg_color);
 
 void cc_println(struct console_context* cc);
-
-void cc_render(struct console_context* cc);

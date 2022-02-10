@@ -1,76 +1,69 @@
 #include "renderer.h"
 
-#include "gra_console.h"
+#include <malloc.h>
 
-enum renderer renderer;
-bitdepth_t bit_depth;
+#include "types.h"
 
-
-char* renderer_nameof(enum renderer r)
+static struct rectangle to_rect(resolution_t res)
 {
-	switch (r)
+	u16 w = 320;
+	u16 h = 240;
+
+	switch (res)
 	{
-	case CONSOLE:
-		return "console";
+	case RESOLUTION_640x480:
+		w = 640;
+	case RESOLUTION_512x480:
+		w = 512;
+		h = 480;
+		break;
 
-	case Gx2D:
-		return "2D graphics";
-
-	default:
-		return (char*)NULL;
+	case RESOLUTION_256x240:
+		w = 256;
+	case RESOLUTION_512x240:
+		w = 512;
+	case RESOLUTION_640x240:
+		w = 640;
+	case RESOLUTION_320x240:
+		w = 320;
+		h = 240;
 	}
+
+	return (struct rectangle) { 0, 0, w, h };
 }
 
-
-
-char* renderer_current_name(void)
+struct renderer* ren_new(resolution_t res, bitdepth_t bpp, uint32_t num_buf, gamma_t gamma, antialias_t aa)
 {
-	return renderer_nameof(renderer);
+	display_init(res, bpp, num_buf, gamma, aa);
+
+	struct renderer* ren = malloc(sizeof * ren);
+
+	ren->res = res;
+	ren->bpp = bpp;
+	ren->num_buf = num_buf;
+	ren->gamma = gamma;
+	ren->aa = aa;
+	ren->rdp_enabled = 0;
+
+	ren->view_port = to_rect(res);
+
+	ren->dc = 0;
+
+	return ren;
 }
 
-bitdepth_t renderer_current_bitdepth(void)
+void ren_request_rdp(struct renderer* ren)
 {
-	return bit_depth;
+	if (ren->rdp_enabled)
+		return;
+
+	rdp_init();
+
+	ren->rdp_enabled = 1;
 }
 
 
-
-void set_up_console(void)
-{
-	/* Initialize peripherals */
-	console_init();
-	console_set_render_mode(RENDER_MANUAL);
-}
-
-void set_up_graphics(void)
-{
-	/* Initialize peripherals */
-	display_init(RESOLUTION_320x240, bit_depth, 2, GAMMA_NONE, ANTIALIAS_RESAMPLE);
-}
-
-void renderer_init(enum renderer r, bitdepth_t d)
-{
-	renderer = r;
-	bit_depth = d;
-
-	switch (renderer)
-	{
-	case CONSOLE:
-		set_up_console();
-		break;
-
-	case Gx2D:
-		set_up_graphics();
-		break;
-
-	default:
-		break;
-	}
-}
-
-
-
-display_context_t lock_graphics(void)
+static inline display_context_t lock_graphics(void)
 {
 	display_context_t dc;
 
@@ -79,107 +72,28 @@ display_context_t lock_graphics(void)
 	return dc;
 }
 
-display_context_t clear_graphics(uint32_t color)
+void ren_lock(struct renderer* ren)
 {
 	display_context_t dc = lock_graphics();
-	graphics_fill_screen(dc, color);
-	return dc;
-}
 
-display_context_t renderer_clear(uint32_t color)
-{
-	switch (renderer)
+	if (ren->rdp_enabled)
 	{
-	case CONSOLE:
-		console_clear();
-		break;
-
-	case Gx2D:
-		return clear_graphics(color);
-		
-	default:
-		break;
+		rdp_sync(SYNC_PIPE);
+		rdp_set_default_clipping();
+		rdp_attach_display(dc);
 	}
 
-	return (display_context_t)NULL;
+	ren->dc = dc;
 }
 
-
-
-void renderer_print(display_context_t dc, char* text, int x, int y)
+void ren_show(struct renderer* ren)
 {
-	switch (renderer)
+	if (ren->rdp_enabled)
 	{
-	case CONSOLE:
-		printf(text);
-		break;
+		rdp_detach_display();
 
-	case Gx2D:
-		gra_print(dc, text, x, y);
-		break;
-
-	default:
-		break;
-	}
-}
-
-
-
-void renderer_render(display_context_t dc)
-{
-	switch (renderer)
-	{
-	case CONSOLE:
-		console_render();
-		break;
-
-	case Gx2D:
-		display_show(dc);
-		break;
-
-	default:
-		break;
-	}
-}
-
-
-
-void renderer_tear_down(void)
-{
-	switch (renderer)
-	{
-	case CONSOLE:
-		console_close();
-		break;
-
-	case Gx2D:
-		display_close();
-		break;
-
-	default:
-		break;
+		ren->rdp_enabled = 0;
 	}
 
-	renderer_init(renderer, bit_depth);
-}
-
-void renderer_current_next(void)
-{
-	renderer_tear_down();
-
-	renderer++;
-
-	if (renderer >= N_RENDERERS)
-		renderer = 0;
-
-	renderer_init(renderer, bit_depth);
-}
-
-void renderer_bitdepth_next(void)
-{
-	renderer_tear_down();
-
-	bit_depth = 1 - bit_depth;
-
-	renderer_init(renderer, bit_depth);
+	display_show(ren->dc);
 }

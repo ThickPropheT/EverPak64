@@ -20,4 +20,4 @@
 //0x32CD32FF
 // 16 : 364D364D
 // 32 : 32CD32FF
-#define LIME(bpp, r)	(uint32_t)(bpp == DEPTH_16_BPP || r == CONSOLE ? 0x364D364D : 0x32CD32FF)
+#define LIME(bpp)		(uint32_t)(bpp == DEPTH_16_BPP ? 0x364D364D : 0x32CD32FF)

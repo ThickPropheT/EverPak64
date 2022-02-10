@@ -15,6 +15,7 @@
 #include "menu_state.h"
 #include "menu_tree.h"
 #include "main_menu.h"
+#include "renderer.h"
 #include "console.h"
 
 
@@ -31,7 +32,7 @@
 
 #define BG_COLOR 		BLACK(BIT_DEPTH)
 #define BG_TEXT_COLOR	TRANS
-#define FG_TEXT_COLOR	LIME(BIT_DEPTH, RENDERER)
+#define FG_TEXT_COLOR	LIME(BIT_DEPTH)
 
 
 // #### TODO MOVE THIS ####
@@ -64,22 +65,25 @@ static inline void draw(struct menu_tree* mt)
 
 
 
-static void set_up(void)
+static struct renderer* set_up(void)
 {
 	/* enable interrupts (on the CPU) */
 	init_interrupts();
 
-	/* Initialize peripherals */
-	cs_init(RENDERER, BIT_DEPTH);
+	struct renderer* ren = ren_new(RESOLUTION_320x240, BIT_DEPTH, 2, GAMMA_NONE, ANTIALIAS_RESAMPLE);
+
+	cs_init();
 
 	controller_init();
+
+	return ren;
 }
 
 
 
 int main(void)
 {
-	set_up();
+	struct renderer* ren = set_up();
 
 	char pinwheel = 0;
 	pw_init(FIFTEEN_FPS, 0, &pinwheel);
@@ -96,21 +100,24 @@ int main(void)
 
 	while (1)
 	{
-		pw_update();
 		fps_update();
 
 		dev_poll(&dev);
 		cman_update(cman);
 
+		pw_update();
+
 		update(&mt);
 
-		cs_clear(BG_COLOR);
+		ren_lock(ren);
+
+		cs_clear(ren, BG_COLOR);
 
 		draw_header(pinwheel, fps);
 
 		draw(&mt);
 
-		cs_render();
+		ren_show(ren);
 	}
 
 	return 0;

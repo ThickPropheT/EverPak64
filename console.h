@@ -1,10 +1,7 @@
 #pragma once
 
+#include "renderer.h"
 #include "console_context.h"
-
-// TODO figure out how to hide this as best as possible while allowing
-// TODO for the functionality above
-//struct console_context cs;
 
 
 // TODO could this pattern be converted to a function?
@@ -13,10 +10,8 @@
 }
 
 
-void cs_init(enum renderer r, bitdepth_t d);
+void cs_init(void);
 
-struct console_context *cs_get_current(void);
+struct console_context* cs_get_current(void);
 
-void cs_clear(uint32_t bg_color);
-
-void cs_render(void);
+void cs_clear(struct renderer* ren, uint32_t bg_color);
