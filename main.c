@@ -16,14 +16,13 @@
 #include "menu_tree.h"
 #include "main_menu.h"
 #include "renderer.h"
+#include "render_graph_bootstrapper.h"
 #include "console.h"
 
 
 #define TITLE			"EverPak64"
 #define VERSION			"0.1.0.1"
 
-// render pinwheel @ ~15Hz
-#define FIFTEEN_FPS		66
 // render fps counter @ 0.5Hz
 #define HALF_FPS		2000
 
@@ -46,25 +45,29 @@ void sleep(unsigned long ms)
 
 
 
-static inline void update(struct menu_tree* mt)
+static inline void update(struct render_graph* rg, struct menu_tree* mt)
 {
 	// TODO prevents weirdness if controller 1 is removed
 	// TODO update this when any/all controllers can input
 	if (!(mt->cman->ctrl_flags & CONTROLLER_1_INSERTED))
 		return;
 
+	rg_update(rg);
+
 	mt_update(mt);
 }
 
 
 
-static inline void draw_header(char pinwheel, float fps)
+static inline void draw_header(float fps)
 {
-	cprintf("(%c) %.1f fps [%s v%s]\n\n", pinwheel, fps, TITLE, VERSION);
+	cprintf("    %.1f fps [%s v%s]\n\n", fps, TITLE, VERSION);
 }
 
-static inline void draw(struct menu_tree* mt)
+static inline void draw(struct render_graph* rg, struct menu_tree* mt)
 {
+	rg_draw(rg);
+
 	mt_draw(mt);
 }
 
@@ -90,9 +93,6 @@ int main(void)
 {
 	struct renderer* ren = set_up();
 
-	char pinwheel = 0;
-	pw_init(FIFTEEN_FPS, 0, &pinwheel);
-
 	float fps = 0;
 	fps_init(HALF_FPS, &fps);
 
@@ -100,6 +100,8 @@ int main(void)
 
 	struct device_state dev = dev_new();
 	struct controller_manager* cman = cman_new(&dev);
+
+	struct render_graph* rg = rg_init(ren);
 
 	struct menu_tree mt = mt_new(&dev, cman);
 
@@ -110,17 +112,15 @@ int main(void)
 		dev_poll(&dev);
 		cman_update(cman);
 
-		pw_update();
-
-		update(&mt);
+		update(rg, &mt);
 
 		ren_lock(ren);
 
 		cs_clear(ren, BG_COLOR);
 
-		draw_header(pinwheel, fps);
+		draw_header(fps);
 
-		draw(&mt);
+		draw(rg, &mt);
 
 		ren_show(ren);
 	}

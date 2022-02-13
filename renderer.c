@@ -92,6 +92,8 @@ void ren_show(struct renderer* ren)
 	{
 		rdp_detach_display();
 
+		rdp_close();
+
 		ren->rdp_enabled = 0;
 	}
 
