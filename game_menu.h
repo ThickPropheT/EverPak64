@@ -12,7 +12,6 @@ extern const struct go_delegate GM_UPDATE[];
 
 struct game_menu
 {
-	// TODO should this be const?
 	struct game_object go;
 
 	struct device_state* dev;

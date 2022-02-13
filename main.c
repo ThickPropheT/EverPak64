@@ -48,6 +48,11 @@ void sleep(unsigned long ms)
 
 static inline void update(struct menu_tree* mt)
 {
+	// TODO prevents weirdness if controller 1 is removed
+	// TODO update this when any/all controllers can input
+	if (!(mt->cman->ctrl_flags & CONTROLLER_1_INSERTED))
+		return;
+
 	mt_update(mt);
 }
 

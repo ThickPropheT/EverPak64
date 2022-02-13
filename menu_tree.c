@@ -25,11 +25,6 @@ struct menu_tree mt_new(struct device_state* dev, struct controller_manager* cma
 
 void mt_update(struct menu_tree* mt)
 {
-	// TODO prevents weirdness if controller 1 is removed
-	// TODO update this when any/all controllers can input
-	if (!(mt->cman->ctrl_flags & CONTROLLER_1_INSERTED))
-		return;
-
 	struct mn_enumerator mne = ms_get_enumerator(mt->mnav->ms);
 
 	struct menu_presenter* mp;

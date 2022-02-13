@@ -43,3 +43,21 @@ void ll_remove(struct linked_list* list, struct ll_node* node)
 	if (list->head == node)
 		list->head = node->next;
 }
+
+struct ll_enumerator ll_get_enumerator(struct ll_node* node)
+{
+	struct ll_enumerator en = { node };
+	return en;
+}
+
+struct ll_node* lle_next(struct ll_enumerator* en)
+{
+	struct ll_node* current = en->current;
+
+	if (current == NULL)
+		return NULL;
+
+	en->current = current->next;
+
+	return current;
+}
