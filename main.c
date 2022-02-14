@@ -23,11 +23,9 @@
 #define TITLE			"EverPak64"
 #define VERSION			"0.1.0.1"
 
-// render fps counter @ 0.5Hz
-#define HALF_FPS		2000
 
 #define RENDERER		Gx2D
-#define BIT_DEPTH		DEPTH_32_BPP
+#define BIT_DEPTH		DEPTH_16_BPP
 
 #define BG_COLOR 		BLACK(BIT_DEPTH)
 #define BG_TEXT_COLOR	TRANS
@@ -47,28 +45,29 @@ void sleep(unsigned long ms)
 
 static inline void update(struct render_graph* rg, struct menu_tree* mt)
 {
+	rg_update(rg);
+
 	// TODO prevents weirdness if controller 1 is removed
 	// TODO update this when any/all controllers can input
 	if (!(mt->cman->ctrl_flags & CONTROLLER_1_INSERTED))
 		return;
 
-	rg_update(rg);
-
-	mt_update(mt);
+	//mt_update(mt);
 }
 
 
 
-static inline void draw_header(float fps)
+static inline void draw_header()
 {
-	cprintf("    %.1f fps [%s v%s]\n\n", fps, TITLE, VERSION);
+	//      "(\) 00.0 fps [%s v%s]\n\n"
+	cprintf("             [%s v%s]\n\n", TITLE, VERSION);
 }
 
 static inline void draw(struct render_graph* rg, struct menu_tree* mt)
 {
 	rg_draw(rg);
 
-	mt_draw(mt);
+	//mt_draw(mt);
 }
 
 
@@ -79,6 +78,7 @@ static struct renderer* set_up(void)
 	init_interrupts();
 
 	struct renderer* ren = ren_new(RESOLUTION_320x240, BIT_DEPTH, 2, GAMMA_NONE, ANTIALIAS_RESAMPLE);
+	ren_set_rdp_enabled(ren, 1);
 
 	cs_init();
 
@@ -93,9 +93,6 @@ int main(void)
 {
 	struct renderer* ren = set_up();
 
-	float fps = 0;
-	fps_init(HALF_FPS, &fps);
-
 	graphics_set_color(FG_TEXT_COLOR, BG_TEXT_COLOR);
 
 	struct device_state dev = dev_new();
@@ -107,22 +104,14 @@ int main(void)
 
 	while (1)
 	{
-		fps_update();
-
-		dev_poll(&dev);
-		cman_update(cman);
+		//dev_poll(&dev);
+		//cman_update(cman);
 
 		update(rg, &mt);
 
-		ren_lock(ren);
-
-		cs_clear(ren, BG_COLOR);
-
-		draw_header(fps);
+		//draw_header();
 
 		draw(rg, &mt);
-
-		ren_show(ren);
 	}
 
 	return 0;

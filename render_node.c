@@ -6,10 +6,7 @@
 
 struct render_node* rn_new(struct game_object* payload)
 {
-	struct render_node* rn = malloc(sizeof * rn);
-
-	rn->parent = NULL;
-	rn->children = ll_new();
+	struct render_node* rn = calloc(1, sizeof * rn);
 
 	rn->payload = payload;
 
@@ -18,6 +15,9 @@ struct render_node* rn_new(struct game_object* payload)
 
 void rn_add_child(struct render_node* rn, struct render_node* child)
 {
+	if (!rn->children)
+		rn->children = ll_new();
+
 	ll_add_last(rn->children, (void*)child);
 	child->parent = rn;
 }
@@ -28,34 +28,42 @@ void rn_add_child_for(struct render_node* rn, struct game_object* payload)
 }
 
 
-u8 rn_update(struct render_node* rn)
+void rn_update(struct render_node* rn)
 {
-	if (rn->payload)
-		go_update(rn->payload);
+	struct game_object* go = rn->payload;
 
-	u8 draw_requested = 1;
-
-	struct ll_enumerator en = ll_get_enumerator(rn->children->head);
-
-	struct render_node* child;
-	while ((child = (void*)lle_next(&en)))
+	if (go)
 	{
-		draw_requested |= rn_update(child);
+		go_update(go);
 	}
 
-	return draw_requested;
+	if (rn->children)
+	{
+		struct ll_enumerator en = ll_get_enumerator(rn->children->head);
+
+		struct render_node* child;
+		while ((child = (void*)lle_next(&en)))
+		{
+			rn_update(child);
+		}
+	}
 }
 
 void rn_draw(struct render_node* rn)
 {
-	if (rn->payload)
-		go_draw(rn->payload);
+	struct game_object* go = rn->payload;
 
-	struct ll_enumerator en = ll_get_enumerator(rn->children->head);
+	if (go)
+		go_draw(go);
 
-	struct render_node* child;
-	while ((child = (void*)lle_next(&en)))
+	if (rn->children)
 	{
-		rn_draw(child);
+		struct ll_enumerator en = ll_get_enumerator(rn->children->head);
+
+		struct render_node* child;
+		while ((child = (void*)lle_next(&en)))
+		{
+			rn_draw(child);
+		}
 	}
 }

@@ -29,39 +29,50 @@ static struct rectangle to_rect(resolution_t res)
 		h = 240;
 	}
 
-	return (struct rectangle) { 0, 0, w, h };
+	return rect_new(0, 0, w, h);
 }
 
 struct renderer* ren_new(resolution_t res, bitdepth_t bpp, uint32_t num_buf, gamma_t gamma, antialias_t aa)
 {
 	display_init(res, bpp, num_buf, gamma, aa);
 
-	struct renderer* ren = malloc(sizeof * ren);
+	struct renderer* ren = calloc(1, sizeof * ren);
 
 	ren->res = res;
 	ren->bpp = bpp;
 	ren->num_buf = num_buf;
 	ren->gamma = gamma;
 	ren->aa = aa;
-	ren->rdp_enabled = 0;
 
 	ren->view_port = to_rect(res);
-
-	ren->dc = 0;
 
 	return ren;
 }
 
-void ren_request_rdp(struct renderer* ren)
+void ren_set_rdp_enabled(struct renderer* ren, u8 enabled)
 {
-	if (ren->rdp_enabled)
+	u8 is_enabled = ren->rdp_enabled;
+
+	if (is_enabled == enabled)
 		return;
 
-	rdp_init();
+	ren->rdp_enabled = enabled;
 
-	ren->rdp_enabled = 1;
+	if (enabled)
+	{
+		rdp_init();
+	}
+	else if (is_enabled)
+	{
+		rdp_close();
+	}
 }
 
+
+void ren_invalidate(struct renderer* ren)
+{
+	ren->draw_requested = 1;
+}
 
 static inline display_context_t lock_graphics(void)
 {
@@ -91,11 +102,34 @@ void ren_show(struct renderer* ren)
 	if (ren->rdp_enabled)
 	{
 		rdp_detach_display();
-
-		rdp_close();
-
-		ren->rdp_enabled = 0;
 	}
 
 	display_show(ren->dc);
+
+	ren->draw_requested = 0;
+}
+
+
+void ren_set_primitive_color(struct renderer* ren, uint32_t color)
+{
+	u8 fill_enabled = ren->fill_enabled;
+	u8 color_changed = ren->fill_color != color;
+
+	if (fill_enabled
+		&& !color_changed)
+		return;
+
+	ren->fill_enabled = 1;
+	ren->fill_color = color;
+
+	if (ren->rdp_enabled)
+	{
+		rdp_sync(SYNC_PIPE);
+
+		if (!fill_enabled)
+			rdp_enable_primitive_fill();
+
+		if (color_changed)
+			rdp_set_primitive_color(color);
+	}
 }

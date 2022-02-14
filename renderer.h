@@ -13,16 +13,25 @@ struct renderer
 	gamma_t gamma;
 	antialias_t aa;
 
-	u8 rdp_enabled;
-
 	struct rectangle view_port;
 
+	u8 rdp_enabled;
+
+	u8 draw_requested;
+
 	display_context_t dc;
+
+	u8 fill_enabled;
+	uint32_t fill_color;
 };
 
 struct renderer* ren_new(resolution_t res, bitdepth_t bpp, uint32_t num_buf, gamma_t gamma, antialias_t aa);
 
-void ren_request_rdp(struct renderer* ren);
+void ren_set_rdp_enabled(struct renderer* ren, u8 enabled);
+
+void ren_invalidate(struct renderer* ren);
 
 void ren_lock(struct renderer* ren);
 void ren_show(struct renderer* ren);
+
+void ren_set_primitive_color(struct renderer* ren, uint32_t color);

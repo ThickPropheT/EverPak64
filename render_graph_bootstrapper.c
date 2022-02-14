@@ -1,15 +1,15 @@
 #include "render_graph_bootstrapper.h"
 
+#include "hertz.h"
 #include "pinwheel.h"
-
-// render pinwheel @ ~15Hz
-#define FIFTEEN_FPS		66
+#include "fps_counter.h"
 
 struct render_graph* rg_init(struct renderer* ren)
 {
 	struct render_node* root = rn_new(NULL);
 
-	rn_add_child_for(root, (void*)pw_new(20, 16, FIFTEEN_FPS, ren));
+	rn_add_child_for(root, (void*)fps_new(45, 16, htz_from_fps(0.5f), ren));
+	rn_add_child_for(root, (void*)pw_new(20, 16, htz_from_fps(11), ren));
 
-	return rg_new(root);
+	return rg_new(root, ren);
 }

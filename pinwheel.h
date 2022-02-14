@@ -14,9 +14,9 @@ struct pinwheel
 	struct rectangle bounds;
 
 	u32 resolution;
+	u32 last_tick_ms;
 
 	u8 current_frame_i;
-	u32 last_tick_ms;
 };
 
 struct pinwheel* pw_new(u16 x, u16 y, u32 resolution, struct renderer* ren);
