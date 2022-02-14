@@ -13,7 +13,6 @@ extern const struct go_type ACC_TYPE[];
 
 struct accessory
 {
-	// TODO should this be const?
 	struct game_object go;
 
 	u8 i_slot;

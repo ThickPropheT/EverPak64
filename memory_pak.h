@@ -13,7 +13,6 @@ extern const struct go_type MPK_TYPE[];
 
 struct memory_pak
 {
-	// TODO should this be const?
 	struct accessory acc;
 
 	entry_structure_t entries[ENTRIES_LEN];

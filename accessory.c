@@ -39,6 +39,8 @@ struct accessory* acc_new(u8 i_slot)
 	acc->i_slot = i_slot;
 	acc->type = ACCESSORY_NONE;
 
+	acc->status = 0;
+
 	return acc;
 }
 
