@@ -3,6 +3,7 @@
 #include "game_object.h"
 #include "renderer.h"
 #include "rectangle.h"
+#include "interval.h"
 #include "types.h"
 
 struct pinwheel
@@ -13,8 +14,7 @@ struct pinwheel
 
 	struct rectangle bounds;
 
-	u32 resolution;
-	u32 last_tick_ms;
+	struct interval interval;
 
 	u8 current_frame_i;
 };

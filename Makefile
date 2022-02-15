@@ -22,7 +22,7 @@ N64_FLAGS = -l 2M -h $(HEADERPATH)/$(HEADERNAME) -o $(PROG_NAME)$(ROM_EXTENSION)
 endif
 
 
-OBJS = $(PROG_NAME).o linked_list.o color_palette.o renderer.o render_node.o render_graph.o render_graph_bootstrapper.o console.o console_context.o pwm_state.o device_manager.o controller_manager.o controller.o accessory_factory.o accessory.o memory_pak.o rumble_pak.o menu_state.o menu_presenter.o acc_menu_presenter.o menu_builder_registrar.o menu_presenter_resolver.o game_menu_resolver.o menu_builder_table.o main_menu_builder.o acc_menu_builder.o acc_mb_args.o menu_nav_controller.o pinwheel.o fps_counter.o title_bar.o menu_tree.o main_menu.o no_accessory_menu.o mpk_menu.o rpk_menu.o game_menu.o
+OBJS = $(PROG_NAME).o linked_list.o interval.o color_palette.o renderer.o render_node.o render_graph.o render_graph_bootstrapper.o console.o console_context.o pwm_state.o device_manager.o controller_manager.o controller.o accessory_factory.o accessory.o memory_pak.o rumble_pak.o menu_state.o menu_presenter.o acc_menu_presenter.o menu_builder_registrar.o menu_presenter_resolver.o game_menu_resolver.o menu_builder_table.o main_menu_builder.o acc_menu_builder.o acc_mb_args.o menu_nav_controller.o pinwheel.o fps_counter.o title_bar.o menu_tree.o main_menu.o no_accessory_menu.o mpk_menu.o rpk_menu.o game_menu.o
 
 
 PROG_NAME = main

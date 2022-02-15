@@ -39,7 +39,7 @@ struct pinwheel* pw_new(u16 x, u16 y, u32 resolution, struct renderer* ren)
 
 	pw->bounds = rect_new(x, y, WIDTH, HEIGHT);
 
-	pw->resolution = resolution;
+	pw->interval = ivl_new(resolution);
 
 	return pw;
 }
@@ -48,13 +48,10 @@ static void pw_update(const struct go_delegate* base, struct game_object* go)
 {
 	struct pinwheel* pw = (void*)go;
 
-	u32 ticks_ms = get_ticks_ms();
-
-	if (ticks_ms - pw->last_tick_ms > pw->resolution)
+	u32 _;
+	if (ivl_has_elapsed(&pw->interval, &_))
 	{
 		pw->current_frame_i = (pw->current_frame_i + 1) % N_PW_FRAMES;
-		pw->last_tick_ms = ticks_ms;
-
 		ren_invalidate(pw->ren);
 	}
 }

@@ -37,7 +37,7 @@ struct fps_counter* fps_new(u16 x, u16 y, u32 resolution, struct renderer* ren)
 
 	fps->bounds = rect_new(x, y, WIDTH, HEIGHT);
 
-	fps->resolution = resolution;
+	fps->interval = ivl_new(resolution);
 
 	return fps;
 }
@@ -48,11 +48,8 @@ static void fps_update(const struct go_delegate* base, struct game_object* go)
 
 	fps->frame_count++;
 
-	u32 ticks_ms = get_ticks_ms();
-
-	u32 ticks_diff = ticks_ms - fps->last_tick_ms;
-
-	if (ticks_diff >= fps->resolution)
+	u32 delta_ticks_ms = 0;
+	if (ivl_has_elapsed(&fps->interval, &delta_ticks_ms))
 	{
 		//  n f   1000mf   n2 mf    n3 mf   1000mf
 		// ---- * ------ = ----- X ------ / ------ = n4 f / 1s
@@ -62,11 +59,9 @@ static void fps_update(const struct go_delegate* base, struct game_object* go)
 		// ---- X ------ = n4 f / 1s
 		// i ms   1000ms
 
-		// n4 = n3 =       n        * 1000ms /     i
-		fps->fps = fps->frame_count * 1000.0 / ticks_diff;
-
+		// n4 = n3 =       n        * 1000ms /       i
+		fps->fps = fps->frame_count * 1000.0 / delta_ticks_ms;
 		fps->frame_count = 0;
-		fps->last_tick_ms = ticks_ms;
 
 		ren_invalidate(fps->ren);
 	}
