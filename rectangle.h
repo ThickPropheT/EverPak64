@@ -4,16 +4,16 @@
 
 struct rectangle
 {
-	u16 x;
-	u16 y;
+	u16 l;
+	u16 t;
+	u16 r;
+	u16 b;
+
 	u16 w;
 	u16 h;
-
-	u16 bx;
-	u16 by;
 };
 
 static inline struct rectangle rect_new(u16 x, u16 y, u16 w, u16 h)
 {
-	return (struct rectangle) { x, y, w, h, x + w, y + h };
+	return (struct rectangle) { x, y, (x + w) - 1, (y + h) - 1, w, h };
 }

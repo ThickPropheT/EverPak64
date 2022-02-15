@@ -2,8 +2,8 @@
 
 #include <stdio.h>
 #include <libdragon.h>
-
 #include "rectangle.h"
+#include "color_palette.h"
 
 struct renderer
 {
@@ -14,6 +14,8 @@ struct renderer
 	antialias_t aa;
 
 	struct rectangle view_port;
+
+	struct color_palette* cp;
 
 	u8 rdp_enabled;
 

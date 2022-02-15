@@ -46,6 +46,8 @@ struct renderer* ren_new(resolution_t res, bitdepth_t bpp, uint32_t num_buf, gam
 
 	ren->view_port = to_rect(res);
 
+	ren->cp = cp_new();
+
 	return ren;
 }
 

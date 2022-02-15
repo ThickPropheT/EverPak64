@@ -7,9 +7,6 @@
 #include "game_object.h"
 #include "device_manager.h"
 #include "controller_manager.h"
-#include "pinwheel.h"
-#include "fps_counter.h"
-#include "color_palette.h"
 #include "types.h"
 #include "math.h"
 #include "menu_state.h"
@@ -20,16 +17,7 @@
 #include "console.h"
 
 
-#define TITLE			"EverPak64"
-#define VERSION			"0.1.0.1"
-
-
-#define RENDERER		Gx2D
 #define BIT_DEPTH		DEPTH_16_BPP
-
-#define BG_COLOR 		BLACK(BIT_DEPTH)
-#define BG_TEXT_COLOR	TRANS
-#define FG_TEXT_COLOR	LIME(BIT_DEPTH)
 
 
 // #### TODO MOVE THIS ####
@@ -40,7 +28,6 @@ void sleep(unsigned long ms)
 	while (get_ticks_ms() - start_ms < ms);
 }
 // #### TODO MOVE THIS ####
-
 
 
 static inline void update(struct render_graph* rg, struct menu_tree* mt)
@@ -55,21 +42,12 @@ static inline void update(struct render_graph* rg, struct menu_tree* mt)
 	//mt_update(mt);
 }
 
-
-
-static inline void draw_header()
-{
-	//      "(\) 00.0 fps [%s v%s]\n\n"
-	cprintf("             [%s v%s]\n\n", TITLE, VERSION);
-}
-
 static inline void draw(struct render_graph* rg, struct menu_tree* mt)
 {
 	rg_draw(rg);
 
 	//mt_draw(mt);
 }
-
 
 
 static struct renderer* set_up(void)
@@ -88,12 +66,11 @@ static struct renderer* set_up(void)
 }
 
 
-
 int main(void)
 {
 	struct renderer* ren = set_up();
 
-	graphics_set_color(FG_TEXT_COLOR, BG_TEXT_COLOR);
+	graphics_set_color(ren->cp->fg_text, ren->cp->bg_text);
 
 	struct device_state dev = dev_new();
 	struct controller_manager* cman = cman_new(&dev);
@@ -108,8 +85,6 @@ int main(void)
 		//cman_update(cman);
 
 		update(rg, &mt);
-
-		//draw_header();
 
 		draw(rg, &mt);
 	}

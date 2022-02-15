@@ -3,8 +3,8 @@
 #include "pinwheel.h"
 
 
-#define WIDTH	21
-#define	HEIGHT	6
+#define WIDTH	22
+#define	HEIGHT	7
 
 
 #define N_PW_FRAMES 4
@@ -66,9 +66,9 @@ static void pw_draw(const struct go_delegate* base, struct game_object* go)
 	struct renderer* ren = pw->ren;
 	struct rectangle b = pw->bounds;
 
-	ren_set_primitive_color(ren, 0xFFFFFFFF);
+	ren_set_primitive_color(ren, ren->cp->bg);
 
-	rdp_draw_filled_rectangle(b.x, b.y, b.bx, b.by);
+	rdp_draw_filled_rectangle(b.l, b.t, b.r, b.b);
 
-	graphics_draw_text(ren->dc, b.x, b.y, pw_frames[pw->current_frame_i]);
+	graphics_draw_text(ren->dc, b.l, b.t, pw_frames[pw->current_frame_i]);
 }

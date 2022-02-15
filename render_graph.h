@@ -8,6 +8,8 @@ struct render_graph
 	struct render_node* root;
 
 	struct renderer* ren;
+
+	u8 draw_requested;
 };
 
 struct render_graph* rg_new(struct render_node* root, struct renderer* ren);

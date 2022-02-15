@@ -10,14 +10,21 @@ struct render_graph* rg_new(struct render_node* root, struct renderer* ren)
 	rg->root = root;
 	rg->ren = ren;
 
+	// use only to prompt first draw
+	rg->draw_requested = 1;
+
 	return rg;
 }
-
-u8 wentFalse = 0;
 
 void rg_update(struct render_graph* rg)
 {
 	rn_update(rg->root);
+
+	struct renderer* ren = rg->ren;
+
+	if (!ren->draw_requested
+		&& rg->draw_requested)
+		ren_invalidate(ren);
 }
 
 void rg_draw(struct render_graph* rg)
@@ -32,4 +39,6 @@ void rg_draw(struct render_graph* rg)
 	rn_draw(rg->root);
 
 	ren_show(ren);
+
+	rg->draw_requested = 0;
 }

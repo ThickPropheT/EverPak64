@@ -7,8 +7,8 @@
 #include <math.h>
 
 
-#define WIDTH	69
-#define HEIGHT	7
+#define WIDTH	94
+#define HEIGHT	8
 
 
 #define BUFFER_LEN	16
@@ -54,7 +54,16 @@ static void fps_update(const struct go_delegate* base, struct game_object* go)
 
 	if (ticks_diff >= fps->resolution)
 	{
-		fps->fps = fps->frame_count / (ticks_diff * 1.0f);
+		//  n f   1000mf   n2 mf    n3 mf   1000mf
+		// ---- * ------ = ----- X ------ / ------ = n4 f / 1s
+		// i ms    1ms      i ms   1000ms   1000ms
+
+		//  n f     n3 f
+		// ---- X ------ = n4 f / 1s
+		// i ms   1000ms
+
+		// n4 = n3 =       n        * 1000ms /     i
+		fps->fps = fps->frame_count * 1000.0 / ticks_diff;
 
 		fps->frame_count = 0;
 		fps->last_tick_ms = ticks_ms;
@@ -70,8 +79,10 @@ static void fps_draw(const struct go_delegate* base, struct game_object* go)
 	struct renderer* ren = fps->ren;
 	struct rectangle b = fps->bounds;
 
-	rdp_draw_filled_rectangle(b.x, b.y, b.bx, b.by);
+	ren_set_primitive_color(ren, ren->cp->bg);
+
+	rdp_draw_filled_rectangle(b.l, b.t, b.r, b.b);
 
 	sprintf(buffer, "%.1lf fps", fps->fps);
-	graphics_draw_text(ren->dc, b.x, b.y, buffer);
+	graphics_draw_text(ren->dc, b.l, b.t, buffer);
 }
