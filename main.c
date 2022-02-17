@@ -30,24 +30,15 @@ void sleep(unsigned long ms)
 // #### TODO MOVE THIS ####
 
 
-static inline void update(struct render_graph* rg, struct menu_tree* mt)
-{
-	rg_update(rg);
-
-	// TODO prevents weirdness if controller 1 is removed
-	// TODO update this when any/all controllers can input
-	if (!(mt->cman->ctrl_flags & CONTROLLER_1_INSERTED))
-		return;
-
-	//mt_update(mt);
-}
-
-static inline void draw(struct render_graph* rg, struct menu_tree* mt)
-{
-	rg_draw(rg);
-
-	//mt_draw(mt);
-}
+//static inline void update(struct menu_tree* mt)
+//{
+//	// TODO prevents weirdness if controller 1 is removed
+//	// TODO update this when any/all controllers can input
+//	/*if (!(mt->cman->ctrl_flags & CONTROLLER_1_INSERTED))
+//		return;*/
+//
+//	//mt_update(mt);
+//}
 
 
 static struct renderer* set_up(void)
@@ -72,21 +63,20 @@ int main(void)
 
 	graphics_set_color(ren->cp->fg_text, ren->cp->bg_text);
 
-	struct device_state dev = dev_new();
-	struct controller_manager* cman = cman_new(&dev);
+	//struct controller_manager* cman = cman_new(&dev);
 
 	struct render_graph* rg = rg_init(ren);
 
-	struct menu_tree mt = mt_new(&dev, cman);
+	//struct menu_tree mt = mt_new(&dev, cman);
 
 	while (1)
 	{
 		//dev_poll(&dev);
 		//cman_update(cman);
 
-		update(rg, &mt);
+		rg_update(rg);
 
-		draw(rg, &mt);
+		rg_draw(rg);
 	}
 
 	return 0;

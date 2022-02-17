@@ -5,15 +5,22 @@
 #include "pinwheel.h"
 #include "fps_counter.h"
 #include "title_bar.h"
+#include "device_manager.h"
 
 #define PADDING_Y	8
 #define PADDING_X	8
 
 
-struct render_graph* rg_init(struct renderer* ren)
+static void build_managers(struct render_node* root)
 {
-	struct render_node* root = rn_new(NULL);
+	struct device_manager* devm = devm_new(htz_from_fps(30));
 
+	rn_add_child_for(root, (void*)devm);
+}
+
+
+static void build_visuals(struct render_node* root, struct renderer* ren)
+{
 	struct rectangle vp = ren->view_port;
 
 	u16 top = vp.t + PADDING_Y;
@@ -29,6 +36,15 @@ struct render_graph* rg_init(struct renderer* ren)
 	rn_add_child_for(root, (void*)tb);
 	rn_add_child_for(root, (void*)fps);
 	rn_add_child_for(root, (void*)pw);
+}
+
+
+struct render_graph* rg_init(struct renderer* ren)
+{
+	struct render_node* root = rn_new(NULL);
+
+	build_managers(root);
+	build_visuals(root, ren);
 
 	return rg_new(root, ren);
 }
