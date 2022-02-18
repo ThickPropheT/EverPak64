@@ -6,7 +6,7 @@
 #include "types.h"
 
 
-#define TB_WIDTH	158
+#define TB_WIDTH	111
 #define TB_HEIGHT	7
 
 

@@ -7,8 +7,8 @@
 #include "title_bar.h"
 #include "device_manager.h"
 
-#define PADDING_Y	8
-#define PADDING_X	8
+#define PADDING_Y	4
+#define PADDING_X	4
 
 
 static void build_managers(struct render_node* root)
@@ -25,13 +25,14 @@ static void build_visuals(struct render_node* root, struct renderer* ren)
 
 	u16 top = vp.t + PADDING_Y;
 	u16 left = vp.l + PADDING_X;
+	u16 right = vp.r - PADDING_X;
 
-	struct pinwheel* pw = pw_new(left, top, htz_from_fps(11), ren);
-	struct fps_counter* fps = fps_new(pw->bounds.r + 4, top, htz_from_fps(0.5f), ren);
+	struct pinwheel* pw = pw_new(right - PW_WIDTH, top, htz_from_fps(11), ren);
+	struct fps_counter* fps = fps_new(left, top, htz_from_fps(0.5f), ren);
 
 	u16 tb_x = roundf((vp.t + vp.w / 2.0f) - TB_WIDTH / 2.0f);
 
-	struct title_bar* tb = tb_new(tb_x, fps->bounds.b + 8, ren);
+	struct title_bar* tb = tb_new(tb_x, top, ren);
 
 	rn_add_child_for(root, (void*)tb);
 	rn_add_child_for(root, (void*)fps);

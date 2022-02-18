@@ -3,10 +3,6 @@
 #include "pinwheel.h"
 
 
-#define WIDTH	22
-#define	HEIGHT	7
-
-
 #define N_PW_FRAMES 4
 char* pw_frames[N_PW_FRAMES] =
 {
@@ -37,7 +33,7 @@ struct pinwheel* pw_new(u16 x, u16 y, u32 resolution, struct renderer* ren)
 
 	pw->ren = ren;
 
-	pw->bounds = rect_new(x, y, WIDTH, HEIGHT);
+	pw->bounds = rect_new(x, y, PW_WIDTH, PW_HEIGHT);
 
 	pw->interval = ivl_new(resolution);
 

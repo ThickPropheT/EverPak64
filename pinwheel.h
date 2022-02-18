@@ -6,6 +6,11 @@
 #include "interval.h"
 #include "types.h"
 
+
+#define PW_WIDTH	22
+#define	PW_HEIGHT	7
+
+
 struct pinwheel
 {
 	struct game_object go;

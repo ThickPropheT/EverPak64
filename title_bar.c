@@ -2,6 +2,7 @@
 
 #include <malloc.h>
 #include "app_info.h"
+#include "string_ext.h"
 
 
 #define BUFFER_LEN	32
@@ -41,6 +42,6 @@ static void tb_draw(const struct go_delegate* base, struct game_object* go)
 
 	rdp_draw_filled_rectangle(b.l, b.t, b.r, b.b);
 
-	sprintf(buffer, "[%s v%s]", TITLE, VERSION);
+	sprintf(buffer, "%s v%s", TITLE, TO_STRING(PRETTY_VERSION));
 	graphics_draw_text(ren->dc, b.l, b.t, buffer);
 }
