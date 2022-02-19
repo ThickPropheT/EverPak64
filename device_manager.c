@@ -37,68 +37,61 @@ struct device_manager* devm_new(void)
 	return devm;
 }
 
-static void update(const struct go_delegate* base, struct game_object* go)
+static void replace_acc(struct device_state* dev, u8 i_slot)
 {
-	//struct device_manager* devm = (void*)go;
-
-	struct controller_data out;
-	controller_read(&out);
+	free(dev->accessories[i_slot]);
+	dev->accessories[i_slot] = resolve_acc(*dev, i_slot);
 }
 
-//static void replace_acc(struct device_state* dev, u8 i_slot)
-//{
-//	free(dev->accessories[i_slot]);
-//	dev->accessories[i_slot] = resolve_acc(*dev, i_slot);
-//}
-
-//static void acc_flags_changed(struct device_state* dev, u16 from, u16 to)
-//{
-//	for (u8 i = 0; i < N_SLOTS; i++)
-//	{
-//		u16 f = get_flag(i);
-//		u8 has_f_changed = did_flag_change(f, from, to);
-//
-//		if (!has_f_changed)
-//			continue;
-//
-//		replace_acc(dev, i);
-//	}
-//}
-
-//static void set_acc_flags(struct device_state* dev, u16 value)
-//{
-//	if (dev->acc_flags == value)
-//		return;
-//
-//	u16 old_value = dev->acc_flags;
-//
-//	dev->acc_flags = value;
-//
-//	acc_flags_changed(dev, old_value, value);
-//}
-
-//static void update_accessories(struct device_state* dev)
-//{
-//	for (u8 i = 0; i < N_SLOTS; i++)
-//	{
-//		go_update((struct game_object*)dev->accessories[i]);
-//	}
-//}
-
-void dev_poll(struct device_state* dev)
+static void acc_flags_changed(struct device_state* dev, u16 from, u16 to)
 {
+	for (u8 i = 0; i < N_SLOTS; i++)
+	{
+		u16 f = get_flag(i);
+		u8 has_f_changed = did_flag_change(f, from, to);
+
+		if (!has_f_changed)
+			continue;
+
+		replace_acc(dev, i);
+	}
+}
+
+static void set_acc_flags(struct device_state* dev, u16 value)
+{
+	if (dev->acc_flags == value)
+		return;
+
+	u16 old_value = dev->acc_flags;
+
+	dev->acc_flags = value;
+
+	acc_flags_changed(dev, old_value, value);
+}
+
+static void update_accessories(struct device_state* dev)
+{
+	for (u8 i = 0; i < N_SLOTS; i++)
+	{
+		go_update((struct game_object*)dev->accessories[i]);
+	}
+}
+
+static void update(const struct go_delegate* base, struct game_object* go)
+{
+	struct device_manager* devm = (void*)go;
+	struct device_state* dev = devm->dev;
+	
+	controller_scan();
+
 	struct controller_data out;
-	controller_read(&out);
-	//controller_scan();
+	u16 acc = get_accessories_present(&out);
 
-	//struct controller_data out;
-	//u16 acc = get_accessories_present(&out);
+	set_acc_flags(dev, acc);
 
-	//set_acc_flags(dev, acc);
+	update_accessories(dev);
 
-	//update_accessories(dev);
-
-	/*dev->keys_d = get_keys_down();
+	dev->keys_d = get_keys_down();
 	dev->keys_h = get_keys_held();
-	dev->keys_u = get_keys_up();*/
+	dev->keys_u = get_keys_up();
 }
