@@ -23,7 +23,7 @@ static struct device_state* dev_new(void)
 	return dev;
 }
 
-struct device_manager* devm_new(u32 resolution)
+struct device_manager* devm_new(void)
 {
 	struct device_manager* devm = malloc(sizeof * devm);
 
@@ -32,8 +32,6 @@ struct device_manager* devm_new(u32 resolution)
 	devm->go.can_update = 1;
 	devm->go.can_draw = 0;
 
-	devm->interval = ivl_new(resolution);
-
 	devm->dev = dev_new();
 
 	return devm;
@@ -41,14 +39,10 @@ struct device_manager* devm_new(u32 resolution)
 
 static void update(const struct go_delegate* base, struct game_object* go)
 {
-	struct device_manager* devm = (void*)go;
+	//struct device_manager* devm = (void*)go;
 
-	u32 _;
-	if (ivl_has_elapsed(&devm->interval, &_))
-	{
-		struct controller_data out;
-		controller_read(&out);
-	}
+	struct controller_data out;
+	controller_read(&out);
 }
 
 //static void replace_acc(struct device_state* dev, u8 i_slot)

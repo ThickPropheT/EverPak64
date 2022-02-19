@@ -22,7 +22,7 @@ const struct go_delegate PW_DRAW[] = { { pw_draw } };
 const struct go_type PW_TYPE[] = { { NULL, PW_UPDATE, PW_DRAW } };
 
 
-struct pinwheel* pw_new(u16 x, u16 y, u32 resolution, struct renderer* ren)
+struct pinwheel* pw_new(u16 x, u16 y, struct renderer* ren)
 {
 	struct pinwheel* pw = calloc(1, sizeof * pw);
 
@@ -35,8 +35,6 @@ struct pinwheel* pw_new(u16 x, u16 y, u32 resolution, struct renderer* ren)
 
 	pw->bounds = rect_new(x, y, PW_WIDTH, PW_HEIGHT);
 
-	pw->interval = ivl_new(resolution);
-
 	return pw;
 }
 
@@ -44,12 +42,8 @@ static void pw_update(const struct go_delegate* base, struct game_object* go)
 {
 	struct pinwheel* pw = (void*)go;
 
-	u32 _;
-	if (ivl_has_elapsed(&pw->interval, &_))
-	{
-		pw->current_frame_i = (pw->current_frame_i + 1) % N_PW_FRAMES;
-		ren_invalidate(pw->ren);
-	}
+	pw->current_frame_i = (pw->current_frame_i + 1) % N_PW_FRAMES;
+	ren_invalidate(pw->ren);
 }
 
 static void pw_draw(const struct go_delegate* base, struct game_object* go)

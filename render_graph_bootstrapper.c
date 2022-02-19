@@ -6,6 +6,7 @@
 #include "fps_counter.h"
 #include "title_bar.h"
 #include "device_manager.h"
+#include "timed_trigger.h"
 
 #define PADDING_Y	4
 #define PADDING_X	4
@@ -13,9 +14,10 @@
 
 static void build_managers(struct render_node* root)
 {
-	struct device_manager* devm = devm_new(htz_from_fps(30));
+	struct device_manager* devm = devm_new();
 
-	rn_add_child_for(root, (void*)devm);
+	struct render_node* devm_node = rn_add_child_for(root, (void*)devm);
+	devm_node->update_trigger = (void*)trigger_at_rate(htz_from_fps(15));
 }
 
 
@@ -27,7 +29,7 @@ static void build_visuals(struct render_node* root, struct renderer* ren)
 	u16 left = vp.l + PADDING_X;
 	u16 right = vp.r - PADDING_X;
 
-	struct pinwheel* pw = pw_new(right - PW_WIDTH, top, htz_from_fps(11), ren);
+	struct pinwheel* pw = pw_new(right - PW_WIDTH, top, ren);
 	struct fps_counter* fps = fps_new(left, top, htz_from_fps(0.5f), ren);
 
 	u16 tb_x = roundf((vp.t + vp.w / 2.0f) - TB_WIDTH / 2.0f);
@@ -35,8 +37,11 @@ static void build_visuals(struct render_node* root, struct renderer* ren)
 	struct title_bar* tb = tb_new(tb_x, top, ren);
 
 	rn_add_child_for(root, (void*)tb);
+
 	rn_add_child_for(root, (void*)fps);
-	rn_add_child_for(root, (void*)pw);
+
+	struct render_node* pw_node = rn_add_child_for(root, (void*)pw);
+	pw_node->update_trigger = (void*)trigger_at_rate(htz_from_fps(11));
 }
 
 
