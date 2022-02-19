@@ -38,5 +38,8 @@ static inline void _trg_init(struct trigger* trg, const struct trg_type* vtable)
 	trg->is_tripped = 0;
 }
 
+struct trigger* trigger_manually(void);
+
+void trg_set(struct trigger* trg);
 u8 trg_check(struct trigger* trg);
 void trg_reset(struct trigger* trg);

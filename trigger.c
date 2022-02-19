@@ -1,5 +1,26 @@
 #include "trigger.h"
 
+#include <malloc.h>
+
+
+const struct trg_type TRG_TYPE[] = { { } };
+
+
+struct trigger* trigger_manually(void)
+{
+	struct trigger* trg = malloc(sizeof * trg);
+
+	_trg_init(trg, TRG_TYPE);
+
+	return trg;
+}
+
+
+void trg_set(struct trigger* trg)
+{
+	trg->is_tripped = 1;
+}
+
 u8 trg_check(struct trigger* trg)
 {
 	if (!trg || trg->is_tripped)

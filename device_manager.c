@@ -5,9 +5,9 @@
 
 
 static void update(const struct go_delegate* base, struct game_object* go);
-const struct go_delegate UPDATE[] = { { update } };
+const struct go_delegate DEVM_UPDATE[] = { { update } };
 
-const struct go_type TYPE[] = { { NULL, UPDATE } };
+const struct go_type DEVM_TYPE[] = { { NULL, DEVM_UPDATE } };
 
 
 static struct device_state* dev_new(void)
@@ -23,14 +23,16 @@ static struct device_state* dev_new(void)
 	return dev;
 }
 
-struct device_manager* devm_new(void)
+struct device_manager* devm_new(struct trigger* dev_changed)
 {
 	struct device_manager* devm = malloc(sizeof * devm);
 
-	_go_init(&devm->go, TYPE);
+	_go_init(&devm->go, DEVM_TYPE);
 
 	devm->go.can_update = 1;
 	devm->go.can_draw = 0;
+
+	devm->dev_changed = dev_changed;
 
 	devm->dev = dev_new();
 
@@ -57,8 +59,10 @@ static void acc_flags_changed(struct device_state* dev, u16 from, u16 to)
 	}
 }
 
-static void set_acc_flags(struct device_state* dev, u16 value)
+static void set_acc_flags(struct device_manager* devm, u16 value)
 {
+	struct device_state* dev = devm->dev;
+
 	if (dev->acc_flags == value)
 		return;
 
@@ -67,14 +71,43 @@ static void set_acc_flags(struct device_state* dev, u16 value)
 	dev->acc_flags = value;
 
 	acc_flags_changed(dev, old_value, value);
+
+	trg_set(devm->dev_changed);
 }
 
 static void update_accessories(struct device_state* dev)
 {
 	for (u8 i = 0; i < N_SLOTS; i++)
 	{
-		go_update((struct game_object*)dev->accessories[i]);
+		go_update((void*)dev->accessories[i]);
 	}
+}
+
+u8 keys_are_equal(struct SI_condat* keys1, struct SI_condat* keys2)
+{
+	struct SI_condat k1 = *keys1;
+	struct SI_condat k2 = *keys2;
+
+	return k1.A == k2.A
+		&& k1.B == k2.B
+		&& k1.Z == k2.Z
+		&& k1.start == k2.start
+
+		&& k1.up == k2.up
+		&& k1.down == k2.down
+		&& k1.left == k2.left
+		&& k1.right == k2.right
+
+		&& k1.L == k2.L
+		&& k1.R == k2.R
+
+		&& k1.C_up == k2.C_up
+		&& k1.C_down == k2.C_down
+		&& k1.C_left == k2.C_left
+		&& k1.C_right == k2.C_right
+
+		&& k1.x == k2.x
+		&& k1.y == k2.y;
 }
 
 static void update(const struct go_delegate* base, struct game_object* go)
@@ -87,11 +120,18 @@ static void update(const struct go_delegate* base, struct game_object* go)
 	struct controller_data out;
 	u16 acc = get_accessories_present(&out);
 
-	set_acc_flags(dev, acc);
+	set_acc_flags(devm, acc);
 
 	update_accessories(dev);
 
-	dev->keys_d = get_keys_down();
-	dev->keys_h = get_keys_held();
-	dev->keys_u = get_keys_up();
+	struct controller_data keys_d = get_keys_down();
+
+	if (!keys_are_equal(dev->keys_d.c, keys_d.c))
+	{
+		dev->keys_d = keys_d;
+		dev->keys_h = get_keys_held();
+		dev->keys_u = get_keys_up();
+
+		trg_set(devm->dev_changed);
+	}
 }

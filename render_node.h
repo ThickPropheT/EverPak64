@@ -22,6 +22,7 @@ struct render_node* rn_new(struct game_object* payload);
 
 void rn_add_child(struct render_node* rn, struct render_node* child);
 struct render_node* rn_add_child_for(struct render_node* rn, struct game_object* payload);
+void rn_clear_children(struct render_node* rn);
 
 void rn_update(struct render_node* rn);
 void rn_draw(struct render_node* rn);

@@ -47,7 +47,6 @@ static struct renderer* set_up(void)
 	init_interrupts();
 
 	struct renderer* ren = ren_new(RESOLUTION_320x240, BIT_DEPTH, 2, GAMMA_NONE, ANTIALIAS_RESAMPLE);
-	ren_set_rdp_enabled(ren, 1);
 
 	cs_init();
 
@@ -63,17 +62,10 @@ int main(void)
 
 	graphics_set_color(ren->cp->fg_text, ren->cp->bg_text);
 
-	//struct controller_manager* cman = cman_new(&dev);
-
 	struct render_graph* rg = rg_init(ren);
-
-	//struct menu_tree mt = mt_new(&dev, cman);
 
 	while (1)
 	{
-		//dev_poll(&dev);
-		//cman_update(cman);
-
 		rg_update(rg);
 
 		rg_draw(rg);

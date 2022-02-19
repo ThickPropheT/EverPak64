@@ -31,10 +31,10 @@ void ll_add_last(struct linked_list* list, struct ll_node* node)
 
 void ll_remove(struct linked_list* list, struct ll_node* node)
 {
-	if (node->prev != NULL)
+	if (node->prev)
 		node->prev->next = node->next;
 
-	if (node->next != NULL)
+	if (node->next)
 		node->next->prev = node->prev;
 
 	if (list->tail == node)
@@ -54,7 +54,7 @@ struct ll_node* lle_next(struct ll_enumerator* en)
 {
 	struct ll_node* current = en->current;
 
-	if (current == NULL)
+	if (!current)
 		return NULL;
 
 	en->current = current->next;
