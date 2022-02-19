@@ -2,7 +2,7 @@
 
 u8 trg_check(struct trigger* trg)
 {
-	if (!trg)
+	if (!trg || trg->is_tripped)
 		return 1;
 
 	return trg->is_tripped = _trg_invoke(trg->trg_type->check, trg);

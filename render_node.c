@@ -32,7 +32,9 @@ void rn_update(struct render_node* rn)
 {
 	struct game_object* go = rn->payload;
 
-	if (go && trg_check(rn->update_trigger))
+	// check trigger before checking if go exists
+	// so that trigger is always updated
+	if (trg_check(rn->update_trigger) && go)
 	{
 		go_update(go);
 	}
