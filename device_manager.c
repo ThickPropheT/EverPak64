@@ -83,31 +83,21 @@ static void update_accessories(struct device_state* dev)
 	}
 }
 
-u8 keys_are_equal(struct SI_condat* keys1, struct SI_condat* keys2)
+u8 keys_are_equal(struct controller_data k1, struct controller_data k2)
 {
-	struct SI_condat k1 = *keys1;
-	struct SI_condat k2 = *keys2;
+	if (!k1.c && !k2.c)
+		return 1;
 
-	return k1.A == k2.A
-		&& k1.B == k2.B
-		&& k1.Z == k2.Z
-		&& k1.start == k2.start
+	if (!k1.c || !k2.c)
+		return 0;
 
-		&& k1.up == k2.up
-		&& k1.down == k2.down
-		&& k1.left == k2.left
-		&& k1.right == k2.right
+	for (u8 i = 0; i < N_SLOTS; i++)
+	{
+		if (k1.c[i].data != k2.c[i].data)
+			return 0;
+	}
 
-		&& k1.L == k2.L
-		&& k1.R == k2.R
-
-		&& k1.C_up == k2.C_up
-		&& k1.C_down == k2.C_down
-		&& k1.C_left == k2.C_left
-		&& k1.C_right == k2.C_right
-
-		&& k1.x == k2.x
-		&& k1.y == k2.y;
+	return 1;
 }
 
 static void update(const struct go_delegate* base, struct game_object* go)
@@ -117,8 +107,8 @@ static void update(const struct go_delegate* base, struct game_object* go)
 	
 	controller_scan();
 
-	struct controller_data out;
-	u16 acc = get_accessories_present(&out);
+	struct controller_data _;
+	u16 acc = get_accessories_present(&_);
 
 	set_acc_flags(devm, acc);
 
@@ -126,7 +116,7 @@ static void update(const struct go_delegate* base, struct game_object* go)
 
 	struct controller_data keys_d = get_keys_down();
 
-	if (!keys_are_equal(dev->keys_d.c, keys_d.c))
+	if (!keys_are_equal(dev->keys_d, keys_d))
 	{
 		dev->keys_d = keys_d;
 		dev->keys_h = get_keys_held();
