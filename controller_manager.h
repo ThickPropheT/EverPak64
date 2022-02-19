@@ -1,6 +1,7 @@
 #pragma once
 
 #include "controller.h"
+#include "game_object.h"
 #include "device_state.h"
 #include "types.h"
 #include "linked_list.h"
@@ -25,6 +26,8 @@ struct input_handler
 
 struct controller_manager
 {
+	struct game_object go;
+
 	struct device_state* dev;
 
 	u16 ctrl_flags;

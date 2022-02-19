@@ -10,6 +10,12 @@
 
 
 
+static void update(const struct go_delegate* base, struct game_object* go);
+const struct go_delegate UPDATE[] = { { update } };
+
+const struct go_type TYPE[] = { { NULL, UPDATE } };
+
+
 static struct input_handler* ih_new(struct controller* ctrl, void* context, handle_input handle)
 {
 	struct input_handler* handler = malloc(sizeof * handler);
@@ -30,6 +36,11 @@ static struct input_handler* ih_new(struct controller* ctrl, void* context, hand
 struct controller_manager* cman_new(struct device_state* dev)
 {
 	struct controller_manager* cman = malloc(sizeof * cman);
+
+	_go_init((void*)cman, TYPE);
+
+	cman->go.can_update = 1;
+	cman->go.can_draw = 0;
 
 	cman->dev = dev;
 
@@ -152,8 +163,10 @@ static inline void cman_handle_input(struct controller_manager* cman)
 }
 
 
-void cman_update(struct controller_manager* cman)
+static void update(const struct go_delegate* base, struct game_object* go)
 {
+	struct controller_manager* cman = (void*)go;
+
 	update_flags(cman);
 
 	cman_handle_input(cman);
