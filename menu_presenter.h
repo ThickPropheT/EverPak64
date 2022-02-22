@@ -13,12 +13,12 @@ struct menu_presenter
 {
 	struct game_object go;
 
-	struct game_menu* gm;
+	struct game_menu *gm;
 };
 
 
-struct menu_presenter* mp_new(struct game_menu* gm);
+struct menu_presenter *mp_new(struct game_menu *gm);
 
-void _mp_init(struct menu_presenter* mp, const struct go_type* vtable, struct game_menu* gm);
+void _mp_init(struct menu_presenter *mp, const struct go_type *vtable, struct game_menu *gm);
 
-void mp_free(struct menu_presenter* mp);
+void mp_free(struct menu_presenter *mp);

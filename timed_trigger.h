@@ -10,4 +10,4 @@ struct timed_trigger
 	struct interval interval;
 };
 
-struct timed_trigger* trigger_at_rate(u32 htz);
+struct timed_trigger *trigger_at_rate(u32 htz);

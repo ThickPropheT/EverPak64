@@ -12,6 +12,6 @@
 
 void cs_init(void);
 
-struct console_context* cs_get_current(void);
+struct console_context *cs_get_current(void);
 
-void cs_clear(struct renderer* ren, uint32_t bg_color);
+void cs_clear(struct renderer *ren, uint32_t bg_color);

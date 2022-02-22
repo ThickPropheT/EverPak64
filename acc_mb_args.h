@@ -7,7 +7,7 @@ struct acc_mb_args
 {
 	struct mb_args mba;
 
-	struct controller* ctrl;
+	struct controller *ctrl;
 };
 
-struct acc_mb_args* accmba_new(struct controller* ctrl);
+struct acc_mb_args *accmba_new(struct controller *ctrl);

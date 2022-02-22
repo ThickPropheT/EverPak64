@@ -26,6 +26,6 @@ struct console_context
 
 struct console_context cc_new(void);
 
-void cc_clear(struct console_context* cc, uint32_t bg_color);
+void cc_clear(struct console_context *cc, uint32_t bg_color);
 
-void cc_println(struct console_context* cc);
+void cc_println(struct console_context *cc);

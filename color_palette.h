@@ -15,4 +15,4 @@ struct color_palette
 	uint32_t fg_text;
 };
 
-struct color_palette* cp_new(void);
+struct color_palette *cp_new(void);

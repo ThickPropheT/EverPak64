@@ -4,15 +4,15 @@
 
 
 
-static void update(const struct go_delegate* base, struct game_object* go);
+static void update(const struct go_delegate *base, struct game_object *go);
 const struct go_delegate DEVM_UPDATE[] = { { update } };
 
 const struct go_type DEVM_TYPE[] = { { NULL, DEVM_UPDATE } };
 
 
-static struct device_state* dev_new(void)
+static struct device_state *dev_new(void)
 {
-	struct device_state* dev = malloc(sizeof * dev);
+	struct device_state *dev = malloc(sizeof * dev);
 
 	for (u8 i = 0; i < N_SLOTS; i++)
 		// TODO this will result in all accessories being accessory
@@ -23,9 +23,9 @@ static struct device_state* dev_new(void)
 	return dev;
 }
 
-struct device_manager* devm_new(struct trigger* dev_changed)
+struct device_manager *devm_new(struct trigger *dev_changed)
 {
-	struct device_manager* devm = malloc(sizeof * devm);
+	struct device_manager *devm = malloc(sizeof * devm);
 
 	_go_init(&devm->go, DEVM_TYPE);
 
@@ -39,13 +39,13 @@ struct device_manager* devm_new(struct trigger* dev_changed)
 	return devm;
 }
 
-static void replace_acc(struct device_state* dev, u8 i_slot)
+static void replace_acc(struct device_state *dev, u8 i_slot)
 {
 	free(dev->accessories[i_slot]);
 	dev->accessories[i_slot] = resolve_acc(*dev, i_slot);
 }
 
-static void acc_flags_changed(struct device_state* dev, u16 from, u16 to)
+static void acc_flags_changed(struct device_state *dev, u16 from, u16 to)
 {
 	for (u8 i = 0; i < N_SLOTS; i++)
 	{
@@ -59,9 +59,9 @@ static void acc_flags_changed(struct device_state* dev, u16 from, u16 to)
 	}
 }
 
-static void set_acc_flags(struct device_manager* devm, u16 value)
+static void set_acc_flags(struct device_manager *devm, u16 value)
 {
-	struct device_state* dev = devm->dev;
+	struct device_state *dev = devm->dev;
 
 	if (dev->acc_flags == value)
 		return;
@@ -75,11 +75,11 @@ static void set_acc_flags(struct device_manager* devm, u16 value)
 	trg_set(devm->dev_changed);
 }
 
-static void update_accessories(struct device_state* dev)
+static void update_accessories(struct device_state *dev)
 {
 	for (u8 i = 0; i < N_SLOTS; i++)
 	{
-		go_update((void*)dev->accessories[i]);
+		go_update((void *)dev->accessories[i]);
 	}
 }
 
@@ -100,11 +100,11 @@ u8 keys_are_equal(struct controller_data k1, struct controller_data k2)
 	return 1;
 }
 
-static void update(const struct go_delegate* base, struct game_object* go)
+static void update(const struct go_delegate *base, struct game_object *go)
 {
-	struct device_manager* devm = (void*)go;
-	struct device_state* dev = devm->dev;
-	
+	struct device_manager *devm = (void *)go;
+	struct device_state *dev = devm->dev;
+
 	controller_scan();
 
 	struct controller_data _;

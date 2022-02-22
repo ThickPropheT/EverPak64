@@ -10,7 +10,7 @@
 #define N_HANDLERS	N_SLOTS + 1
 
 
-typedef void (*handle_input)(struct controller* ctrl, void* context);
+typedef void (*handle_input)(struct controller *ctrl, void *context);
 
 struct input_handler
 {
@@ -18,8 +18,8 @@ struct input_handler
 
 	u8 is_disposed;
 
-	struct controller* ctrl;
-	void* context;
+	struct controller *ctrl;
+	void *context;
 
 	handle_input handle;
 };
@@ -28,21 +28,21 @@ struct controller_manager
 {
 	struct game_object go;
 
-	struct device_state* dev;
+	struct device_state *dev;
 
 	u16 ctrl_flags;
 	u16 acc_flags;
 
-	struct controller* controllers[N_SLOTS];
-	struct controller* any_controller;
+	struct controller *controllers[N_SLOTS];
+	struct controller *any_controller;
 
-	struct linked_list* input_handlers[N_HANDLERS];
+	struct linked_list *input_handlers[N_HANDLERS];
 
 };
 
-struct controller_manager* cman_new(struct device_state* dev);
+struct controller_manager *cman_new(struct device_state *dev);
 
-void cman_update(struct controller_manager* cman);
+void cman_update(struct controller_manager *cman);
 
-struct input_handler* cman_add_handler(struct controller_manager* cman, struct controller* ctrl, void* context, handle_input handle);
-void cman_rem_handler(struct controller_manager* cman, struct input_handler* handler);
+struct input_handler *cman_add_handler(struct controller_manager *cman, struct controller *ctrl, void *context, handle_input handle);
+void cman_rem_handler(struct controller_manager *cman, struct input_handler *handler);

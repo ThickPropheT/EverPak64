@@ -8,9 +8,9 @@ struct device_manager
 {
 	struct game_object go;
 
-	struct trigger* dev_changed;
+	struct trigger *dev_changed;
 
-	struct device_state* dev;
+	struct device_state *dev;
 };
 
-struct device_manager* devm_new(struct trigger* dev_changed);
+struct device_manager *devm_new(struct trigger *dev_changed);

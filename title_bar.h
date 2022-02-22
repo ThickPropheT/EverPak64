@@ -14,9 +14,9 @@ struct title_bar
 {
 	struct game_object go;
 
-	struct renderer* ren;
+	struct renderer *ren;
 
 	struct rectangle bounds;
 };
 
-struct title_bar* tb_new(u16 x, u16 y, struct renderer* ren);
+struct title_bar *tb_new(u16 x, u16 y, struct renderer *ren);

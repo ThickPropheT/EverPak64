@@ -7,35 +7,35 @@
 #include "keys.h"
 
 
-static void rpkm_activating(const struct go_delegate* base, struct game_object* go);
+static void rpkm_activating(const struct go_delegate *base, struct game_object *go);
 const struct go_delegate RPKM_ACTIVATING[] = { { rpkm_activating } };
 
-static void rpkm_update(const struct go_delegate* base, struct game_object* go);
+static void rpkm_update(const struct go_delegate *base, struct game_object *go);
 const struct go_delegate RPKM_UPDATE[] = { { rpkm_update } };
 
-static void rpkm_draw(const struct go_delegate* base, struct game_object* go);
+static void rpkm_draw(const struct go_delegate *base, struct game_object *go);
 const struct go_delegate RPKM_DRAW[] = { { rpkm_draw } };
 
-static void rpkm_deactivating(const struct go_delegate* base, struct game_object* go);
+static void rpkm_deactivating(const struct go_delegate *base, struct game_object *go);
 const struct go_delegate RPKM_DEACTIVATING[] = { { rpkm_deactivating } };
 
 const struct go_type RPKM_TYPE[] = { { RPKM_ACTIVATING, RPKM_UPDATE, RPKM_DRAW, RPKM_DEACTIVATING } };
 
 
-struct rumble_state* rs_new(void)
+struct rumble_state *rs_new(void)
 {
-	struct rumble_state* rs = calloc(1, sizeof * rs);
+	struct rumble_state *rs = calloc(1, sizeof * rs);
 	return rs;
 }
 
-struct rpk_menu* rpkm_new(struct device_state* dev, struct controller_manager* cman, struct menu_nav_controller* mnav, struct controller* ctrl)
+struct rpk_menu *rpkm_new(struct device_state *dev, struct controller_manager *cman, struct menu_nav_controller *mnav, struct controller *ctrl)
 {
-	struct rpk_menu* menu = malloc(sizeof * menu);
+	struct rpk_menu *menu = malloc(sizeof * menu);
 
 	_gm_init(&menu->gm, RPKM_TYPE, dev, cman, mnav, 0);
 
 	menu->ctrl = ctrl;
-	menu->rpk = (void*)ctrl->acc;
+	menu->rpk = (void *)ctrl->acc;
 
 	menu->rumble_pwm = pwm_new(0, 1, 0);
 	menu->state = rs_new();
@@ -45,7 +45,7 @@ struct rpk_menu* rpkm_new(struct device_state* dev, struct controller_manager* c
 
 
 
-static inline void pwm_handle_input(struct controller* ctrl, struct pwm_state* pwm)
+static inline void pwm_handle_input(struct controller *ctrl, struct pwm_state *pwm)
 {
 	if (ctrl_key_down(ctrl, &key_C_left))
 	{
@@ -65,7 +65,7 @@ static inline void pwm_handle_input(struct controller* ctrl, struct pwm_state* p
 	}
 }
 
-static inline void rmbl_handle_input(struct controller* ctrl, struct pwm_state* pwm, struct rumble_state* state)
+static inline void rmbl_handle_input(struct controller *ctrl, struct pwm_state *pwm, struct rumble_state *state)
 {
 	u8 r = state->rumble;
 
@@ -85,7 +85,7 @@ static inline void rmbl_handle_input(struct controller* ctrl, struct pwm_state* 
 	state->rumble = r;
 }
 
-static inline void reset_handle_input(struct controller* ctrl, struct pwm_state* pwm)
+static inline void reset_handle_input(struct controller *ctrl, struct pwm_state *pwm)
 {
 	if (ctrl_key_down(ctrl, &key_R))
 	{
@@ -93,22 +93,22 @@ static inline void reset_handle_input(struct controller* ctrl, struct pwm_state*
 	}
 }
 
-static void rpkm_handle_input(struct controller* ctrl, void* context)
+static void rpkm_handle_input(struct controller *ctrl, void *context)
 {
-	struct rpk_menu* menu = context;
-	struct pwm_state* pwm = menu->rumble_pwm;
+	struct rpk_menu *menu = context;
+	struct pwm_state *pwm = menu->rumble_pwm;
 
 	pwm_handle_input(ctrl, pwm);
 	rmbl_handle_input(ctrl, pwm, menu->state);
 	reset_handle_input(ctrl, pwm);
 
-	_gm_handle_input(ctrl, (void*)menu);
+	_gm_handle_input(ctrl, (void *)menu);
 }
 
-static void rpkm_activating(const struct go_delegate* base, struct game_object* go)
+static void rpkm_activating(const struct go_delegate *base, struct game_object *go)
 {
-	struct rpk_menu* menu = (void*)go;
-	struct controller_manager* cman = menu->gm.cman;
+	struct rpk_menu *menu = (void *)go;
+	struct controller_manager *cman = menu->gm.cman;
 
 	menu->input_handler =
 		cman_add_handler(cman, cman->any_controller, menu, &rpkm_handle_input);
@@ -116,9 +116,9 @@ static void rpkm_activating(const struct go_delegate* base, struct game_object* 
 
 
 
-static inline void set_rumble(struct rpk_menu* menu, u8 value)
+static inline void set_rumble(struct rpk_menu *menu, u8 value)
 {
-	struct pwm_state* pwm = menu->rumble_pwm;
+	struct pwm_state *pwm = menu->rumble_pwm;
 
 	if (!pwm_set_enabled(pwm, value))
 		return;
@@ -129,9 +129,9 @@ static inline void set_rumble(struct rpk_menu* menu, u8 value)
 	rumble_stop(menu->rpk->acc.i_slot);
 }
 
-static void rpkm_update(const struct go_delegate* base, struct game_object* go)
+static void rpkm_update(const struct go_delegate *base, struct game_object *go)
 {
-	struct rpk_menu* menu = (void*)go;
+	struct rpk_menu *menu = (void *)go;
 	struct accessory acc = menu->rpk->acc;
 
 
@@ -159,14 +159,14 @@ static void rpkm_update(const struct go_delegate* base, struct game_object* go)
 
 
 
-static void rpkm_draw(const struct go_delegate* base, struct game_object* go)
+static void rpkm_draw(const struct go_delegate *base, struct game_object *go)
 {
-	struct rpk_menu* menu = (void*)go;
-	struct accessory* acc = (void*)menu->rpk;
+	struct rpk_menu *menu = (void *)go;
+	struct accessory *acc = (void *)menu->rpk;
 
 	_gm_draw_header(*acc);
 
-	struct pwm_state* pwm = menu->rumble_pwm;
+	struct pwm_state *pwm = menu->rumble_pwm;
 
 	cprintf("Rumble (Z)");
 	cprintf("rumble: %4d", pwm->enabled);
@@ -175,9 +175,9 @@ static void rpkm_draw(const struct go_delegate* base, struct game_object* go)
 	cprintf("pwm low: %3llu", pwm->low_interval);
 }
 
-static void rpkm_deactivating(const struct go_delegate* base, struct game_object* go)
+static void rpkm_deactivating(const struct go_delegate *base, struct game_object *go)
 {
-	struct rpk_menu* menu = (void*)go;
+	struct rpk_menu *menu = (void *)go;
 	struct accessory acc = menu->rpk->acc;
 
 	rumble_stop(acc.i_slot);

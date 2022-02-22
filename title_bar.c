@@ -9,15 +9,15 @@
 static char buffer[BUFFER_LEN];
 
 
-static void tb_draw(const struct go_delegate* base, struct game_object* go);
+static void tb_draw(const struct go_delegate *base, struct game_object *go);
 const struct go_delegate TB_DRAW[] = { { tb_draw } };
 
 const struct go_type TB_TYPE[] = { { NULL, NULL, TB_DRAW } };
 
 
-struct title_bar* tb_new(u16 x, u16 y, struct renderer* ren)
+struct title_bar *tb_new(u16 x, u16 y, struct renderer *ren)
 {
-	struct title_bar* tb = malloc(sizeof * tb);
+	struct title_bar *tb = malloc(sizeof * tb);
 
 	_go_init(&tb->go, TB_TYPE);
 
@@ -31,11 +31,11 @@ struct title_bar* tb_new(u16 x, u16 y, struct renderer* ren)
 	return tb;
 }
 
-static void tb_draw(const struct go_delegate* base, struct game_object* go)
+static void tb_draw(const struct go_delegate *base, struct game_object *go)
 {
-	struct title_bar* tb = (void*)go;
+	struct title_bar *tb = (void *)go;
 
-	struct renderer* ren = tb->ren;
+	struct renderer *ren = tb->ren;
 	struct rectangle b = tb->bounds;
 
 	ren_set_primitive_color(ren, ren->cp->bg);

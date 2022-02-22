@@ -4,9 +4,9 @@
 
 #include "math.h"
 
-static inline struct pwm_state* pwm_new_impl(u8 enabled, u8 high_interval, u8 low_interval)
+static inline struct pwm_state *pwm_new_impl(u8 enabled, u8 high_interval, u8 low_interval)
 {
-	struct pwm_state* pwm = malloc(sizeof * pwm);
+	struct pwm_state *pwm = malloc(sizeof * pwm);
 
 	pwm->enabled = enabled;
 
@@ -17,10 +17,10 @@ static inline struct pwm_state* pwm_new_impl(u8 enabled, u8 high_interval, u8 lo
 	return pwm;
 }
 
-struct pwm_state* pwm_new(u8 enabled, u8 high_interval, u8 low_interval)
+struct pwm_state *pwm_new(u8 enabled, u8 high_interval, u8 low_interval)
 {
-	struct pwm_state* def = pwm_new_impl(enabled, high_interval, low_interval);
-	struct pwm_state* pwm = pwm_new_impl(enabled, high_interval, low_interval);
+	struct pwm_state *def = pwm_new_impl(enabled, high_interval, low_interval);
+	struct pwm_state *pwm = pwm_new_impl(enabled, high_interval, low_interval);
 
 	pwm->def = def;
 
@@ -28,7 +28,7 @@ struct pwm_state* pwm_new(u8 enabled, u8 high_interval, u8 low_interval)
 }
 
 
-u8 pwm_set_enabled(struct pwm_state* pwm, u8 value) 
+u8 pwm_set_enabled(struct pwm_state *pwm, u8 value)
 {
 	if (pwm->enabled == value)
 		return 0;
@@ -41,7 +41,7 @@ u8 pwm_set_enabled(struct pwm_state* pwm, u8 value)
 }
 
 
-void pwm_set_high(struct pwm_state* pwm, u64 value)
+void pwm_set_high(struct pwm_state *pwm, u64 value)
 {
 	pwm->high_interval = value;
 
@@ -51,7 +51,7 @@ void pwm_set_high(struct pwm_state* pwm, u64 value)
 	}
 }
 
-void pwm_inc_high(struct pwm_state* pwm)
+void pwm_inc_high(struct pwm_state *pwm)
 {
 	pwm->high_interval++;
 
@@ -61,14 +61,14 @@ void pwm_inc_high(struct pwm_state* pwm)
 	}
 }
 
-void pwm_dec_high(struct pwm_state* pwm)
+void pwm_dec_high(struct pwm_state *pwm)
 {
 	pwm->high_interval--;
 	pwm->tick = 0;
 }
 
 
-void pwm_set_low(struct pwm_state* pwm, u64 value)
+void pwm_set_low(struct pwm_state *pwm, u64 value)
 {
 	pwm->low_interval = value;
 
@@ -78,7 +78,7 @@ void pwm_set_low(struct pwm_state* pwm, u64 value)
 	}
 }
 
-void pwm_inc_low(struct pwm_state* pwm)
+void pwm_inc_low(struct pwm_state *pwm)
 {
 	pwm->low_interval++;
 
@@ -88,14 +88,14 @@ void pwm_inc_low(struct pwm_state* pwm)
 	}
 }
 
-void pwm_dec_low(struct pwm_state* pwm)
+void pwm_dec_low(struct pwm_state *pwm)
 {
 	pwm->low_interval--;
 	pwm->tick = 0;
 }
 
 
-enum pwm_event pwm_update(struct pwm_state* pwm)
+enum pwm_event pwm_update(struct pwm_state *pwm)
 {
 	math_maxp(&pwm->high_interval, 1);
 
@@ -127,9 +127,9 @@ enum pwm_event pwm_update(struct pwm_state* pwm)
 	return NONE;
 }
 
-void pwm_reset(struct pwm_state* pwm)
+void pwm_reset(struct pwm_state *pwm)
 {
-	struct pwm_state* def = pwm->def;
+	struct pwm_state *def = pwm->def;
 
 	pwm->enabled = def->enabled;
 
@@ -138,7 +138,7 @@ void pwm_reset(struct pwm_state* pwm)
 	pwm->low_interval = def->low_interval;
 }
 
-void pwm_free(struct pwm_state* pwm)
+void pwm_free(struct pwm_state *pwm)
 {
 	free(pwm->def);
 	free(pwm);

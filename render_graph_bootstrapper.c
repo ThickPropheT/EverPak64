@@ -16,28 +16,28 @@
 #define PADDING_X	4
 
 
-static void build_managers(struct render_node* root, struct renderer* ren)
+static void build_managers(struct render_node *root, struct renderer *ren)
 {
-	struct trigger* dev_changed = trigger_manually();
+	struct trigger *dev_changed = trigger_manually();
 
-	struct device_manager* devm = devm_new(dev_changed);
+	struct device_manager *devm = devm_new(dev_changed);
 
-	struct render_node* devm_node = rn_add_child_for(root, (void*)devm);
-	devm_node->update_trigger = (void*)trigger_at_rate(hz_from_fps(20));
+	struct render_node *devm_node = rn_add_child_for(root, (void *)devm);
+	devm_node->update_trigger = (void *)trigger_at_rate(hz_from_fps(20));
 
 
-	struct controller_manager* cman = cman_new(devm->dev);
+	struct controller_manager *cman = cman_new(devm->dev);
 
-	struct render_node* cman_node = rn_add_child_for(devm_node, (void*)cman);
+	struct render_node *cman_node = rn_add_child_for(devm_node, (void *)cman);
 	cman_node->update_trigger = dev_changed;
 
 
-	struct debug_controller* dbg = dbg_new(cman_node, cman, ren);
+	struct debug_controller *dbg = dbg_new(cman_node, cman, ren);
 	dbg->node->update_trigger = dev_changed;
 }
 
 
-static void build_visuals(struct render_node* root, struct renderer* ren)
+static void build_visuals(struct render_node *root, struct renderer *ren)
 {
 	struct rectangle vp = ren->view_port;
 
@@ -45,15 +45,15 @@ static void build_visuals(struct render_node* root, struct renderer* ren)
 
 	u16 tb_x = roundf((vp.t + vp.w / 2.0f) - TB_WIDTH / 2.0f);
 
-	struct title_bar* tb = tb_new(tb_x, top, ren);
+	struct title_bar *tb = tb_new(tb_x, top, ren);
 
-	rn_add_child_for(root, (void*)tb);
+	rn_add_child_for(root, (void *)tb);
 }
 
 
-struct render_graph* rg_init(struct renderer* ren)
+struct render_graph *rg_init(struct renderer *ren)
 {
-	struct render_node* root = rn_new(NULL);
+	struct render_node *root = rn_new(NULL);
 
 	build_managers(root, ren);
 	build_visuals(root, ren);

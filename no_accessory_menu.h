@@ -13,9 +13,9 @@ struct no_accessory_menu
 {
 	struct game_menu gm;
 
-	struct controller* ctrl;
+	struct controller *ctrl;
 
-	struct input_handler* input_handler;
+	struct input_handler *input_handler;
 };
 
-struct no_accessory_menu* nam_new(struct device_state* dev, struct controller_manager* cman, struct menu_nav_controller* mnav, struct controller* ctrl);
+struct no_accessory_menu *nam_new(struct device_state *dev, struct controller_manager *cman, struct menu_nav_controller *mnav, struct controller *ctrl);

@@ -3,9 +3,9 @@
 #include <libdragon.h>
 #include <malloc.h>
 
-struct color_palette* cp_new(void)
+struct color_palette *cp_new(void)
 {
-	struct color_palette* cp = malloc(sizeof * cp);
+	struct color_palette *cp = malloc(sizeof * cp);
 
 	cp->trans = graphics_make_color(0xFF, 0xFF, 0xFF, 0);
 	cp->black = graphics_make_color(0, 0, 0, 0xFF);

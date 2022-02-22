@@ -15,7 +15,7 @@ struct device_state
 {
 	u16 acc_flags;
 
-	struct accessory* accessories[N_SLOTS];
+	struct accessory *accessories[N_SLOTS];
 
 	struct controller_data keys_d;
 	struct controller_data keys_h;

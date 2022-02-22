@@ -7,9 +7,9 @@
 const struct go_type RPK_TYPE[] = { { NULL, ACC_UPDATE } };
 
 
-struct rumble_pak* rpk_new(u8 i_slot)
+struct rumble_pak *rpk_new(u8 i_slot)
 {
-	struct rumble_pak* rpk = calloc(1, sizeof * rpk);
+	struct rumble_pak *rpk = calloc(1, sizeof * rpk);
 
 	_acc_init(&rpk->acc, RPK_TYPE, i_slot);
 

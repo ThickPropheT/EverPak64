@@ -15,18 +15,18 @@
 static char buffer[BUFFER_LEN];
 
 
-static void fps_update(const struct go_delegate* base, struct game_object* go);
+static void fps_update(const struct go_delegate *base, struct game_object *go);
 const struct go_delegate FPS_UPDATE[] = { { fps_update } };
 
-static void fps_draw(const struct go_delegate* base, struct game_object* go);
+static void fps_draw(const struct go_delegate *base, struct game_object *go);
 const struct go_delegate FPS_DRAW[] = { { fps_draw } };
 
 const struct go_type FPS_TYPE[] = { { NULL, FPS_UPDATE, FPS_DRAW } };
 
 
-struct fps_counter* fps_new(u16 x, u16 y, u32 resolution, struct renderer* ren)
+struct fps_counter *fps_new(u16 x, u16 y, u32 resolution, struct renderer *ren)
 {
-	struct fps_counter* fps = calloc(1, sizeof * fps);
+	struct fps_counter *fps = calloc(1, sizeof * fps);
 
 	_go_init(&fps->go, FPS_TYPE);
 
@@ -42,9 +42,9 @@ struct fps_counter* fps_new(u16 x, u16 y, u32 resolution, struct renderer* ren)
 	return fps;
 }
 
-static void fps_update(const struct go_delegate* base, struct game_object* go)
+static void fps_update(const struct go_delegate *base, struct game_object *go)
 {
-	struct fps_counter* fps = (void*)go;
+	struct fps_counter *fps = (void *)go;
 
 	fps->frame_count++;
 
@@ -66,11 +66,11 @@ static void fps_update(const struct go_delegate* base, struct game_object* go)
 	}
 }
 
-static void fps_draw(const struct go_delegate* base, struct game_object* go)
+static void fps_draw(const struct go_delegate *base, struct game_object *go)
 {
-	struct fps_counter* fps = (void*)go;
+	struct fps_counter *fps = (void *)go;
 
-	struct renderer* ren = fps->ren;
+	struct renderer *ren = fps->ren;
 	struct rectangle b = fps->bounds;
 
 	ren_set_primitive_color(ren, ren->cp->bg);

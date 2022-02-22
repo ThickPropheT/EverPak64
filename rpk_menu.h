@@ -19,13 +19,13 @@ struct rpk_menu
 {
 	struct game_menu gm;
 
-	struct controller* ctrl;
-	struct rumble_pak* rpk;
+	struct controller *ctrl;
+	struct rumble_pak *rpk;
 
-	struct rumble_state* state;
-	struct pwm_state* rumble_pwm;
+	struct rumble_state *state;
+	struct pwm_state *rumble_pwm;
 
-	struct input_handler* input_handler;
+	struct input_handler *input_handler;
 };
 
-struct rpk_menu* rpkm_new(struct device_state* dev, struct controller_manager* cman, struct menu_nav_controller* mnav, struct controller* ctrl);
+struct rpk_menu *rpkm_new(struct device_state *dev, struct controller_manager *cman, struct menu_nav_controller *mnav, struct controller *ctrl);

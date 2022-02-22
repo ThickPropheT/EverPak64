@@ -32,11 +32,11 @@ static struct rectangle to_rect(resolution_t res)
 	return rect_new(0, 0, w, h);
 }
 
-struct renderer* ren_new(resolution_t res, bitdepth_t bpp, uint32_t num_buf, gamma_t gamma, antialias_t aa)
+struct renderer *ren_new(resolution_t res, bitdepth_t bpp, uint32_t num_buf, gamma_t gamma, antialias_t aa)
 {
 	display_init(res, bpp, num_buf, gamma, aa);
 
-	struct renderer* ren = calloc(1, sizeof * ren);
+	struct renderer *ren = calloc(1, sizeof * ren);
 
 	ren->res = res;
 	ren->bpp = bpp;
@@ -51,7 +51,7 @@ struct renderer* ren_new(resolution_t res, bitdepth_t bpp, uint32_t num_buf, gam
 	return ren;
 }
 
-void ren_set_rdp_enabled(struct renderer* ren, u8 enabled)
+void ren_set_rdp_enabled(struct renderer *ren, u8 enabled)
 {
 	u8 is_enabled = ren->rdp_enabled;
 
@@ -71,7 +71,7 @@ void ren_set_rdp_enabled(struct renderer* ren, u8 enabled)
 }
 
 
-void ren_invalidate(struct renderer* ren)
+void ren_invalidate(struct renderer *ren)
 {
 	ren->draw_requested = 1;
 }
@@ -85,7 +85,7 @@ static inline display_context_t lock_graphics(void)
 	return dc;
 }
 
-void ren_lock(struct renderer* ren)
+void ren_lock(struct renderer *ren)
 {
 	display_context_t dc = lock_graphics();
 
@@ -99,7 +99,7 @@ void ren_lock(struct renderer* ren)
 	ren->dc = dc;
 }
 
-void ren_show(struct renderer* ren)
+void ren_show(struct renderer *ren)
 {
 	if (ren->rdp_enabled)
 	{
@@ -112,7 +112,7 @@ void ren_show(struct renderer* ren)
 }
 
 
-void ren_set_primitive_color(struct renderer* ren, uint32_t color)
+void ren_set_primitive_color(struct renderer *ren, uint32_t color)
 {
 	u8 fill_enabled = ren->fill_enabled;
 	u8 color_changed = ren->fill_color != color;
@@ -136,7 +136,7 @@ void ren_set_primitive_color(struct renderer* ren, uint32_t color)
 	}
 }
 
-void ren_draw_text(struct renderer* ren, int x, int y, const char* const message)
+void ren_draw_text(struct renderer *ren, int x, int y, const char *const message)
 {
 	if (ren->rdp_enabled)
 		rdp_detach_display();

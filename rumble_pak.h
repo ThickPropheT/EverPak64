@@ -10,4 +10,4 @@ struct rumble_pak
 };
 
 
-struct rumble_pak* rpk_new(u8 i_slot);
+struct rumble_pak *rpk_new(u8 i_slot);

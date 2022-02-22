@@ -4,13 +4,13 @@
 #include <string.h>
 
 
-static void acc_update(const struct go_delegate* base, struct game_object* go);
+static void acc_update(const struct go_delegate *base, struct game_object *go);
 const struct go_delegate ACC_UPDATE[] = { { acc_update } };
 
 const struct go_type ACC_TYPE[] = { { NULL, ACC_UPDATE } };
 
 
-char* accessory_names[N_ACC_TYPES] =
+char *accessory_names[N_ACC_TYPES] =
 {
 	"None",
 	"Mem Pak",
@@ -20,16 +20,16 @@ char* accessory_names[N_ACC_TYPES] =
 };
 
 
-void _acc_init(struct accessory* acc, const struct go_type* vtable, u8 i_slot)
+void _acc_init(struct accessory *acc, const struct go_type *vtable, u8 i_slot)
 {
 	_go_init(&acc->go, vtable);
 
 	acc->i_slot = i_slot;
 }
 
-struct accessory* acc_new(u8 i_slot)
+struct accessory *acc_new(u8 i_slot)
 {
-	struct accessory* acc = malloc(sizeof * acc);
+	struct accessory *acc = malloc(sizeof * acc);
 
 	acc->go.go_type = ACC_TYPE;
 
@@ -45,9 +45,9 @@ struct accessory* acc_new(u8 i_slot)
 }
 
 
-static void acc_update(const struct go_delegate* base, struct game_object* go)
+static void acc_update(const struct go_delegate *base, struct game_object *go)
 {
-	struct accessory* acc = (void*)go;
+	struct accessory *acc = (void *)go;
 
 	u8 slot = acc->i_slot;
 

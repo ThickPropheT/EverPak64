@@ -1,6 +1,6 @@
 #include "interval.h"
 
-u8 ivl_has_elapsed(struct interval* ivl)
+u8 ivl_has_elapsed(struct interval *ivl)
 {
 	u32 ticks_ms = get_ticks_ms();
 

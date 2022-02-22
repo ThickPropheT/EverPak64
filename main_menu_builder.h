@@ -9,9 +9,9 @@ struct main_menu_builder
 {
 	struct menu_builder mb;
 
-	struct device_state* dev;
-	struct controller_manager* cman;
-	struct menu_nav_controller* mnav;
+	struct device_state *dev;
+	struct controller_manager *cman;
+	struct menu_nav_controller *mnav;
 };
 
-struct main_menu_builder* mmb_new(struct device_state* dev, struct controller_manager* cman, struct menu_nav_controller* mnav);
+struct main_menu_builder *mmb_new(struct device_state *dev, struct controller_manager *cman, struct menu_nav_controller *mnav);

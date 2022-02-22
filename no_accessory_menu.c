@@ -4,21 +4,21 @@
 #include "memory_pak.h"
 
 
-static void nam_activating(const struct go_delegate* base, struct game_object* go);
+static void nam_activating(const struct go_delegate *base, struct game_object *go);
 const struct go_delegate NAM_ACTIVATING[] = { { nam_activating } };
 
-static void nam_draw(const struct go_delegate* base, struct game_object* go);
+static void nam_draw(const struct go_delegate *base, struct game_object *go);
 const struct go_delegate NAM_DRAW[] = { { nam_draw } };
 
-static void nam_deactivating(const struct go_delegate* base, struct game_object* go);
+static void nam_deactivating(const struct go_delegate *base, struct game_object *go);
 const struct go_delegate NAM_DEACTIVATING[] = { { nam_deactivating } };
 
 const struct go_type NAM_TYPE[] = { { NAM_ACTIVATING, NULL, NAM_DRAW, NAM_DEACTIVATING } };
 
 
-struct no_accessory_menu* nam_new(struct device_state* dev, struct controller_manager* cman, struct menu_nav_controller* mnav, struct controller* ctrl)
+struct no_accessory_menu *nam_new(struct device_state *dev, struct controller_manager *cman, struct menu_nav_controller *mnav, struct controller *ctrl)
 {
-	struct no_accessory_menu* menu = malloc(sizeof * menu);
+	struct no_accessory_menu *menu = malloc(sizeof * menu);
 
 	_gm_init(&menu->gm, NAM_TYPE, dev, cman, mnav, 0);
 
@@ -31,10 +31,10 @@ struct no_accessory_menu* nam_new(struct device_state* dev, struct controller_ma
 
 
 
-static void nam_activating(const struct go_delegate* base, struct game_object* go)
+static void nam_activating(const struct go_delegate *base, struct game_object *go)
 {
-	struct no_accessory_menu* menu = (void*)go;
-	struct controller_manager* cman = menu->gm.cman;
+	struct no_accessory_menu *menu = (void *)go;
+	struct controller_manager *cman = menu->gm.cman;
 
 	menu->input_handler =
 		cman_add_handler(cman, cman->any_controller, menu, (handle_input)&_gm_handle_input);
@@ -42,11 +42,11 @@ static void nam_activating(const struct go_delegate* base, struct game_object* g
 
 
 
-static void nam_draw(const struct go_delegate* base, struct game_object* go)
+static void nam_draw(const struct go_delegate *base, struct game_object *go)
 {
-	struct no_accessory_menu* menu = (void*)go;
-	struct controller* ctrl = menu->ctrl;
-	struct accessory* acc = ctrl->acc;
+	struct no_accessory_menu *menu = (void *)go;
+	struct controller *ctrl = menu->ctrl;
+	struct accessory *acc = ctrl->acc;
 
 	_gm_draw_header(*acc);
 
@@ -78,9 +78,9 @@ static void nam_draw(const struct go_delegate* base, struct game_object* go)
 
 
 
-static void nam_deactivating(const struct go_delegate* base, struct game_object* go)
+static void nam_deactivating(const struct go_delegate *base, struct game_object *go)
 {
-	struct no_accessory_menu* menu = (void*)go;
-	
+	struct no_accessory_menu *menu = (void *)go;
+
 	cman_rem_handler(menu->gm.cman, menu->input_handler);
 }

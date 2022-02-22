@@ -15,7 +15,7 @@ struct renderer
 
 	struct rectangle view_port;
 
-	struct color_palette* cp;
+	struct color_palette *cp;
 
 	u8 rdp_enabled;
 
@@ -27,15 +27,15 @@ struct renderer
 	uint32_t fill_color;
 };
 
-struct renderer* ren_new(resolution_t res, bitdepth_t bpp, uint32_t num_buf, gamma_t gamma, antialias_t aa);
+struct renderer *ren_new(resolution_t res, bitdepth_t bpp, uint32_t num_buf, gamma_t gamma, antialias_t aa);
 
-void ren_set_rdp_enabled(struct renderer* ren, u8 enabled);
+void ren_set_rdp_enabled(struct renderer *ren, u8 enabled);
 
-void ren_invalidate(struct renderer* ren);
+void ren_invalidate(struct renderer *ren);
 
-void ren_lock(struct renderer* ren);
-void ren_show(struct renderer* ren);
+void ren_lock(struct renderer *ren);
+void ren_show(struct renderer *ren);
 
-void ren_set_primitive_color(struct renderer* ren, uint32_t color);
+void ren_set_primitive_color(struct renderer *ren, uint32_t color);
 
-void ren_draw_text(struct renderer* ren, int x, int y, const char* const message);
+void ren_draw_text(struct renderer *ren, int x, int y, const char *const message);

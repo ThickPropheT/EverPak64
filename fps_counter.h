@@ -10,7 +10,7 @@ struct fps_counter
 {
 	struct game_object go;
 
-	struct renderer* ren;
+	struct renderer *ren;
 
 	struct rectangle bounds;
 
@@ -20,4 +20,4 @@ struct fps_counter
 	double fps;
 };
 
-struct fps_counter* fps_new(u16 x, u16 y, u32 resolution, struct renderer* ren);
+struct fps_counter *fps_new(u16 x, u16 y, u32 resolution, struct renderer *ren);

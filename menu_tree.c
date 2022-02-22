@@ -9,11 +9,11 @@
 #include "game_object.h"
 
 
-struct menu_tree mt_new(struct device_state* dev, struct controller_manager* cman)
+struct menu_tree mt_new(struct device_state *dev, struct controller_manager *cman)
 {
-	struct menu_state* ms = ms_new();
-	struct menu_builder_table* mbt = mbt_new();
-	struct menu_nav_controller* mnav = mnav_new(cman, ms, mbt);
+	struct menu_state *ms = ms_new();
+	struct menu_builder_table *mbt = mbt_new();
+	struct menu_nav_controller *mnav = mnav_new(cman, ms, mbt);
 
 	mbreg_register(mbt, dev, cman, mnav);
 
@@ -23,26 +23,26 @@ struct menu_tree mt_new(struct device_state* dev, struct controller_manager* cma
 }
 
 
-void mt_update(struct menu_tree* mt)
+void mt_update(struct menu_tree *mt)
 {
 	struct mn_enumerator mne = ms_get_enumerator(mt->mnav->ms);
 
-	struct menu_presenter* mp;
+	struct menu_presenter *mp;
 
 	while ((mp = mne_move_next(&mne)))
 	{
-		go_update((struct game_object*)mp);
+		go_update((struct game_object *)mp);
 	}
 }
 
-void mt_draw(struct menu_tree* mt)
+void mt_draw(struct menu_tree *mt)
 {
 	struct mn_enumerator mne = ms_get_enumerator(mt->mnav->ms);
 
-	struct menu_presenter* mp;
-	
+	struct menu_presenter *mp;
+
 	while ((mp = mne_move_next(&mne)))
 	{
-		go_draw((struct game_object*)mp);
+		go_draw((struct game_object *)mp);
 	}
 }

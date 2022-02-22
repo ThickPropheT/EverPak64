@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include "renderer.h"
 
-struct render_graph* rg_new(struct render_node* root, struct renderer* ren)
+struct render_graph *rg_new(struct render_node *root, struct renderer *ren)
 {
-	struct render_graph* rg = malloc(sizeof * rg);
+	struct render_graph *rg = malloc(sizeof * rg);
 
 	rg->root = root;
 	rg->ren = ren;
@@ -18,20 +18,20 @@ struct render_graph* rg_new(struct render_node* root, struct renderer* ren)
 	return rg;
 }
 
-void rg_update(struct render_graph* rg)
+void rg_update(struct render_graph *rg)
 {
 	rn_update(rg->root);
 
-	struct renderer* ren = rg->ren;
+	struct renderer *ren = rg->ren;
 
 	if (!ren->draw_requested
 		&& rg->draw_requested)
 		ren_invalidate(ren);
 }
 
-void rg_draw(struct render_graph* rg)
+void rg_draw(struct render_graph *rg)
 {
-	struct renderer* ren = rg->ren;
+	struct renderer *ren = rg->ren;
 
 	if (!rg->ren->draw_requested)
 		return;

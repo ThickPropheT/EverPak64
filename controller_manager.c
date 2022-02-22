@@ -10,15 +10,15 @@
 
 
 
-static void update(const struct go_delegate* base, struct game_object* go);
+static void update(const struct go_delegate *base, struct game_object *go);
 const struct go_delegate UPDATE[] = { { update } };
 
 const struct go_type TYPE[] = { { NULL, UPDATE } };
 
 
-static struct input_handler* ih_new(struct controller* ctrl, void* context, handle_input handle)
+static struct input_handler *ih_new(struct controller *ctrl, void *context, handle_input handle)
 {
-	struct input_handler* handler = malloc(sizeof * handler);
+	struct input_handler *handler = malloc(sizeof * handler);
 
 	handler->is_disposed = 0;
 
@@ -26,18 +26,18 @@ static struct input_handler* ih_new(struct controller* ctrl, void* context, hand
 	handler->context = context;
 	handler->handle = handle;
 
-	ll_node_init((void*)handler);
+	ll_node_init((void *)handler);
 
 	return handler;
 }
 
 
 
-struct controller_manager* cman_new(struct device_state* dev)
+struct controller_manager *cman_new(struct device_state *dev)
 {
-	struct controller_manager* cman = malloc(sizeof * cman);
+	struct controller_manager *cman = malloc(sizeof * cman);
 
-	_go_init((void*)cman, TYPE);
+	_go_init((void *)cman, TYPE);
 
 	cman->go.can_update = 1;
 	cman->go.can_draw = 0;
@@ -60,14 +60,14 @@ struct controller_manager* cman_new(struct device_state* dev)
 
 
 
-static inline void flags_changed(struct controller_manager* cman, u16 ctrl_from, u16 ctrl_to, u16 acc_from, u16 acc_to)
+static inline void flags_changed(struct controller_manager *cman, u16 ctrl_from, u16 ctrl_to, u16 acc_from, u16 acc_to)
 {
 	u8 ctrl_changed = ctrl_from != ctrl_to;
 	u8 acc_changed = acc_from != acc_to;
 
 	for (u8 i = 0; i < N_SLOTS; i++)
 	{
-		struct controller* ctrl = cman->controllers[i];
+		struct controller *ctrl = cman->controllers[i];
 
 		u16 flag = get_flag(i);
 
@@ -93,7 +93,7 @@ static inline void flags_changed(struct controller_manager* cman, u16 ctrl_from,
 	}
 }
 
-static inline void update_flags(struct controller_manager* cman)
+static inline void update_flags(struct controller_manager *cman)
 {
 	u16 ctrl_f = cman->ctrl_flags;
 	u16 acc_f = cman->dev->acc_flags;
@@ -118,26 +118,26 @@ static inline void update_flags(struct controller_manager* cman)
 
 
 
-static inline void add_handler(struct controller_manager* cman, u8 i_slot, struct input_handler* handler)
+static inline void add_handler(struct controller_manager *cman, u8 i_slot, struct input_handler *handler)
 {
-	ll_add_last(cman->input_handlers[i_slot], (void*)handler);
+	ll_add_last(cman->input_handlers[i_slot], (void *)handler);
 }
 
-static inline void remove_handler(struct controller_manager* cman, u8 i_slot, struct input_handler* handler)
+static inline void remove_handler(struct controller_manager *cman, u8 i_slot, struct input_handler *handler)
 {
-	ll_remove(cman->input_handlers[i_slot], (void*)handler);
+	ll_remove(cman->input_handlers[i_slot], (void *)handler);
 	free(handler);
 }
 
 
-static void invoke_handlers(struct controller_manager* cman, struct input_handler* handler, struct controller* ctrl)
+static void invoke_handlers(struct controller_manager *cman, struct input_handler *handler, struct controller *ctrl)
 {
 	while (handler != NULL)
 	{
 		if (!handler->is_disposed)
 			handler->handle(ctrl, handler->context);
 
-		struct input_handler* next = (void*)handler->node.next;
+		struct input_handler *next = (void *)handler->node.next;
 
 		if (handler->is_disposed)
 			remove_handler(cman, handler->ctrl->i_slot, handler);
@@ -146,26 +146,26 @@ static void invoke_handlers(struct controller_manager* cman, struct input_handle
 	}
 }
 
-static inline void cman_handle_input(struct controller_manager* cman)
+static inline void cman_handle_input(struct controller_manager *cman)
 {
 	for (u8 slot = 0; slot < N_SLOTS; slot++)
 	{
-		struct controller* ctrl = cman->controllers[slot];
+		struct controller *ctrl = cman->controllers[slot];
 
 		if (ctrl->status != CTRL_STATUS_READY)
 			continue;
 
-		struct linked_list** input_handlers = cman->input_handlers;
+		struct linked_list **input_handlers = cman->input_handlers;
 
-		invoke_handlers(cman, (void*)input_handlers[slot]->head, ctrl);
-		invoke_handlers(cman, (void*)input_handlers[ANY_SLOT]->head, ctrl);
+		invoke_handlers(cman, (void *)input_handlers[slot]->head, ctrl);
+		invoke_handlers(cman, (void *)input_handlers[ANY_SLOT]->head, ctrl);
 	}
 }
 
 
-static void update(const struct go_delegate* base, struct game_object* go)
+static void update(const struct go_delegate *base, struct game_object *go)
 {
-	struct controller_manager* cman = (void*)go;
+	struct controller_manager *cman = (void *)go;
 
 	update_flags(cman);
 
@@ -174,16 +174,16 @@ static void update(const struct go_delegate* base, struct game_object* go)
 
 
 
-struct input_handler* cman_add_handler(struct controller_manager* cman, struct controller* ctrl, void* context, handle_input handle)
+struct input_handler *cman_add_handler(struct controller_manager *cman, struct controller *ctrl, void *context, handle_input handle)
 {
-	struct input_handler* handler = ih_new(ctrl, context, handle);
+	struct input_handler *handler = ih_new(ctrl, context, handle);
 
 	add_handler(cman, ctrl->i_slot, handler);
 
 	return handler;
 }
 
-void cman_rem_handler(struct controller_manager* cman, struct input_handler* handler)
+void cman_rem_handler(struct controller_manager *cman, struct input_handler *handler)
 {
 	handler->is_disposed = 1;
 }
