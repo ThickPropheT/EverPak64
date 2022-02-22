@@ -135,3 +135,16 @@ void ren_set_primitive_color(struct renderer* ren, uint32_t color)
 			rdp_set_primitive_color(color);
 	}
 }
+
+void ren_draw_text(struct renderer* ren, int x, int y, const char* const message)
+{
+	if (ren->rdp_enabled)
+		rdp_detach_display();
+
+	display_context_t dc = ren->dc;
+
+	graphics_draw_text(dc, x, y, message);
+
+	if (ren->rdp_enabled)
+		rdp_attach_display(dc);
+}

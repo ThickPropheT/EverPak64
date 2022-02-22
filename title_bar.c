@@ -43,5 +43,5 @@ static void tb_draw(const struct go_delegate* base, struct game_object* go)
 	rdp_draw_filled_rectangle(b.l, b.t, b.r, b.b);
 
 	sprintf(buffer, "%s v%s", TITLE, TO_STRING(PRETTY_VERSION));
-	graphics_draw_text(ren->dc, b.l, b.t, buffer);
+	ren_draw_text(ren, b.l, b.t, buffer);
 }

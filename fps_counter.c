@@ -78,5 +78,5 @@ static void fps_draw(const struct go_delegate* base, struct game_object* go)
 	rdp_draw_filled_rectangle(b.l, b.t, b.r, b.b);
 
 	sprintf(buffer, "%.1lf fps", fps->fps);
-	graphics_draw_text(ren->dc, b.l, b.t, buffer);
+	ren_draw_text(ren, b.l, b.t, buffer);
 }

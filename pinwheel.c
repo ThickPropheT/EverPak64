@@ -57,5 +57,5 @@ static void pw_draw(const struct go_delegate* base, struct game_object* go)
 
 	rdp_draw_filled_rectangle(b.l, b.t, b.r, b.b);
 
-	graphics_draw_text(ren->dc, b.l, b.t, pw_frames[pw->current_frame_i]);
+	ren_draw_text(ren, b.l, b.t, pw_frames[pw->current_frame_i]);
 }

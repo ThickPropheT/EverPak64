@@ -37,3 +37,5 @@ void ren_lock(struct renderer* ren);
 void ren_show(struct renderer* ren);
 
 void ren_set_primitive_color(struct renderer* ren, uint32_t color);
+
+void ren_draw_text(struct renderer* ren, int x, int y, const char* const message);
