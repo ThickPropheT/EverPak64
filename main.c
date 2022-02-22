@@ -17,19 +17,6 @@
 #include "console.h"
 
 
-#define BIT_DEPTH		DEPTH_16_BPP
-
-
-// #### TODO MOVE THIS ####
-void sleep(unsigned long ms)
-{
-	unsigned start_ms = get_ticks_ms();
-
-	while (get_ticks_ms() - start_ms < ms);
-}
-// #### TODO MOVE THIS ####
-
-
 //static inline void update(struct menu_tree* mt)
 //{
 //	// TODO prevents weirdness if controller 1 is removed
@@ -41,12 +28,12 @@ void sleep(unsigned long ms)
 //}
 
 
-static struct renderer* set_up(void)
+static struct renderer *set_up(void)
 {
 	/* enable interrupts (on the CPU) */
 	init_interrupts();
 
-	struct renderer* ren = ren_new(RESOLUTION_320x240, BIT_DEPTH, 2, GAMMA_NONE, ANTIALIAS_RESAMPLE);
+	struct renderer *ren = ren_new(RESOLUTION_320x240, DEPTH_32_BPP, 2, GAMMA_NONE, ANTIALIAS_RESAMPLE);
 
 	cs_init();
 
@@ -58,11 +45,12 @@ static struct renderer* set_up(void)
 
 int main(void)
 {
-	struct renderer* ren = set_up();
+	struct renderer *ren = set_up();
 
+	// TODO find a better place for this
 	graphics_set_color(ren->cp->fg_text, ren->cp->bg_text);
 
-	struct render_graph* rg = rg_init(ren);
+	struct render_graph *rg = rg_init(ren);
 
 	while (1)
 	{
