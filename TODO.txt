@@ -8,7 +8,6 @@ investigate defects:
 	start game with no accessory for slot 0
 
 determine if document formatting can be configured
-	prefer this: 'my_type *' to this: 'my_type* '
 	prefer this: 'sizeof *my_var' to this: 'sizeof * my_var'
 
 consider adding unit tests
@@ -19,11 +18,20 @@ aggregate various pieces of global game state into a game_state struct
 	pass that struct around to update and draw methods
 	remove references to those pieces of state that currently live in disparate structs
 
+
+// #### TODO MOVE THIS ####
+void sleep(unsigned long ms)
+{
+	unsigned start_ms = get_ticks_ms();
+
+	while (get_ticks_ms() - start_ms < ms);
+}
+// #### TODO MOVE THIS ####
+
+
 re-evaluate use of size_t
 
-find a way to remove unused #includes
-
-investigate rdp graphics
+find a way to <strike>remove unused</strike> manage #includes
 
 investigate file system
 
