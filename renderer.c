@@ -13,6 +13,8 @@ static struct rectangle to_rect(resolution_t res)
 	{
 	case RESOLUTION_640x480:
 		w = 640;
+		h = 480;
+		break;
 	case RESOLUTION_512x480:
 		w = 512;
 		h = 480;
@@ -20,13 +22,20 @@ static struct rectangle to_rect(resolution_t res)
 
 	case RESOLUTION_256x240:
 		w = 256;
+		h = 240;
+		break;
 	case RESOLUTION_512x240:
 		w = 512;
+		h = 240;
+		break;
 	case RESOLUTION_640x240:
 		w = 640;
+		h = 240;
+		break;
 	case RESOLUTION_320x240:
 		w = 320;
 		h = 240;
+		break;
 	}
 
 	return rect_new(0, 0, w, h);
@@ -134,6 +143,16 @@ void ren_set_primitive_color(struct renderer *ren, uint32_t color)
 		if (color_changed)
 			rdp_set_primitive_color(color);
 	}
+}
+
+void ren_draw_rectangle(struct renderer *ren, struct rectangle r, uint32_t color)
+{
+	display_context_t dc = ren->dc;
+
+	graphics_draw_line(dc, r.l, r.t, r.r, r.t, color);
+	graphics_draw_line(dc, r.r, r.t, r.r, r.b, color);
+	graphics_draw_line(dc, r.r, r.b, r.l, r.b, color);
+	graphics_draw_line(dc, r.l, r.b, r.l, r.t, color);
 }
 
 void ren_draw_text(struct renderer *ren, int x, int y, const char *const message)
