@@ -1,18 +1,12 @@
 #pragma once
 
-#include "game_object.h"
-#include "renderer.h"
-#include "rectangle.h"
+#include "visual.h"
 #include "interval.h"
 #include "types.h"
 
 struct fps_counter
 {
-	struct game_object go;
-
-	struct renderer *ren;
-
-	struct rectangle bounds;
+	struct visual vis;
 
 	struct interval interval;
 
@@ -20,4 +14,4 @@ struct fps_counter
 	double fps;
 };
 
-struct fps_counter *fps_new(u16 x, u16 y, u32 resolution, struct renderer *ren);
+struct fps_counter *fps_new(struct visual *parent, u32 resolution, struct renderer *ren);

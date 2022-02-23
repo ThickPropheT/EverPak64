@@ -1,22 +1,15 @@
 #pragma once
 
-#include "game_object.h"
-#include "renderer.h"
+#include "visual.h"
 #include "rectangle.h"
-#include "types.h"
-
-
-#define TB_WIDTH	111
-#define TB_HEIGHT	7
+#include "renderer.h"
 
 
 struct title_bar
 {
-	struct game_object go;
+	struct visual vis;
 
-	struct renderer *ren;
-
-	struct rectangle bounds;
+	struct rectangle border_bounds;
 };
 
-struct title_bar *tb_new(u16 x, u16 y, struct renderer *ren);
+struct title_bar *tb_new(struct visual *parent, struct renderer *ren);

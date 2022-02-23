@@ -38,8 +38,6 @@ void rg_draw(struct render_graph *rg)
 
 	ren_lock(ren);
 
-	graphics_fill_screen(ren->dc, ren->cp->black);
-
 	rn_draw(rg->root);
 
 	ren_show(ren);

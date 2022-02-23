@@ -1,10 +1,8 @@
 #include <libdragon.h>
+#include <malloc.h>
+#include <math.h>
 
 #include "fps_counter.h"
-
-#include <malloc.h>
-
-#include <math.h>
 
 
 #define WIDTH	94
@@ -24,18 +22,25 @@ const struct go_delegate FPS_DRAW[] = { { fps_draw } };
 const struct go_type FPS_TYPE[] = { { NULL, FPS_UPDATE, FPS_DRAW } };
 
 
-struct fps_counter *fps_new(u16 x, u16 y, u32 resolution, struct renderer *ren)
+struct fps_counter *fps_new(struct visual *parent, u32 resolution, struct renderer *ren)
 {
 	struct fps_counter *fps = calloc(1, sizeof * fps);
+	struct game_object *go = (void *)fps;
 
-	_go_init(&fps->go, FPS_TYPE);
+	_go_init(go, FPS_TYPE);
 
-	fps->go.can_update = 1;
-	fps->go.can_draw = 1;
+	go->can_update = 1;
+	go->can_draw = 1;
 
-	fps->ren = ren;
 
-	fps->bounds = rect_new(x, y, WIDTH, HEIGHT);
+	struct visual *vis = (void *)fps;
+
+	vis->node = rn_add_child_for(parent->node, go);
+	vis->ren = ren;
+
+	struct rectangle b = parent->bounds;
+
+	vis->bounds = rect_new(b.l, b.t, WIDTH, HEIGHT);
 
 	fps->interval = ivl_new(resolution);
 
@@ -62,7 +67,7 @@ static void fps_update(const struct go_delegate *base, struct game_object *go)
 		fps->fps = fps->frame_count * 1000.0 / fps->interval.delta_ticks_ms;
 		fps->frame_count = 0;
 
-		ren_invalidate(fps->ren);
+		ren_invalidate(fps->vis.ren);
 	}
 }
 
@@ -70,8 +75,8 @@ static void fps_draw(const struct go_delegate *base, struct game_object *go)
 {
 	struct fps_counter *fps = (void *)go;
 
-	struct renderer *ren = fps->ren;
-	struct rectangle b = fps->bounds;
+	struct renderer *ren = fps->vis.ren;
+	struct rectangle b = fps->vis.bounds;
 
 	ren_set_primitive_color(ren, ren->cp->bg);
 

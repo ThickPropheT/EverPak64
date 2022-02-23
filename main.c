@@ -47,9 +47,6 @@ int main(void)
 {
 	struct renderer *ren = set_up();
 
-	// TODO find a better place for this
-	graphics_set_color(ren->cp->fg_text, ren->cp->bg_text);
-
 	struct render_graph *rg = rg_init(ren);
 
 	while (1)

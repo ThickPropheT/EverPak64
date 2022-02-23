@@ -7,17 +7,13 @@
 #include "timed_trigger.h"
 
 
-#define PADDING_Y	4
-#define PADDING_X	4
-
-
 static void dbg_handle_input(struct controller *ctrl, void *context);
 static void enable_debug(struct debug_controller *dbg);
 
 const struct go_type DBG_TYPE[] = { { } };
 
 
-struct debug_controller *dbg_new(struct render_node *parent, struct controller_manager *cman, struct renderer *ren)
+struct debug_controller *dbg_new(struct visual *parent, struct controller_manager *cman, struct renderer *ren)
 {
 	struct debug_controller *dbg = malloc(sizeof * dbg);
 
@@ -26,7 +22,8 @@ struct debug_controller *dbg_new(struct render_node *parent, struct controller_m
 	dbg->go.can_update = 0;
 	dbg->go.can_draw = 0;
 
-	dbg->node = rn_add_child_for(parent, (void *)dbg);
+	dbg->parent = parent;
+	dbg->node = rn_add_child_for(parent->node, (void *)dbg);
 
 	dbg->cman = cman;
 	dbg->ren = ren;
@@ -41,21 +38,11 @@ struct debug_controller *dbg_new(struct render_node *parent, struct controller_m
 
 static void enable_debug(struct debug_controller *dbg)
 {
-	struct render_node *node = dbg->node;
 	struct renderer *ren = dbg->ren;
-	struct rectangle vp = ren->view_port;
+	struct visual *parent = dbg->parent;
 
-	u16 top = vp.t + PADDING_Y;
-	u16 left = vp.l + PADDING_X;
-	u16 right = vp.r - PADDING_X;
-
-	struct pinwheel *pw = pw_new(right - PW_WIDTH, top, ren);
-	struct fps_counter *fps = fps_new(left, top, hz_from_fps(0.5f), ren);
-
-	rn_add_child_for(node, (void *)fps);
-
-	struct render_node *pw_node = rn_add_child_for(node, (void *)pw);
-	pw_node->update_trigger = (void *)trigger_at_rate(hz_from_fps(11));
+	pw_new(parent, ren);
+	fps_new(parent, hz_from_fps(0.5f), ren);
 
 	dbg->is_enabled = 1;
 }

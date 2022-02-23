@@ -1,6 +1,5 @@
 #include "render_graph_bootstrapper.h"
 
-#include <math.h>
 #include "hertz.h"
 #include "trigger.h"
 #include "timed_trigger.h"
@@ -8,22 +7,35 @@
 #include "pinwheel.h"
 #include "fps_counter.h"
 #include "title_bar.h"
+#include "window.h"
 #include "device_manager.h"
 #include "controller_manager.h"
 #include "debug_controller.h"
 
-#define PADDING_Y	4
-#define PADDING_X	4
+
+struct render_graph_bootstrapper
+{
+	struct render_node *root;
+	struct renderer *ren;
+
+	struct trigger *dev_changed;
+
+	struct device_manager *devm;
+	struct controller_manager *cman;
+};
 
 
-static void build_managers(struct render_node *root, struct renderer *ren)
+static void build_managers(struct render_graph_bootstrapper *boot)
 {
 	struct trigger *dev_changed = trigger_manually();
 
 	struct device_manager *devm = devm_new(dev_changed);
 
-	struct render_node *devm_node = rn_add_child_for(root, (void *)devm);
+	struct render_node *devm_node = rn_add_child_for(boot->root, (void *)devm);
 	devm_node->update_trigger = (void *)trigger_at_rate(hz_from_fps(20));
+
+	boot->dev_changed = dev_changed;
+	boot->devm = devm;
 
 
 	struct controller_manager *cman = cman_new(devm->dev);
@@ -31,32 +43,44 @@ static void build_managers(struct render_node *root, struct renderer *ren)
 	struct render_node *cman_node = rn_add_child_for(devm_node, (void *)cman);
 	cman_node->update_trigger = dev_changed;
 
-
-	struct debug_controller *dbg = dbg_new(cman_node, cman, ren);
-	dbg->node->update_trigger = dev_changed;
+	boot->cman = cman;
 }
 
 
-static void build_visuals(struct render_node *root, struct renderer *ren)
+static void build_visuals(struct render_graph_bootstrapper *boot)
 {
-	struct rectangle vp = ren->view_port;
+	struct render_node *root = boot->root;
+	struct renderer *ren = boot->ren;
 
-	u16 top = vp.t + PADDING_Y;
+	struct window *win = win_new(root, ren);
+	struct visual *win_vis = (void *)win;
 
-	u16 tb_x = roundf((vp.t + vp.w / 2.0f) - TB_WIDTH / 2.0f);
+	tb_new(win_vis, ren);
 
-	struct title_bar *tb = tb_new(tb_x, top, ren);
-
-	rn_add_child_for(root, (void *)tb);
+	struct debug_controller *dbg = dbg_new(win_vis, boot->cman, ren);
+	dbg->node->update_trigger = boot->dev_changed;
 }
 
 
 struct render_graph *rg_init(struct renderer *ren)
 {
-	struct render_node *root = rn_new(NULL);
+	struct render_graph_bootstrapper *boot = malloc(sizeof * boot);
 
-	build_managers(root, ren);
-	build_visuals(root, ren);
+
+	graphics_set_color(ren->cp->fg_text, ren->cp->bg_text);
+
+
+	boot->ren = ren;
+
+	struct render_node *root = rn_new(NULL);
+	boot->root = root;
+
+
+	build_managers(boot);
+	build_visuals(boot);
+
+
+	free(boot);
 
 	return rg_new(root, ren);
 }
